@@ -17,6 +17,9 @@ void assignStartingPlayer(char**,char**,char*,char*);
 int getDigit(char);
 int getRow(char*, int);
 
+int checkBounds(char [GRID_SIZE][GRID_SIZE], int ,int ,  int ,int );
+void addShip(char [GRID_SIZE][GRID_SIZE] , int ,int ,  int ,int );
+
 int main()
 {
     
@@ -99,7 +102,10 @@ int main()
             continue;
         }
 
-        printf(" the indexes are %d , %d , %d\n",column,row,orientation);
+        checkBounds(grid1, column,row,orientation,currentShipSize);
+        addShip(grid1, column,row,orientation,currentShipSize);
+        printGrid(grid1);
+        
        
         
     }
@@ -108,6 +114,72 @@ int main()
 
     
    
+}
+
+void addShip(char grid[GRID_SIZE][GRID_SIZE], int column,int row,int orientation,int shipSize)
+{
+    
+    if(orientation==0)
+    {
+        for(int  i = 0 ; i<shipSize;i++)
+        {
+            grid[row][i+column] = 'X';
+            
+        }
+    }else if(orientation==1)
+    {
+        
+        for(int  i = 0 ; i<shipSize;i++)
+        {
+            grid[i+row][column] = 'X';
+        }
+    }
+}
+// 0  for horizontal 1 for vertical
+int checkBounds(char grid[GRID_SIZE][GRID_SIZE], int column,int row,  int orientation,int shipSize)
+{
+    if(orientation==0)
+    {
+        if(column + shipSize >GRID_SIZE)
+        {
+            printf("Ship is out of bound\n");
+            return -1;
+        }
+    }else if(orientation ==1)
+    {
+        if(row+shipSize > GRID_SIZE)
+        {
+            printf("Ship is out of bound\n");
+            return -1;
+        }
+    }
+
+    if(orientation==0)
+    {
+        for(int  i = 0+column ; i<GRID_SIZE;i++)
+        {
+            if(grid[row][i] != '~')
+            {
+                printf("ships overlap\n");
+                return -1;
+            }
+        }
+    }else if(orientation==1)
+    {
+        
+        for(int  i = 0+row ; i<GRID_SIZE;i++)
+        {
+            if(grid[i][column] != '~')
+            {
+                printf("ships overlap\n");
+                return -1;
+            }
+        }
+    }
+
+    return 1;
+
+
 }
 
 int getRow(char* input,int whiteSpaceIndex)
