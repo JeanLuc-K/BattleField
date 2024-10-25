@@ -1,1 +1,67 @@
+//this function is used to be able to create grid for each player to insert there battleships
+void createGrid(char **grid, char *playername)
+{
 
+    printf("%s, please enter your ships coordinate.\n", playername);
+    printf("First start with the square(A10), then the orienttion(horizontal, vertical).\n");
+
+    const char *shipsNames[] = {"Carrier", "Battleship", "Destroyer", "Submarine"}; // all ships to avoid clustering if condition
+    int currentShipSize;
+    int column;
+    int row;
+    char input[20];
+    for (int i = 0; i < 4; i++) // 4 total ships to place
+    {
+
+        currentShipSize = 4 - i; // reverse order size
+
+        printf("Where would you like to place your %s (%d cells)?\n", shipsNames[i], currentShipSize);
+
+        fgets(input, sizeof(input), stdin);
+
+        column = getColumn(input[0]); // transform into coord
+        if (column == -1)             // validate the column coordinate
+        {
+
+            i--; // to repeat the loop ;
+            clearInput(input, sizeof(input));
+            continue;
+        }
+
+        int whiteSpaceIndex = 1;
+        while (input[whiteSpaceIndex] != ' ' && whiteSpaceIndex < sizeof(input) - 1 && input[whiteSpaceIndex] != '\n') // get the index of the first white space
+        {
+            whiteSpaceIndex++;
+        }
+
+        row = getRow(input, whiteSpaceIndex);
+        if (row <= 0 || row > 10) // validate the row coordinate
+        {
+            printf("please enter a valid row\n");
+            clearInput(input, sizeof(input));
+            i--; // to repeat the loop ;
+            continue;
+        }
+
+        row--; // to accomodate for the index that starts at 0;
+
+        int orientation = getOrientation(input, whiteSpaceIndex); // 0  for horizontal 1 for vertical
+
+        if (orientation == -1) // validate orientation
+        {
+            i--;
+            clearInput(input, sizeof(input));
+            continue;
+        }
+
+        if (checkBounds(grid, column, row, orientation, currentShipSize) == -1)
+        {
+            i--;
+            continue;
+        }
+        addShip(grid, column, row, orientation, currentShipSize);
+        printGrid(grid);
+        //Clear input buffer for player 2
+        clearInput(input, sizeof(input));
+    }
+}
