@@ -100,6 +100,7 @@ int main()
         }
 
         printf("\n");
+       
         
     }
    
@@ -209,7 +210,7 @@ int getColumn(char input)
         return 7;
     } else if (input == 'I' || input == 'i') {
         return 8;
-    } else if (input == 'J' || input == 'J'){
+    } else if (input == 'J' || input == 'j'){
         return 9;  
     }else 
     {
