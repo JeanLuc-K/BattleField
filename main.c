@@ -99,7 +99,7 @@ int main()
             continue;
         }
 
-        printf("\n");
+        printf(" the indexes are %d , %d , %d\n",column,row,orientation);
        
         
     }
