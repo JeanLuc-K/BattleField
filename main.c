@@ -3,21 +3,23 @@
 #include <string.h>
 #include <time.h>
 
+
 #define GRID_SIZE 10
 
 void initializeGrid(char grid[GRID_SIZE][GRID_SIZE]);
 void printGrid(char grid[GRID_SIZE][GRID_SIZE]);
-void allocateMemory(char grid[GRID_SIZE][GRID_SIZE]);
+
 int getColumn(char);
 int getOrientation(char* , int);
-void clearInput();
+
+void clearInput(char* , int);
 void assignStartingPlayer(char**,char**,char*,char*);
 int getDigit(char);
 int getRow(char*, int);
 
 int main()
 {
-
+    
     char grid1[GRID_SIZE][GRID_SIZE];//for player 1
     initializeGrid(grid1);
     char grid2[GRID_SIZE][GRID_SIZE];// For player 2
@@ -28,10 +30,13 @@ int main()
 
     printf("Please enter name of Player 1(49 max characters): ");
     fgets(name1, sizeof(name1), stdin);
+    clearInput(name1,sizeof(name1));
     
 
     printf("Please enter name of Player 2(49 max characters): ");
     fgets(name2, sizeof(name2), stdin);
+    clearInput(name2,sizeof(name2));
+
 
     printf("\n");
 
@@ -50,7 +55,8 @@ int main()
     int row;
     char input[20];
     for(int i = 0 ;i<4 ; i++) //4 total ships to place
-    {
+    {   
+       
         currentShipSize = 4-i; //reverse order size
 
         printf("Where would you like to place your %s (%d cells)?\n",shipsNames[i],currentShipSize);
@@ -62,19 +68,22 @@ int main()
         {
            
             i--; //to repeat the loop ;
+            clearInput(input, sizeof(input));
             continue;
         }
 
         int whiteSpaceIndex =1; 
-        while(input[whiteSpaceIndex]!=' ' && whiteSpaceIndex<sizeof(input)-1) //get the index of the first white space 
+        while(input[whiteSpaceIndex]!=' ' && whiteSpaceIndex<sizeof(input)-1&& input[whiteSpaceIndex]!='\n') //get the index of the first white space 
         {
             whiteSpaceIndex++;
         }
+
 
         row = getRow(input,whiteSpaceIndex);
         if(row <= 0 || row >10) //validate the row coordinate
         {
             printf( "please enter a valid row\n");
+             clearInput(input, sizeof(input));
             i--; //to repeat the loop ;
             continue;
         }
@@ -86,14 +95,11 @@ int main()
         if(orientation==-1) //validate orientation
         {
             i--;
+            clearInput(input, sizeof(input));
             continue;
         }
 
-        
-
-
-
-
+        printf("\n");
         
     }
    
@@ -126,6 +132,7 @@ int getRow(char* input,int whiteSpaceIndex)
 
     
 }
+
 int getDigit(char c)
 {
     int digit = c-'0';
@@ -161,9 +168,24 @@ void assignStartingPlayer(char** firstPlayerName, char** secondPlayerName, char*
     }
 }
 
-void clearInput()
+void clearInput(char* input, int size) //removes any overflow in the input
 {
-    while (getchar() != '\n');
+    int hasNewLine = 0;
+    for(int i = 0 ; i < size; i++) //check if the input has a newline charachter
+    {
+        if(input[i] =='\n')
+        {
+            hasNewLine=1;
+            break;
+        }
+
+    }
+    char charachter;
+    if(hasNewLine==0)
+    {
+       
+        while(charachter = getchar()!='\n' && charachter!=EOF);
+    }
 }
 
 int getColumn(char input)
@@ -196,8 +218,6 @@ int getColumn(char input)
     }
 
 }
-
-
 
 int getOrientation(char* input ,int whiteSpaceIndex)
 {
