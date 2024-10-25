@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include "createGrid"
 
 
 #define GRID_SIZE 10
@@ -19,13 +20,11 @@ int getRow(char*, int);
 
 int checkBounds(char [GRID_SIZE][GRID_SIZE], int ,int ,  int ,int );
 void addShip(char [GRID_SIZE][GRID_SIZE] , int ,int ,  int ,int );
-
 int main()
 {
-    
-    char grid1[GRID_SIZE][GRID_SIZE];//for player 1
+char grid1[GRID_SIZE][GRID_SIZE]; // for player 1
     initializeGrid(grid1);
-    char grid2[GRID_SIZE][GRID_SIZE];// For player 2
+    char grid2[GRID_SIZE][GRID_SIZE]; // For player 2
     initializeGrid(grid2);
 
     char name1[50];
@@ -33,85 +32,24 @@ int main()
 
     printf("Please enter name of Player 1(49 max characters): ");
     fgets(name1, sizeof(name1), stdin);
-    clearInput(name1,sizeof(name1));
-    
+    clearInput(name1, sizeof(name1));
 
     printf("Please enter name of Player 2(49 max characters): ");
     fgets(name2, sizeof(name2), stdin);
-    clearInput(name2,sizeof(name2));
-
+    clearInput(name2, sizeof(name2));
 
     printf("\n");
 
-    char* firstPlayerName;
-    char* secondPlayerName;
+    char *firstPlayerName;
+    char *secondPlayerName;
 
-    assignStartingPlayer(&firstPlayerName,&secondPlayerName,name1,name2);
+    assignStartingPlayer(&firstPlayerName, &secondPlayerName, name1, name2);
     printf("\n");
-
-    printf("%s, please enter your ships coordinate.\n",firstPlayerName);
-    printf("First start with the square(A10), then the orienttion(horizontal, vertical).\n");
-    
-    const char* shipsNames[]={"Carrier","Battleship","Destroyer","Submarine"}; //all ships to avoid clustering if condition
-    int currentShipSize;
-    int column;
-    int row;
-    char input[20];
-    for(int i = 0 ;i<4 ; i++) //4 total ships to place
-    {   
-       
-        currentShipSize = 4-i; //reverse order size
-
-        printf("Where would you like to place your %s (%d cells)?\n",shipsNames[i],currentShipSize);
-
-        fgets(input, sizeof(input), stdin);
-        
-        column = getColumn(input[0]); // transform into coord
-        if(column ==-1) //validate the column coordinate
-        {
-           
-            i--; //to repeat the loop ;
-            clearInput(input, sizeof(input));
-            continue;
-        }
-
-        int whiteSpaceIndex =1; 
-        while(input[whiteSpaceIndex]!=' ' && whiteSpaceIndex<sizeof(input)-1&& input[whiteSpaceIndex]!='\n') //get the index of the first white space 
-        {
-            whiteSpaceIndex++;
-        }
-
-
-        row = getRow(input,whiteSpaceIndex);
-        if(row <= 0 || row >10) //validate the row coordinate
-        {
-            printf( "please enter a valid row\n");
-             clearInput(input, sizeof(input));
-            i--; //to repeat the loop ;
-            continue;
-        }
-
-        row--; // to accomodate for the index that starts at 0;
-
-        int orientation = getOrientation(input,whiteSpaceIndex); // 0  for horizontal 1 for vertical
-
-        if(orientation==-1) //validate orientation
-        {
-            i--;
-            clearInput(input, sizeof(input));
-            continue;
-        }
-
-        checkBounds(grid1, column,row,orientation,currentShipSize);
-        addShip(grid1, column,row,orientation,currentShipSize);
-        printGrid(grid1);
-        
-       
-        
-    }
-   
-
-
+    printf("Player 1 please fill your grid: ");
+    createGrid(grid1, firstPlayerName);
+    printf("\n");
+    printf("Player 2 please fill your grid: ");
+    createGrid(grid2, secondPlayerName);
     
    
 }
