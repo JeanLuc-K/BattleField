@@ -27,7 +27,7 @@ void addShip(char grid[GRID_SIZE][GRID_SIZE], int column,int row,int orientation
 // 0  for horizontal 1 for vertical
 int checkBounds(char grid[GRID_SIZE][GRID_SIZE], int column,int row,  int orientation,int shipSize)
 {
-    if(orientation==0)
+   if(orientation==0)
     {
         if(column + shipSize >GRID_SIZE)
         {
@@ -45,9 +45,9 @@ int checkBounds(char grid[GRID_SIZE][GRID_SIZE], int column,int row,  int orient
 
     if(orientation==0)
     {
-        for(int  i = 0+column ; i<GRID_SIZE;i++)
+        for(int  i = 0 ; i<shipSize;i++)
         {
-            if(grid[row][i] != '~')
+            if(grid[row][column+i] != '~')
             {
                 printf("ships overlap\n");
                 return -1;
@@ -56,9 +56,9 @@ int checkBounds(char grid[GRID_SIZE][GRID_SIZE], int column,int row,  int orient
     }else if(orientation==1)
     {
         
-        for(int  i = 0+row ; i<GRID_SIZE;i++)
+        for(int  i = 0; i<shipSize;i++)
         {
-            if(grid[i][column] != '~')
+            if(grid[i+row][column] != '~')
             {
                 printf("ships overlap\n");
                 return -1;
@@ -67,6 +67,7 @@ int checkBounds(char grid[GRID_SIZE][GRID_SIZE], int column,int row,  int orient
     }
 
     return 1;
+
 
 
 }
