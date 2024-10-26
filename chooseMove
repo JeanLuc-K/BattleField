@@ -1,0 +1,29 @@
+int chooseMove( char **grid,char *playerName) {
+    char moveName[50];
+        printf("Enter your move 'fire', 'Radar Sweep', 'Smoke Screen', 'Artillery', 'Torpedo'): ");
+        fgets(moveName, sizeof(moveName), stdin);
+        printf(moveName);
+        clearInput(moveName, sizeof(moveName));
+        printf(moveName);
+        if (strcasecmp(moveName, "fire\n") == 0) {
+            fireMove(grid, playerName);
+          
+        } else if (strcasecmp(moveName, "radar sweep\n") == 0) {
+            // radarSweep(grid, playerName);
+       
+        } else if (strcasecmp(moveName, "smoke screen\n") == 0) {
+            // smokeScreen(grid, playerName);
+          
+        } else if (strcasecmp(moveName, "artillery\n") == 0) {
+            // artillery(grid, playerName);
+
+        } else if (strcasecmp(moveName, "torpedo\n") == 0) {
+            // torpedo(grid, playerName);
+            
+        } else {
+            printf("Invalid input. Turn skipped.. \n");
+        }   
+       
+    
+    return 0;
+}
