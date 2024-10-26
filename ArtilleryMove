@@ -1,52 +1,64 @@
-int artilleryMove(char **grid, char *playername)
+int artilleryMove(char **grid, char *playername, char **gridHitsandMisses)
 {
     int startcolumn;
     int startrow;
     char input[20];
 
     printf(" %s Please enter the coordinates  to hit your opponents's ship in this format Artillery [top-left coordinate].: ", playername);
-    {
-        fgets(input, sizeof(input), stdin);
-        // Remove newline if present
-        clearInput(input, sizeof(input));
-        // Get column and row coordinates
-
-        startcolumn = getColumn(input[0]);
-
-        int whiteSpaceIndex = 1;
-        while (input[whiteSpaceIndex] != ' ' && whiteSpaceIndex < sizeof(input) - 1 && input[whiteSpaceIndex] != '\n') // get the index of the first white space
+    
+        while (1)
         {
-            whiteSpaceIndex++;
-        }
-        startrow = getRow(input, whiteSpaceIndex);
-
-        for (int i = 0; i < 2; i++)
-        {
-            for (int j = 0; j < 2; j++)
+            fgets(input, sizeof(input), stdin);
+            // Remove newline if present
+            clearInput(input, sizeof(input));
+            // Get column and row coordinates
+            startcolumn = getColumn(input[0]);
+            int whiteSpaceIndex = 1;
+            while (input[whiteSpaceIndex] != ' ' && whiteSpaceIndex < sizeof(input) - 1 && input[whiteSpaceIndex] != '\n') // get the index of the first white space
             {
-                // Check the 2x2 area starting from inputed coordinates
-                int row = startrow + i;
-                int column = startcolumn + j;
-                // Make sure I dont go out of bounds
-                if (row < 10 && column < 10)
+                whiteSpaceIndex++;
+            }
+            startrow = getRow(input, whiteSpaceIndex);
+          // check if the coordinates are out of bounds
+          if (startrow < 0 || startrow >= 10 || startcolumn < 0 || startcolumn >= 10)
+            { 
+               
+                printf("Coordinates out of bounds. Please try again.\n");
+            }
+            else
+            {
+                // Valid input
+                break; // Exit the loop since we have valid coordinates
+            }
+        }
+    
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            // Check the 2x2 area starting from inputed coordinates
+            int row = startrow + i;
+            int column = startcolumn + j;
+            // Make sure I dont go out of bounds
+            if (row < 10 && column < 10)
+            {
+                // Check for a hit in the grid
+                if (grid[row][column] == 'X')
                 {
-                    // Check for a hit in the grid
-                    if (grid[row][column] == 'X')
-                    {
-                        printf("Hit!\n");
-                        grid[row][column] = '*'; // Mark the location of the hit
-                        return 1;
-                    }
-                    else
-                    {
-                        printf("Miss.\n");
-                        return 0;
-                    }
+                    printf("Hit!\n");
+                    gridHitsandMisses[row][column] = '*'; // Mark the location of the hit
+                    return 1;
+                }
+                else
+                {
+                    printf("Miss.\n");
+                    gridHitsandMisses[row][column] = 'o';
+                    return 0;
                 }
             }
         }
-        
     }
 
-    return 0;
+
+return 0;
 }
