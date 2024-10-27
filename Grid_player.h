@@ -10,7 +10,7 @@ int getOrientation(char* , int);
 
 void clearInput(char* , int);
 int getDigit(char);
-int getRow(char*, int);
+int getRow(char*, int,int);
 
 int checkBounds(char [GRID_SIZE][GRID_SIZE], int ,int ,  int ,int );
 void addShip(char [GRID_SIZE][GRID_SIZE] , int ,int ,  int ,int );
