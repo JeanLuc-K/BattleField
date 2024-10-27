@@ -1,21 +1,16 @@
-//this function is used to be able to create grid for each player to insert there battleships
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "Grid_player.h"
-#define GRID_SIZE 10
+#include "headerFile.h"
 
 void addShip(char grid[GRID_SIZE][GRID_SIZE], int column,int row,int orientation,int shipSize)
 {
     
-    if(orientation==0)
+    if(orientation==HORIZONTAL)
     {
         for(int  i = 0 ; i<shipSize;i++)
         {
             grid[row][i+column] = 'X';
             
         }
-    }else if(orientation==1)
+    }else if(orientation==VERTICAL)
     {
         
         for(int  i = 0 ; i<shipSize;i++)
@@ -24,17 +19,17 @@ void addShip(char grid[GRID_SIZE][GRID_SIZE], int column,int row,int orientation
         }
     }
 }
-// 0  for horizontal 1 for vertical
+
 int checkBounds(char grid[GRID_SIZE][GRID_SIZE], int column,int row,  int orientation,int shipSize)
 {
-   if(orientation==0)
+   if(orientation==HORIZONTAL)
     {
         if(column + shipSize >GRID_SIZE)
         {
             printf("Ship is out of bound\n");
             return -1;
         }
-    }else if(orientation ==1)
+    }else if(orientation ==VERTICAL)
     {
         if(row+shipSize > GRID_SIZE)
         {
@@ -43,7 +38,7 @@ int checkBounds(char grid[GRID_SIZE][GRID_SIZE], int column,int row,  int orient
         }
     }
 
-    if(orientation==0)
+    if(orientation==HORIZONTAL)
     {
         for(int  i = 0 ; i<shipSize;i++)
         {
@@ -53,7 +48,7 @@ int checkBounds(char grid[GRID_SIZE][GRID_SIZE], int column,int row,  int orient
                 return -1;
             }
         }
-    }else if(orientation==1)
+    }else if(orientation==VERTICAL)
     {
         
         for(int  i = 0; i<shipSize;i++)
