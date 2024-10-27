@@ -89,7 +89,7 @@ int getRow(char* input,int startCoord, int whiteSpaceIndex)
             }else return -1;
             
         }
-        return row/10;
+        return row/10-1;
     }
     
 
