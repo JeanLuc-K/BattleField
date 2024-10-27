@@ -1,8 +1,19 @@
-#ifndef SMOKE_SCREEN_H
-#define SMOKE_SCREEN_H
+// #ifndef SMOKE_SCREEN_H
+// #define SMOKE_SCREEN_H
 
-void smokeScreen(char** grid, char** smokeGrid, int smokeScreenCounter, int shipsSunk, int* coord );
-int inBound(int* coord);
-void updateCoordBySquare(int* coord,int iteration);
+// #define GRID_SIZE 10
+// struct Input
+// {
+//     char orientation[11];
+//     char moveName[10];
 
-#endif
+//     int column;
+//     int row;
+//     int valid;
+// };
+
+// int smokeScreen(char grid[GRID_SIZE][GRID_SIZE], char smokeGrid[GRID_SIZE][GRID_SIZE], int smokeScreenCounter, int shipsSunk, struct Input input );
+// int isInBound(struct Input);
+// void updateCoordBySquare(struct Input* input ,int iteration);
+
+// #endif
