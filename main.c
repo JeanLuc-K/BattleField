@@ -2,45 +2,64 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "Grid_player.h"
+#include "Grid_player.c"
 
 
 #define GRID_SIZE 10
+#define EASY 0
+#define HARD 1
 
 void initializeGrid(char grid[GRID_SIZE][GRID_SIZE]);
 
 void assignStartingPlayer(char**,char**,char*,char*);
+int getDifficultyLevel();
+void getName(char*, int,int);
+void initializeGridHelper(char[GRID_SIZE][GRID_SIZE],char[GRID_SIZE][GRID_SIZE],char[GRID_SIZE][GRID_SIZE]);
 
 int main()
 {
-char grid1[GRID_SIZE][GRID_SIZE]; // for player 1
-    initializeGrid(grid1);
+    char grid1[GRID_SIZE][GRID_SIZE]; // for player 1
+    char hitsAndMissesGrid1[GRID_SIZE][GRID_SIZE];
+    char smokeGird1[GRID_SIZE][GRID_SIZE];
+
+    initializeGridHelper(grid1,hitsAndMissesGrid1,smokeGird1);
+
     char grid2[GRID_SIZE][GRID_SIZE]; // For player 2
-    initializeGrid(grid2);
+    char hitsAndMissesGrid2[GRID_SIZE][GRID_SIZE];
+    char smokeGrid2[GRID_SIZE][GRID_SIZE];
+
+    initializeGridHelper(grid2,hitsAndMissesGrid2,smokeGrid2);
+
+    int difficultyLevel = getDifficultyLevel();
 
     char name1[50];
+    getName(name1,sizeof(name1), 1);
     char name2[50];
-
-    printf("Please enter name of Player 1(49 max characters): ");
-    fgets(name1, sizeof(name1), stdin);
-    clearInput(name1, sizeof(name1));
-
-    printf("Please enter name of Player 2(49 max characters): ");
-    fgets(name2, sizeof(name2), stdin);
-    clearInput(name2, sizeof(name2));
-
-    printf("\n");
+    getName(name2, sizeof(name2), 2);
 
     char *firstPlayerName;
     char *secondPlayerName;
 
     assignStartingPlayer(&firstPlayerName, &secondPlayerName, name1, name2);
+    
+
+
     printf("\n");
-    printf("Player 1 please fill your grid: ");
     createGrid(grid1, firstPlayerName);
     printf("\n");
-    printf("Player 2 please fill your grid: ");
     createGrid(grid2, secondPlayerName);
+
+
+    int shipsLeft1=4;
+    int shipsLeft2=4;
+
+    while(shipsLeft1>0 && shipsLeft2>0)
+    {
+
+    }
+
+
+    
     
    
 }
@@ -67,6 +86,13 @@ void assignStartingPlayer(char** firstPlayerName, char** secondPlayerName, char*
     }
 }
 
+void initializeGridHelper(char grid1[GRID_SIZE][GRID_SIZE],char grid2[GRID_SIZE][GRID_SIZE] ,char grid3[GRID_SIZE][GRID_SIZE]) 
+{
+    initializeGrid(grid1);
+    initializeGrid(grid2);
+    initializeGrid(grid3);
+}
+
 void initializeGrid(char grid[GRID_SIZE][GRID_SIZE])
 {
     for (int i = 0; i < GRID_SIZE; i++)
@@ -79,14 +105,33 @@ void initializeGrid(char grid[GRID_SIZE][GRID_SIZE])
 }
 
 
-int difficultyLevel(){
-   char difficulty[5];
+int getDifficultyLevel()
+{
+   char difficulty[6];
    printf("Please enter your difficulty level: ");
-   scanf("%s ",difficulty);
 
-   if(strcmp(difficulty, "easy") == 0){
-    return 0;
-   }else{
-    return 1;
-   }
+    while(1)
+    {
+        
+        fgets(difficulty,sizeof(difficulty),stdin);
+        clearInput(difficulty,sizeof(difficulty));
+
+
+        if(strcmp(difficulty, "easy\n") == 0){
+            return 0;
+        }else if(strcmp(difficulty, "hard\n")==0) {
+            return 1;
+        }else{
+        printf("difficulty level unknow, try again.\n");
+        }
+
+    }
+}
+
+void getName(char* name, int size, int number)
+{
+    
+    printf("Please enter name of Player %d(%d max characters): ",number,size);
+    fgets(name, sizeof(name), stdin);
+    clearInput(name, sizeof(name));
 }
