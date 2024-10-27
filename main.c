@@ -1,88 +1,81 @@
 
 #include "headerFile.h"
 
-#include "mainF.c"
-#include "Grid_player.c"
-#include "Smoke_Screen.c"
+#include "input.c"
+#include "initialize_game.c"
+#include "place_ships.c"
+#include "smoke_screen.c"
+
 
 int main()
-{
-    char grid1[GRID_SIZE][GRID_SIZE]; // for player 1
-    char hitsAndMissesGrid1[GRID_SIZE][GRID_SIZE];
-    char smokeGird1[GRID_SIZE][GRID_SIZE];
+{  
 
-    initializeGridHelper(grid1,hitsAndMissesGrid1,smokeGird1);
-
-    char grid2[GRID_SIZE][GRID_SIZE]; // For player 2
-    char hitsAndMissesGrid2[GRID_SIZE][GRID_SIZE];
-    char smokeGrid2[GRID_SIZE][GRID_SIZE];
-
-    initializeGridHelper(grid2,hitsAndMissesGrid2,smokeGrid2);
+    PLAYER player1;
+    PLAYER player2;
 
     int difficultyLevel = getDifficultyLevel();
+    
+    initializePlayer(&player1,1);
+    initializePlayer(&player2,2);
 
-    char name1[50];
-    getName(name1,sizeof(name1), 1);
-    char name2[50];
-    getName(name2, sizeof(name2), 2);
 
-    char *firstPlayerName;
-    char *secondPlayerName;
-
-    assignStartingPlayer(&firstPlayerName, &secondPlayerName, name1, name2);
+    assignStartingPlayer(&player1,&player2);
     
 
-
     printf("\n");
-    createGrid(grid1, firstPlayerName);
+    createGrid(&player1);
     printf("\n");
-    createGrid(grid2, secondPlayerName);
+    createGrid(&player2);
 
-
-    int shipsLeft1=4;
-    int shipsLeft2=4;
-    int smokeScreenCounter1 =0;
-    int smokeScreenCounter2 =0;
-
-    while(shipsLeft1>0 && shipsLeft2>0)
+    for(int i=0; player1.shipsLeft>0 && player2.shipsLeft>0 ;i++)
     {
-        printGrid(hitsAndMissesGrid1);
-        printf("%s, what is your move?\n",firstPlayerName);
-        printf("for a list of moves, enter \"help\"\n");
+        if(i%2==0)
+        {
+            game(&player1,&player2);
+        }else
+        {
+            game(&player2,&player1);
+        }
+    }
+}
 
+
+void game(PLAYER* player1, PLAYER* player2)
+{
+    printf("%s, what is your move?\n",player1->name);
+    printf("for a list of moves, enter \"help\"\n");
+
+    
+    INPUT input;
+    getInput(&input);
+
+    if (strcasecmp(input.moveName, "fire") == 0)
+    {
+        printf("najah");
+        //fireMove(grid, playerName,gridHitsandMisses);
+    }
+    else if (strcasecmp(input.moveName, "radar") == 0)
+    {
+        // radarSweep(grid, playerName);
+    }
+    else if (strcasecmp(input.moveName, "smoke") == 0)
+    {
+        player1->smokeScreenCounter +=smokeScreen(player1->grid,player1->smokeGird,player1->smokeScreenCounter,player2->shipsLeft,input);
         
-        INPUT input;
-        getInput(&input);
-
-        printf("input move is : %s.",input.moveName);
-        if (strcasecmp(input.moveName, "fire") == 0)
-        {
-            printf("najah");
-            //fireMove(grid, playerName,gridHitsandMisses);
-        }
-        else if (strcasecmp(input.moveName, "radar") == 0)
-        {
-            // radarSweep(grid, playerName);
-        }
-        else if (strcasecmp(input.moveName, "smoke") == 0)
-        {
-            smokeScreenCounter1 +=smokeScreen(grid1,smokeGird1,smokeScreenCounter1,shipsLeft2,input);
-            
-        }
-        else if (strcasecmp(input.moveName, "artillery") == 0)
-        {
-            // artillery(grid, playerName);
-        }
-        else if (strcasecmp(input.moveName, "torpedo") == 0)
-        {
-            // torpedo(grid, playerName);
-        }
-        else
-        {
-            printf("Invalid input. Turn skipped.. \n");
     }
-
+    else if (strcasecmp(input.moveName, "artillery") == 0)
+    {
+        // artillery(grid, playerName);
     }
+    else if (strcasecmp(input.moveName, "torpedo") == 0)
+    {
+        // torpedo(grid, playerName);
+    }
+    else
+    {
+        printf("Invalid input. Turn skipped.. \n");
+    }
+    
 }
 
 

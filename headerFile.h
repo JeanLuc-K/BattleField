@@ -6,54 +6,73 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#define GRID_SIZE 10
-#define EASY 0
-#define HARD 1
+
+
+
+
+
+//for INPUT.C
 #define INPUT struct Input
-
-
-
-//for MAIN.C
 struct Input
 {
-    char orientation[11];
+    char orientation[10];
     char moveName[10];
 
     int column;
     int row;
     int valid;
 };
+void getInput(struct Input*);
+void getInputForPlacingShips(struct Input*);
+int getColumn(char);
+int getOrientation(char*);
+int getDigit(char);
+int getRow(char*, int,int);
+int getTrailingCharachterIndex(char*, int );
+int getLeadingCharachterIndex(char* , int );
+void clearInput(char* , int);
+
+
+//for initialize_game
+#define GRID_SIZE 10
+#define EASY 0
+#define HARD 1
+
+#define PLAYER struct Player
+struct Player
+{
+    char grid[GRID_SIZE][GRID_SIZE]; 
+    char hitsAndMissesGrid[GRID_SIZE][GRID_SIZE];
+    char smokeGird[GRID_SIZE][GRID_SIZE];
+    char name[50];
+    
+    int shipsLocations[4][4];
+    int shipsLeft;
+    int smokeScreenCounter;
+};
+void game(PLAYER* player1, PLAYER* player2);
+void initializePlayer(PLAYER* player,int number);
 void initializeGrid(char grid[GRID_SIZE][GRID_SIZE]);
-void assignStartingPlayer(char**,char**,char*,char*);
+void assignStartingPlayer(PLAYER*,PLAYER*);
 int getDifficultyLevel();
 void getName(char*, int,int);
 void initializeGridHelper(char[GRID_SIZE][GRID_SIZE],char[GRID_SIZE][GRID_SIZE],char[GRID_SIZE][GRID_SIZE]);
-int getTrailingCharachterIndex(char*, int );
-int getLeadingCharachterIndex(char* , int );
-void getInput(struct Input*);
 
 
 
-//for GRID_PLAYER.C
+
+
+
+//for place_ships.C
 #define HORIZONTAL 0
 #define VERTICAL 1
-void createGrid(char grid[10][10], char *playername);
+void createGrid(PLAYER* );
 void printGrid(char grid[GRID_SIZE][GRID_SIZE]);
-
-int getColumn(char);
-int getOrientation(char* , int);
-
-void clearInput(char* , int);
-int getDigit(char);
-int getRow(char*, int,int);
-
 int checkBounds(char [GRID_SIZE][GRID_SIZE], int ,int ,  int ,int );
 void addShip(char [GRID_SIZE][GRID_SIZE] , int ,int ,  int ,int );
 
 
-//for SMOKE_SCREEN.C
-
-
+//for smoke_screen.C
 int smokeScreen(char grid[GRID_SIZE][GRID_SIZE], char smokeGrid[GRID_SIZE][GRID_SIZE], int smokeScreenCounter, int shipsSunk, struct Input input );
 int isInBound(struct Input);
 void updateCoordBySquare(struct Input* input ,int iteration);
