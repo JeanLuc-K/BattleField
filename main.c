@@ -30,10 +30,6 @@ int getLeadingCharachterIndex(char* , int );
 void getInput(struct Input*);
 
 
-
-
-
-
 int main()
 {
     char grid1[GRID_SIZE][GRID_SIZE]; // for player 1
@@ -108,11 +104,7 @@ int main()
             printf("Invalid input. Turn skipped.. \n");
     }
 
-
-
     }
-
-   
 }
 
 
@@ -171,9 +163,8 @@ void getInput(INPUT* input)
 
     int leading2 = getLeadingCharachterIndex(stringInput, trailing1);
     int trailing2 = getTrailingCharachterIndex(stringInput,leading2);
-   
 
-
+    
     int leading3 = getLeadingCharachterIndex(stringInput, leading2+1);
     int trailing3 = getTrailingCharachterIndex(stringInput,leading3);
     
