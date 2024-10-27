@@ -72,14 +72,14 @@ int checkBounds(char grid[GRID_SIZE][GRID_SIZE], int column,int row,  int orient
 
 }
 
-int getRow(char* input,int whiteSpaceIndex)
+int getRow(char* input,int startCoord, int whiteSpaceIndex)
 {
-    if(whiteSpaceIndex-1 ==0 || whiteSpaceIndex-1 >2) //check if no character entered or more than 2 characters
+    if(whiteSpaceIndex-startCoord ==0 || whiteSpaceIndex-startCoord >2) //check if no character entered or more than 2 characters
     {
         return -1;
     }else{
         int row  = 0;
-        for(int i = 1 ; i <whiteSpaceIndex;i++)
+        for(int i = startCoord ; i <whiteSpaceIndex;i++)
         {
             int digit = getDigit(input[i]); //get each digit seperately
             if(digit != -1) 
@@ -256,7 +256,7 @@ void createGrid(char grid[10][10], char *playername)
             whiteSpaceIndex++;
         }
 
-        row = getRow(input, whiteSpaceIndex);
+        row = getRow(input,1, whiteSpaceIndex);
         if (row <= 0 || row > 10) // validate the row coordinate
         {
             printf("please enter a valid row\n");
