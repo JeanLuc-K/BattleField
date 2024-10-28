@@ -68,8 +68,8 @@ void initializeGridHelper(char[GRID_SIZE][GRID_SIZE],char[GRID_SIZE][GRID_SIZE],
 #define VERTICAL 1
 void createGrid(PLAYER* );
 void printGrid(char grid[GRID_SIZE][GRID_SIZE]);
-int checkBounds(char [GRID_SIZE][GRID_SIZE], int ,int ,  int ,int );
-void addShip(char [GRID_SIZE][GRID_SIZE] , int ,int ,  int ,int );
+void addShip(PLAYER* ,INPUT* ,int );
+int checkBounds(PLAYER* ,INPUT*,int );
 
 
 //for smoke_screen.C
