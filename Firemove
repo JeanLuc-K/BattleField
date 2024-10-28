@@ -1,48 +1,28 @@
-int fireMove(char **grid, char *playername, char **gridHitsandMisses)
+#include "headerFile.h"
+
+void fireMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input)
 {
-
-    int column;
-    int row;
-    char input[20];
-
-    printf(" %s Please enter the coordinates  to hit your opponents's ship in this format Fire [coordinates]: ", playername);
-    
-         while (1)
-        {
-            fgets(input, sizeof(input), stdin);
-            // Remove newline if present
-            clearInput(input, sizeof(input));
-            // Get column and row coordinates
-            column = getColumn(input[0]);
-            int whiteSpaceIndex = 1;
-            while (input[whiteSpaceIndex] != ' ' && whiteSpaceIndex < sizeof(input) - 1 && input[whiteSpaceIndex] != '\n') // get the index of the first white space
-            {
-                whiteSpaceIndex++;
-            }
-            row = getRow(input, whiteSpaceIndex);
-           // check if the coordinates are out of bounds
-            if (row < 0 || row >= 10 || column < 0 || column >= 10)
-            { 
-                printf("Coordinates out of bounds. Please try again.\n");
-            }
-            else
-            {
-                // Valid input
-                break; // Exit the loop since we have valid coordinates
-            }
-        }
-    
-        if (grid[row][column] == 'X')
-        {
-            // The player hit a ship
-            printf("Hit!\n");
-            gridHitsandMisses[row][column] = '*'; // Mark the location of the hit
-            return 1;
-        }
-        else
-        {
-            printf("Miss.\n");
-            gridHitsandMisses[row][column] = 'o';
-            return 0;
-        }
+    printf("\n");
+  
+    //check the validation of the input
+    int row = input.row-1;
+    int col = input.column;
+  //  printf("%d", row); debug line
+    if (row < 0 || row >= GRID_SIZE || col < 0 || col >= GRID_SIZE)
+    {
+        printf("Invalid coordinates");
+            return;
     }
+    // Check hit or miss
+    if (opposingPlayer->grid[row][col] == 'X')
+    {
+        printf("Hit!\n");
+        opposingPlayer->hitsAndMissesGrid[row][col] = '*'; // Mark the location of the hit
+    }
+    else
+    {
+        printf("Miss.\n");
+       opposingPlayer->hitsAndMissesGrid[row][col] = 'o'; // Mark the miss
+    }
+    printGrid(opposingPlayer->hitsAndMissesGrid); // Print hits/misses grid
+}
