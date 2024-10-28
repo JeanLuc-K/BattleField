@@ -136,9 +136,9 @@ int getOrientation(char* input)
 //     orientation[endOfOrientationInput - whiteSpaceBefore] = '\0'; // Null-terminate the substring
 
     if (strcmp(input, "horizontal") == 0) {
-        return 0;
+        return HORIZONTAL;
     } else if (strcmp(input, "vertical") == 0) {
-        return 1;
+        return VERTICAL;
     } else {
         printf("Please enter either 'horizontal' or 'vertical' for the orientation.\n");
         return -1;
