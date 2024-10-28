@@ -1,64 +1,46 @@
-int artilleryMove(char **grid, char *playername, char **gridHitsandMisses)
-{
-    int startcolumn;
-    int startrow;
-    char input[20];
 
-    printf(" %s Please enter the coordinates  to hit your opponents's ship in this format Artillery [top-left coordinate].: ", playername);
+#include "headerFile.h"
+
+void artilleryMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input)
+{
+    //check the validation of the input
+    int startrow = input.row-1;
+    int startcol = input.column;
     
-        while (1)
-        {
-            fgets(input, sizeof(input), stdin);
-            // Remove newline if present
-            clearInput(input, sizeof(input));
-            // Get column and row coordinates
-            startcolumn = getColumn(input[0]);
-            int whiteSpaceIndex = 1;
-            while (input[whiteSpaceIndex] != ' ' && whiteSpaceIndex < sizeof(input) - 1 && input[whiteSpaceIndex] != '\n') // get the index of the first white space
-            {
-                whiteSpaceIndex++;
-            }
-            startrow = getRow(input, whiteSpaceIndex);
-          // check if the coordinates are out of bounds
-          if (startrow < 0 || startrow >= 10 || startcolumn < 0 || startcolumn >= 10)
-            { 
-               
-                printf("Coordinates out of bounds. Please try again.\n");
-            }
-            else
-            {
-                // Valid input
-                break; // Exit the loop since we have valid coordinates
-            }
-        }
-    
+    if (startrow < 0 || startrow >= GRID_SIZE || startcol < 0 || startcol >= GRID_SIZE)
+    {
+        printf("Invalid coordinates");
+        return;
+     
+    }
+
     for (int i = 0; i < 2; i++)
     {
         for (int j = 0; j < 2; j++)
         {
             // Check the 2x2 area starting from inputed coordinates
             int row = startrow + i;
-            int column = startcolumn + j;
+            int column = startcol + j;
             // Make sure I dont go out of bounds
-            if (row < 10 && column < 10)
+            if (row < GRID_SIZE && column < GRID_SIZE)
             {
                 // Check for a hit in the grid
-                if (grid[row][column] == 'X')
+                if (opposingPlayer->grid[row][column] == 'X')
                 {
                     printf("Hit!\n");
-                    gridHitsandMisses[row][column] = '*'; // Mark the location of the hit
-                    return 1;
+                    opposingPlayer->hitsAndMissesGrid[row][column] = '*'; // Mark the location of the hit
+                
                 }
                 else
                 {
                     printf("Miss.\n");
-                    gridHitsandMisses[row][column] = 'o';
-                    return 0;
+                    opposingPlayer->hitsAndMissesGrid[row][column] = 'o';
+                    
                 }
             }
         }
     }
+//printGrid(opposingPlayer->hitsAndMissesGrid);
 
-
-return 0;
 }
+// I need to add condition where the next turn of the player who sinks the other player’s third ship in the current turn.
