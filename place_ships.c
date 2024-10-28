@@ -1,13 +1,13 @@
 #include "headerFile.h"
 
-void addShip(char grid[GRID_SIZE][GRID_SIZE], int column,int row,int orientation,int shipSize)
+void addShip(PLAYER* currentPlayer,INPUT* input,int shipSize)
 {
-    
+    int orientation = getOrientation(input->orientation);
     if(orientation==HORIZONTAL)
     {
         for(int  i = 0 ; i<shipSize;i++)
         {
-            grid[row][i+column] = 'X';
+            currentPlayer->grid[input->row][i+input->column] = 'X';
             
         }
     }else if(orientation==VERTICAL)
@@ -15,23 +15,24 @@ void addShip(char grid[GRID_SIZE][GRID_SIZE], int column,int row,int orientation
         
         for(int  i = 0 ; i<shipSize;i++)
         {
-            grid[i+row][column] = 'X';
+            currentPlayer->grid[i+input->row][input->column] = 'X';
         }
     }
 }
 
-int checkBounds(char grid[GRID_SIZE][GRID_SIZE], int column,int row,  int orientation,int shipSize)
+int checkBounds(PLAYER* currentPlayer,INPUT* input,int shipSize)
 {
+    int orientation = getOrientation(input->orientation);
    if(orientation==HORIZONTAL)
     {
-        if(column + shipSize >GRID_SIZE)
+        if(input->column + shipSize >GRID_SIZE)
         {
             printf("Ship is out of bound\n");
             return -1;
         }
     }else if(orientation ==VERTICAL)
     {
-        if(row+shipSize > GRID_SIZE)
+        if(input->row+shipSize > GRID_SIZE)
         {
             printf("Ship is out of bound\n");
             return -1;
@@ -42,7 +43,7 @@ int checkBounds(char grid[GRID_SIZE][GRID_SIZE], int column,int row,  int orient
     {
         for(int  i = 0 ; i<shipSize;i++)
         {
-            if(grid[row][column+i] != '~')
+            if(currentPlayer->grid[input->row][input->column+i] != '~')
             {
                 printf("ships overlap\n");
                 return -1;
@@ -53,7 +54,7 @@ int checkBounds(char grid[GRID_SIZE][GRID_SIZE], int column,int row,  int orient
         
         for(int  i = 0; i<shipSize;i++)
         {
-            if(grid[i+row][column] != '~')
+            if(currentPlayer->grid[i+input->row][input->column] != '~')
             {
                 printf("ships overlap\n");
                 return -1;
@@ -66,7 +67,6 @@ int checkBounds(char grid[GRID_SIZE][GRID_SIZE], int column,int row,  int orient
 
 
 }
-
 
 void createGrid(PLAYER* player)
 {
@@ -111,13 +111,13 @@ void createGrid(PLAYER* player)
             continue;
         }
 
-        if (checkBounds(player->grid, input.column, input.row, orientation, currentShipSize) == -1)
+        if (checkBounds(player,&input, currentShipSize) == -1)
         {
             i--;
             continue;
         }
         
-        addShip(player->grid, input.column, input.row, orientation, currentShipSize);
+        addShip(player,&input, currentShipSize);
         printGrid(player->grid);
         
     }
