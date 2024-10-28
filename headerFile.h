@@ -73,7 +73,7 @@ void addShip(char [GRID_SIZE][GRID_SIZE] , int ,int ,  int ,int );
 
 
 //for smoke_screen.C
-int smokeScreen(char grid[GRID_SIZE][GRID_SIZE], char smokeGrid[GRID_SIZE][GRID_SIZE], int smokeScreenCounter, int shipsSunk, struct Input input );
+int smokeScreen(PLAYER*,PLAYER*,INPUT);
 int isInBound(struct Input);
 void updateCoordBySquare(struct Input* input ,int iteration);
 
