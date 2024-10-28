@@ -60,7 +60,7 @@ void game(PLAYER* currentPlayer, PLAYER* opposingPlayer)
     }
     else if (strcasecmp(input.moveName, "smoke") == 0)
     {
-        currentPlayer->smokeScreenCounter +=smokeScreen(&currentPlayer,&opposingPlayer,input);
+        currentPlayer->smokeScreenCounter +=smokeScreen(currentPlayer,opposingPlayer,input);
         
     }
     else if (strcasecmp(input.moveName, "artillery") == 0)
