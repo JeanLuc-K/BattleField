@@ -61,7 +61,17 @@ void getName(char* name, int size, int number)
     
     printf("Please enter name of Player %d(%d max characters): ",number,size);
     fgets(name, sizeof(name), stdin);
+
+
     clearInput(name, sizeof(name));
+
+    for(int i= 0; i <size;i++) //drop the \n
+    {
+        if(name[i]=='\n')
+        {
+            name[i]='\0';
+        }
+    }
 }
 
 void initializePlayer(PLAYER* player,int number)
