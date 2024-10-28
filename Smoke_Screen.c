@@ -1,9 +1,9 @@
 #include "headerFile.h"
 
-int smokeScreen(char grid[GRID_SIZE][GRID_SIZE], char smokeGrid[GRID_SIZE][GRID_SIZE], int smokeScreenCounter, int oppShipsLeft,struct Input input )
+int smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input )
 {
-    int shipsSunk = 4- oppShipsLeft;
-    if(smokeScreenCounter>= shipsSunk)
+    int shipsSunk = 4- opposingPlayer->shipsLeft;
+    if(currentPlayer->smokeScreenCounter>= shipsSunk)
     {
         printf("You cannot hide more than you have sunk ships!Stand Strong!");
         return 0;
@@ -14,7 +14,7 @@ int smokeScreen(char grid[GRID_SIZE][GRID_SIZE], char smokeGrid[GRID_SIZE][GRID_
         {
             if(isInBound(input))
             {
-                smokeGrid[input.row][input.column]='X';
+                currentPlayer->smokeGird[input.row][input.column]='X';
                 hiddenSquares++;
             }
 
