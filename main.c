@@ -1,92 +1,85 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include "Grid_player.h"
 
+#include "headerFile.h"
 
-#define GRID_SIZE 10
+#include "input.c"
+#include "place_ships.c"
+#include "Smoke_Screen.c"
+#include "fireMove.c"
+#include "initialize_game.c"
+#include "ArtilleryMove.c"
 
-void initializeGrid(char grid[GRID_SIZE][GRID_SIZE]);
-
-void assignStartingPlayer(char**,char**,char*,char*);
 
 int main()
-{
-char grid1[GRID_SIZE][GRID_SIZE]; // for player 1
-    initializeGrid(grid1);
-    char grid2[GRID_SIZE][GRID_SIZE]; // For player 2
-    initializeGrid(grid2);
+{  
 
-    char name1[50];
-    char name2[50];
+    PLAYER player1;
+    PLAYER player2;
 
-    printf("Please enter name of Player 1(49 max characters): ");
-    fgets(name1, sizeof(name1), stdin);
-    clearInput(name1, sizeof(name1));
-
-    printf("Please enter name of Player 2(49 max characters): ");
-    fgets(name2, sizeof(name2), stdin);
-    clearInput(name2, sizeof(name2));
-
-    printf("\n");
-
-    char *firstPlayerName;
-    char *secondPlayerName;
-
-    assignStartingPlayer(&firstPlayerName, &secondPlayerName, name1, name2);
-    printf("\n");
-    printf("Player 1 please fill your grid: ");
-    createGrid(grid1, firstPlayerName);
-    printf("\n");
-    printf("Player 2 please fill your grid: ");
-    createGrid(grid2, secondPlayerName);
+    int difficultyLevel = getDifficultyLevel();
     
-   
-}
+    initializePlayer(&player1,1);
+    initializePlayer(&player2,2);
 
-void assignStartingPlayer(char** firstPlayerName, char** secondPlayerName, char*name1, char*name2)
-{
 
-    name1[strcspn(name1,"\n")] = '\0';
-    name2[strcspn(name2,"\n")] = '\0';
+    assignStartingPlayer(&player1,&player2);
+    
 
-    srand(time(NULL));
-    int randomNumber=rand()%2; //create random number 
-    if(randomNumber==0) //chooses randoml which player to start
+    printf("\n");
+    createGrid(&player1);
+    printf("\n");
+    createGrid(&player2);
+
+    for(int i=0; player1.shipsLeft>0 && player2.shipsLeft>0 ;i++)
     {
-        printf("The first player is %s\n",name1);
-        *firstPlayerName = name1;
-        *secondPlayerName = name2;
-        
-    }else
-    {
-        printf("The first player is %s\n", name2);
-        *firstPlayerName= name2;
-        *secondPlayerName = name1;
-    }
-}
-
-void initializeGrid(char grid[GRID_SIZE][GRID_SIZE])
-{
-    for (int i = 0; i < GRID_SIZE; i++)
-    {
-        for (int j = 0; j < GRID_SIZE; j++)
+        if(i%2==0)
         {
-            grid[i][j] = '~';
+            game(&player1,&player2);
+        }else
+        {
+            game(&player2,&player1);
         }
     }
-}
-
-
-int difficultyLevel(){
-   char difficulty[5];
-   printf("Please enter your difficulty level: ");
-   scanf("%s ",difficulty);
-
-   if(strcmp(difficulty, "easy") == 0){
     return 0;
-   }else{
-    return 1;
-   }
 }
+
+
+void game(PLAYER* currentPlayer, PLAYER* opposingPlayer)
+{
+    printf("%s, what is your move?\n",currentPlayer->name);
+    printf("for a list of moves, enter \"help\"\n");
+
+    
+    INPUT input;
+    getInput(&input);
+
+    if (strcasecmp(input.moveName, "fire") == 0)
+    {
+       // printf("najah");
+        fireMove(currentPlayer,opposingPlayer,input);
+    }
+    else if (strcasecmp(input.moveName, "radar") == 0)
+    {
+        // radarSweep(grid, playerName);
+    }
+    else if (strcasecmp(input.moveName, "smoke") == 0)
+    {
+        currentPlayer->smokeScreenCounter +=smokeScreen(currentPlayer,opposingPlayer,input);
+        
+    }
+    else if (strcasecmp(input.moveName, "artillery") == 0)
+    {
+        artilleryMove(currentPlayer,opposingPlayer,input);
+    }
+    else if (strcasecmp(input.moveName, "torpedo") == 0)
+    {
+        // torpedo(grid, playerName);
+    }
+    else
+    {
+        printf("Invalid input. Turn skipped.. \n");
+    }
+    
+}
+
+
+
