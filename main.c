@@ -40,9 +40,9 @@ int main()
 }
 
 
-void game(PLAYER* player1, PLAYER* player2)
+void game(PLAYER* currentPlayer, PLAYER* opposingPlayer)
 {
-    printf("%s, what is your move?\n",player1->name);
+    printf("%s, what is your move?\n",currentPlayer->name);
     printf("for a list of moves, enter \"help\"\n");
 
     
@@ -60,7 +60,7 @@ void game(PLAYER* player1, PLAYER* player2)
     }
     else if (strcasecmp(input.moveName, "smoke") == 0)
     {
-        player1->smokeScreenCounter +=smokeScreen(player1->grid,player1->smokeGird,player1->smokeScreenCounter,player2->shipsLeft,input);
+        currentPlayer->smokeScreenCounter +=smokeScreen(&currentPlayer,&opposingPlayer,input);
         
     }
     else if (strcasecmp(input.moveName, "artillery") == 0)
