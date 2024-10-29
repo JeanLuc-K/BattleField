@@ -11,21 +11,27 @@
 #include "torpedo.c"
 #include "ArtilleryMove.c"
 
+int difficulty =0;
 int main()
 {
 
     PLAYER player1;
     PLAYER player2;
 
-    int difficultyLevel = getDifficultyLevel();
+    difficulty = getDifficultyLevel();
 
     initializePlayer(&player1, 1);
     initializePlayer(&player2, 2);
 
+    printf("\n");
+
     assignStartingPlayer(&player1, &player2);
 
     placeShips(&player1);
+    system("cls");
     placeShips(&player2);
+    system("cls");
+
 
    for (int i = 0; player1.shipsLeft > 0 && player2.shipsLeft > 0;)
     {
@@ -44,54 +50,69 @@ int main()
         if (turnSuccess) {
             i++;
         }
+        
+    printf("\n\n");
+
+    }
+
+    if(player1.shipsLeft==0)
+    {
+        printf("Congrats %s, you have won!",player2.name);
+    }else{
+        printf("Congrats %s, you have defeated %s!",player1.name,player2.name);
     }
     return 0;
 }
 
 int game(PLAYER *currentPlayer, PLAYER *opposingPlayer)
 {
+
     printf("%s, what is your move?\n", currentPlayer->name);
     printf("for a list of moves, enter \"help\"\n");
+
+    checkArtillery(currentPlayer);
+    checkTorpedo(currentPlayer);
 
     printGrid(currentPlayer->hitsAndMissesGrid);
     INPUT input;
     getInput(&input);
-    input.row--;
-
+    
+    
+    
     if (strcasecmp(input.moveName, "fire") == 0)
     {
         fireMove(currentPlayer, opposingPlayer, input);
-        return 1; // Successful turn
+        
     }
     else if (strcasecmp(input.moveName, "radar") == 0)
     {
         RadarSweep(currentPlayer, opposingPlayer, &input);
-        return 1; // Successful turn
+        
     }
     else if (strcasecmp(input.moveName, "smoke") == 0)
     {
         smokeScreen(currentPlayer, opposingPlayer, input);
-        return 1; // Successful turn
+        
     }
     else if (strcasecmp(input.moveName, "artillery") == 0)
     { 
      
-        artilleryMove(currentPlayer, opposingPlayer, input);
+        artilleryMove(currentPlayer, opposingPlayer, &input);
         
 
-        return 1; // Successful turn
+        
     }
     else if (strcasecmp(input.moveName, "torpedo") == 0)
     {
         torpedo(currentPlayer, opposingPlayer, &input);
-        return 1; // Successful turn
+        
     }
     else if (strcasecmp(input.moveName, "help") == 0)
     {
         printf("Moves are:\n");
         printf("1) Fire.\n");
         printf("2) Radar Sweep(you are only allowed 3 radar sweeps).\n");
-        printf("3) Smoke Screen(you are allowed one smoke screen per ship they have sunk).\n");
+        printf("3) Smoke Screen(you are allowed one smoke screen per ship opponent have sunk).\n");
         printf("4) Artillery(can be accessed after sinking opponent's ship ).\n");
         printf("5) Torpedo(can be accessed after sinking opponent's third ship).\n");
         return 0; // "Help" does not end the turn
@@ -101,4 +122,8 @@ int game(PLAYER *currentPlayer, PLAYER *opposingPlayer)
         printf("Invalid input. Turn skipped.\n");
         return 1; 
     }
+
+    printGrid(currentPlayer->hitsAndMissesGrid);
+    return 1; //successful turn
+
 }
