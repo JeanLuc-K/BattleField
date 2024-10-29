@@ -43,9 +43,9 @@ int getDifficultyLevel()
         printf("Enter a difficulty level:");
         getInput(&input);
     
-        if(strcmp(input.moveName, "easy") == 0){
+        if(strcasecmp(input.moveName, "easy") == 0){
             return 0;
-        }else if(strcmp(input.moveName, "hard")==0) {
+        }else if(strcasecmp(input.moveName, "hard")==0) {
             return 1;
         }else{
         printf("difficulty level unknow, try again.\n");
