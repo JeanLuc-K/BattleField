@@ -2,64 +2,78 @@
 
 void fireMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input)
 {
-    printf("\n");
-  
-    //extracting the row and column from the input
+ 
+    //extracting the row and col from input
     int row = input.row;
     int col = input.column;
   //  printf("%d", row); debug line
-    //check validation for the input
+  //checking validation
     if (row < 0 || row >= GRID_SIZE || col < 0 || col >= GRID_SIZE)
     {
         printf("Invalid coordinates");
             return;
     }
-    // check if hits or miss
+    // Check hit or miss
     if (opposingPlayer->grid[row][col] == 'X')
     {
         printf("Hit!\n");
-        opposingPlayer->hitsAndMissesGrid[row][col] = '*'; // Mark the location of the hit
-        addHitOnShip(opposingPlayer,&input); //call this function to mark the hit on the grid
+        currentPlayer->hitsAndMissesGrid[row][col] = '*'; // Mark the location of the hit
+        addHitOnShip(currentPlayer,opposingPlayer,&input);
     }
     else
     {
         printf("Miss.\n");
-       opposingPlayer->hitsAndMissesGrid[row][col] = 'o'; // Mark the miss
+       currentPlayer->hitsAndMissesGrid[row][col] = 'o'; // Mark the miss
     }
     // printGrid(opposingPlayer->hitsAndMissesGrid); // Print hits/misses grid
 }
 
 //function to register a hit on the ship for the player
-void addHitOnShip(PLAYER* player, INPUT* input)
+void addHitOnShip(PLAYER* currentPlayer,PLAYER* opposingPlayer, INPUT* input)
 {
-    int hitCoord = input->row*10+input->column; // converting the coordinates to integer
+
+    int hitCoord = input->row*10+input->column; //converting coordinates to integers
     SHIP* currentShip ;
     // loop through each ship the player has
     for(int  i =0;i< 4; i++)
     {
-        currentShip= &player->ships[i];
+        currentShip= &opposingPlayer->ships[i];
         if(currentShip->hasFallen==1) //skip if the ship has fallen
         {
             continue;
         }
-    //check if any coordinate in the ship matches the hit one
+
         for(int  j = 0 ; j < currentShip->size;j++)
         {
 
-            if(currentShip->coord[j]==hitCoord) //if the current ship is hitten
+            if(currentShip->coord[j]==hitCoord)
             {
-                currentShip->hits++; //increament the hit counter for the ship
+                currentShip->hits++;
 
                 if(currentShip->hits == currentShip->size)
                 {
-                    currentShip->hasFallen=1; 
-                    player->shipsLeft--;
-                    printf("%s has fallen!\n",currentShip->name); //notify that the ship is destroyed
+                    printf("%s has fallen!\n",currentShip->name); //ship is destroyed
+                    currentShip->hasFallen=1;
+                    shipFallen(currentPlayer,opposingPlayer,input); //reprecussions of a fallenSHIP
+
+
                 }
-                return;
+                
             }
         }
 
         
+    }
+}
+
+void shipFallen(PLAYER* currentPlayer,PLAYER* opposingPlayer, INPUT* input)
+{
+    
+    opposingPlayer->shipsLeft--;
+    currentPlayer->artillery =1;
+
+    if(opposingPlayer->shipsLeft==1)
+    {
+        currentPlayer->torpedo=1;
     }
 }
