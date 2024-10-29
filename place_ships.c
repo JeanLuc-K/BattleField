@@ -114,14 +114,13 @@ void placeShips(PLAYER* player)
             continue;
         }
 
-        if (input.row <= 0 || input.row > 10) // validate the row coordinate
+        if (input.row < 0 || input.row > 9) // validate the row coordinate
         {
             printf("please enter a valid row\n");
             i--; // to repeat the loop ;
             continue;
         }
 
-        input.row--; // to accomodate for the index that starts at 0;
 
         int orientation = getOrientation(input.orientation); // 0  for horizontal 1 for vertical
 
@@ -139,7 +138,7 @@ void placeShips(PLAYER* player)
         }
         
         addShip(player,&input,shipsNames[i],currentShipSize);
-        printGrid(player->grid);
+        printGrid(player->hitsAndMissesGrid);
         
     }
 

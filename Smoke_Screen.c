@@ -29,8 +29,7 @@ void smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input )
         }
         if(hiddenSquares==0)
         {
-            printf("let it be known that you have smoked out of bound squares, great job!\n");
-            return;
+            printf("let it be known that you have hidden absolutely no square, great job!");
         }
         
     }

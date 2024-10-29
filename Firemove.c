@@ -2,8 +2,7 @@
 
 void fireMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input)
 {
-    printf("\n");
-  
+ 
     //check the validation of the input
     int row = input.row;
     int col = input.column;
@@ -16,26 +15,39 @@ void fireMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input)
     // Check hit or miss
     if (opposingPlayer->grid[row][col] == 'X')
     {
+        if(currentPlayer->hitsAndMissesGrid[row][col]=='*')
+        {
+            printf("congrats on hitting the same place twice!\n");
+            return;
+        }
         printf("Hit!\n");
-        opposingPlayer->hitsAndMissesGrid[row][col] = '*'; // Mark the location of the hit
-        addHitOnShip(opposingPlayer,&input);
+        currentPlayer->hitsAndMissesGrid[row][col] = '*'; // Mark the location of the hit
+        addHitOnShip(currentPlayer,opposingPlayer,&input);
     }
     else
     {
+        if(currentPlayer->hitsAndMissesGrid[row][col]=='o')
+        {
+            if(difficulty=EASY)
+            {
+                printf("why?\n");
+                return;
+            }
+        }
         printf("Miss.\n");
-       opposingPlayer->hitsAndMissesGrid[row][col] = 'o'; // Mark the miss
+       currentPlayer->hitsAndMissesGrid[row][col] = 'o'; // Mark the miss
     }
-    // printGrid(opposingPlayer->hitsAndMissesGrid); // Print hits/misses grid
 }
 
 
-void addHitOnShip(PLAYER* player, INPUT* input)
+void addHitOnShip(PLAYER* currentPlayer,PLAYER* opposingPlayer, INPUT* input)
 {
+
     int hitCoord = input->row*10+input->column;
     SHIP* currentShip ;
     for(int  i =0;i< 4; i++)
     {
-        currentShip= &player->ships[i];
+        currentShip= &opposingPlayer->ships[i];
         if(currentShip->hasFallen==1) //skip if the ship has fallen
         {
             continue;
@@ -50,14 +62,28 @@ void addHitOnShip(PLAYER* player, INPUT* input)
 
                 if(currentShip->hits == currentShip->size)
                 {
-                    currentShip->hasFallen=1;
-                    player->shipsLeft--;
                     printf("%s has fallen!\n",currentShip->name);
+                    currentShip->hasFallen=1;
+                    shipFallen(currentPlayer,opposingPlayer,input); //reprecussions of a fallenSHIP
+
+
                 }
-                return;
+                
             }
         }
 
         
+    }
+}
+
+void shipFallen(PLAYER* currentPlayer,PLAYER* opposingPlayer, INPUT* input)
+{
+    
+    opposingPlayer->shipsLeft--;
+    currentPlayer->artillery =1;
+
+    if(opposingPlayer->shipsLeft==1)
+    {
+        currentPlayer->torpedo=1;
     }
 }

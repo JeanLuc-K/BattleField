@@ -8,7 +8,8 @@
 #include <time.h>
 
 
-
+// TO REMOVE CLEARING INPUT OVERFLOW CHANGE TO 0
+#define INPUTOVERFLOW 1
 
 
 //for INPUT.C
@@ -40,6 +41,7 @@ void clearInput(char* , int);
 #define HARD 1
 #define SHIP struct Ship
 #define PLAYER struct Player
+extern int difficulty ;
 
 struct Ship
 {
@@ -59,14 +61,17 @@ struct Player
     char name[50];
     SHIP ships[4];
     int shipsLocations[4][4];
+    
     int shipsLeft;
     int smokeScreenCounter;
     int radarSweep;
-    int torpedoCounter;
+
+    int torpedo;
+    int artillery;
 };
 
 
-void game(PLAYER* player1, PLAYER* player2);
+int game(PLAYER* player1, PLAYER* player2);
 void initializePlayer(PLAYER* player,int number);
 void initializeGrid(char grid[GRID_SIZE][GRID_SIZE]);
 void assignStartingPlayer(PLAYER*,PLAYER*);
@@ -92,12 +97,13 @@ int checkBounds(PLAYER* ,INPUT*,int );
 //for firemove.c
 
 void fireMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input);
-void artilleryMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input);
-void addHitOnShip(PLAYER* , INPUT*);
+void addHitOnShip(PLAYER*, PLAYER* , INPUT*);
+void shipFallen(PLAYER* currentPlayer,PLAYER* opposingPlayer, INPUT* input);
+
 
 //for smoke_screen.C
 void smokeScreen(PLAYER*,PLAYER*,INPUT);
-int isInBound(struct Input);
+int isInBound(INPUT*);
 void updateCoordBySquare(struct Input* input ,int iteration);
 
 // for radarSweep.c
@@ -105,6 +111,12 @@ void RadarSweep(PLAYER*,PLAYER*,INPUT*);
 
 //for torpedo.c
 void torpedo(PLAYER*,PLAYER*,INPUT*);
+
+//for arilleryMove.c
+void checkArtillery(PLAYER* currentPlayer);
+void artilleryMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input);
+
+
 
 
 

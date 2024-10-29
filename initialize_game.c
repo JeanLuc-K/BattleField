@@ -52,6 +52,8 @@ int getDifficultyLevel()
         }
 
     }
+
+    printf("\n");
 }
 
 void getName(char* name, int size, int number)
@@ -82,5 +84,7 @@ void initializePlayer(PLAYER* player,int number)
     player->shipsLeft =4;
     player->smokeScreenCounter = 0;
     player->radarSweep =0;
+    player-> artillery=0;
+    player->torpedo=0;
     
 }
