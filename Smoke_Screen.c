@@ -1,12 +1,12 @@
 #include "headerFile.h"
 
-int smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input )
+void smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input )
 {
     int shipsSunk = 4- opposingPlayer->shipsLeft;
     if(currentPlayer->smokeScreenCounter>= shipsSunk)
     {
-        printf("You cannot hide more than you have sunk ships!Stand Strong!");
-        return 0;
+        printf("You cannot hide more than you have sunk ships!Stand Strong\n!");
+        return;
     }else{
 
         int hiddenSquares = 0;
@@ -30,7 +30,7 @@ int smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input )
     printf("\n");
 
     
-    return 1;
+    currentPlayer->smokeScreenCounter++;
 
     
 }

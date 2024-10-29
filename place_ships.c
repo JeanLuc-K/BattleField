@@ -1,13 +1,29 @@
 #include "headerFile.h"
 
-void addShip(PLAYER* currentPlayer,INPUT* input,int shipSize)
-{
+void addShip(PLAYER* currentPlayer,INPUT* input,const char* name,int shipSize)
+{   
+    SHIP* ships = currentPlayer->ships;
+    int shipIndex = 4-shipSize;
+
+    int sizeofName =0;
+    while(name[sizeofName]!= '\0')
+    {
+        sizeofName++;
+    }
+
+    strncpy(ships[shipIndex].name, name, sizeofName);
+    ships[shipIndex].name[sizeofName] = '\0';
+
+    currentPlayer->ships[shipIndex].size = shipSize;
+
+
     int orientation = getOrientation(input->orientation);
     if(orientation==HORIZONTAL)
     {
         for(int  i = 0 ; i<shipSize;i++)
         {
             currentPlayer->grid[input->row][i+input->column] = 'X';
+           currentPlayer->ships[shipIndex].coord[i] = (input->row * 10) + (input->column + i); 
             
         }
     }else if(orientation==VERTICAL)
@@ -16,8 +32,12 @@ void addShip(PLAYER* currentPlayer,INPUT* input,int shipSize)
         for(int  i = 0 ; i<shipSize;i++)
         {
             currentPlayer->grid[i+input->row][input->column] = 'X';
+            currentPlayer->ships[shipIndex].coord[i] = (input->row + i) * 10 + input->column; 
         }
     }
+    ships[shipIndex].hits=0;
+    ships[shipIndex].hasFallen =0;
+
 }
 
 int checkBounds(PLAYER* currentPlayer,INPUT* input,int shipSize)
@@ -68,7 +88,7 @@ int checkBounds(PLAYER* currentPlayer,INPUT* input,int shipSize)
 
 }
 
-void createGrid(PLAYER* player)
+void placeShips(PLAYER* player)
 {
 
     printf("%s, please enter your ships coordinate.\n", player->name);
@@ -107,6 +127,7 @@ void createGrid(PLAYER* player)
 
         if (orientation == -1) // validate orientation
         {
+            printf("please enter a valid column from A to J\n");
             i--;
             continue;
         }
@@ -117,9 +138,11 @@ void createGrid(PLAYER* player)
             continue;
         }
         
-        addShip(player,&input, currentShipSize);
+        addShip(player,&input,shipsNames[i],currentShipSize);
         printGrid(player->grid);
         
     }
+
+    printf("\n");
 }
 

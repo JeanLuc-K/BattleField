@@ -1,6 +1,4 @@
-#include <stdio.h>
 #include "headerFile.h"
-#include "RadarSweep.h"
 
 //radar sweep function checks in a 2x2 area if it exists enemy ships and display result
 
@@ -26,7 +24,7 @@ void RadarSweep(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input){
         for (int j = col; j < col + 2 && j < GRID_SIZE; j++){
         if (opposingPlayer->grid[i][j] == 'X')
         {
-            if(opposingPlayer->smokeGird[i][j]!="X")
+            if(opposingPlayer->smokeGird[i][j]!='X') //check if its not hidden by smoke
             {
                 enemyFound = 1;
                 break; //we exist the loop when we find an enemy

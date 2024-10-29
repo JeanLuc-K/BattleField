@@ -35,19 +35,17 @@ void initializeGrid(char grid[GRID_SIZE][GRID_SIZE])
 
 int getDifficultyLevel()
 {
-   char difficulty[6];
-   printf("Please enter your difficulty level: ");
+   INPUT input;
+   
 
     while(1)
     {
-        
-        fgets(difficulty,sizeof(difficulty),stdin);
-        clearInput(difficulty,sizeof(difficulty));
-
-
-        if(strcmp(difficulty, "easy\n") == 0){
+        printf("Enter a difficulty level:");
+        getInput(&input);
+    
+        if(strcmp(input.moveName, "easy") == 0){
             return 0;
-        }else if(strcmp(difficulty, "hard\n")==0) {
+        }else if(strcmp(input.moveName, "hard")==0) {
             return 1;
         }else{
         printf("difficulty level unknow, try again.\n");
@@ -83,4 +81,6 @@ void initializePlayer(PLAYER* player,int number)
     getName(player->name,sizeof(player->name),number);
     player->shipsLeft =4;
     player->smokeScreenCounter = 0;
+    player->radarSweep =0;
+    
 }

@@ -104,7 +104,6 @@ int getColumn(char input)
         return 9;  
     }else 
     {
-         printf("Please enter a letter between A and J for the column\n");
         return -1;
     }
 
@@ -193,6 +192,7 @@ void getInput(INPUT* input)
     {
         input->moveName[i]= stringInput[leading1+i];
     }
+    input->moveName[trailing1-leading1]='\0';
 
     int leading2 = getLeadingCharachterIndex(stringInput, trailing1);
     int trailing2 = getTrailingCharachterIndex(stringInput,leading2);
