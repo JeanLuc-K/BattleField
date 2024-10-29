@@ -7,12 +7,19 @@ void smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input )
     {
         printf("You cannot hide more than you have sunk ships!Stand Strong\n!");
         return;
-    }else{
+    }
+    else if (isInBound(&input)==0)
+    {
+        printf("Invalid coord\n");
+        return;
+    }
+    else
+    {
 
         int hiddenSquares = 0;
         for(int i = 0 ; i < 4 ; i++)
         {
-            if(isInBound(input))
+            if(isInBound(&input))
             {
                 currentPlayer->smokeGird[input.row][input.column]='X';
                 hiddenSquares++;
@@ -22,27 +29,27 @@ void smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input )
         }
         if(hiddenSquares==0)
         {
-            printf("you have hidden absolutely nothing, great job!");
+            printf("let it be known that you have smoked out of bound squares, great job!\n");
+            return;
         }
         
     }
 
-    printf("\n");
-
+    system("cls");
     
     currentPlayer->smokeScreenCounter++;
 
     
 }
 
-int isInBound(struct Input input)
+int isInBound(INPUT* input)
 {
-     if (input.row < 0 || input.row >= GRID_SIZE) {
+     if (input->row < 0 || input->row >= GRID_SIZE) {
         return 0;
     }
 
     
-    if (input.column < 0 || input.column >= GRID_SIZE) {
+    if (input->column < 0 || input->column >= GRID_SIZE) {
         return 0;
     }
 
