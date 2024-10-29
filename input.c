@@ -17,7 +17,9 @@ int getRow(char* input,int startCoord, int whiteSpaceIndex)
             }else return -1;
             
         }
-        return row/10;
+        row = row/10;
+        row--;
+        return row;
     }
     
 
@@ -39,6 +41,12 @@ int getDigit(char c)
 
 void clearInput(char* input, int size) //removes any overflow in the input
 {
+
+    if(INPUTOVERFLOW==0)
+    {
+        return;
+    }
+    
     int hasNewLine = 0;
     for(int i = 0 ; i < size; i++) //check if the input has a newline charachter
     {
@@ -59,7 +67,6 @@ void clearInput(char* input, int size) //removes any overflow in the input
 
 void printGrid(char grid[GRID_SIZE][GRID_SIZE])
 {
-
     printf("    A B C D E F G H I J\n");
 
     for (int i = 0; i < GRID_SIZE; i++)
@@ -72,8 +79,19 @@ void printGrid(char grid[GRID_SIZE][GRID_SIZE])
         }
         for (int j = 0; j < GRID_SIZE; j++)
         {
-
-            printf("%c ", grid[i][j]);
+            if(difficulty==HARD)
+            {
+                if(grid[i][j]=='o')
+                {
+                    printf("~ ");
+                }else 
+                {
+                    printf("%c ", grid[i][j]);
+                }
+            }else{
+                 printf("%c ", grid[i][j]);
+            }
+           
         }
         printf("\n");
     }
@@ -197,6 +215,12 @@ void getInput(INPUT* input)
     int leading2 = getLeadingCharachterIndex(stringInput, trailing1);
     int trailing2 = getTrailingCharachterIndex(stringInput,leading2);
 
+    if(strcmp(input->moveName,"torpedo")==0)
+    {
+        input->row = getRow(stringInput,leading2,trailing2);
+        input->column = getColumn(stringInput[leading2]);
+        return;
+    }
     
     int leading3 = getLeadingCharachterIndex(stringInput, leading2+1);
     int trailing3 = getTrailingCharachterIndex(stringInput,leading3);
