@@ -1,22 +1,27 @@
-#include "headerFile.h"
+smoke screen #include "headerFile.h"
 //this function hide a 2x2 area on the player's grid
 void smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input )
-{
-    //calculating the number of lost ships
-   int shipsSunk = 4- opposingPlayer->shipsLeft;
+{   //calculating the number of lost ships
+    int shipsSunk = 4- opposingPlayer->shipsLeft;
     //check if the player has used this function >= to the number of sunk ships
     if(currentPlayer->smokeScreenCounter>= shipsSunk)
     {
         printf("You cannot hide more than you have sunk ships!Stand Strong\n!");
         return;
-    }else{
+    }
+    else if (isInBound(&input)==0)
+    {
+        printf("Invalid coord\n");
+        return;
+    }
+    else
+    {
 
         int hiddenSquares = 0; // counter for squares that are hidder successfully
-        //looping from the given coordinates
+         //looping from the given coordinates
         for(int i = 0 ; i < 4 ; i++)
-        {   
-            //validate the input
-            if(isInBound(input))
+        {
+            if(isInBound(&input))
             {
                 currentPlayer->smokeGird[input.row][input.column]='X';
                 hiddenSquares++;
@@ -27,7 +32,7 @@ void smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input )
         //check if no squares were hidden
         if(hiddenSquares==0)
         {
-            printf("you have hidden absolutely nothing, great job!");
+            printf("let it be known that you have hidden absolutely no square, great job!");
         }
         
     }
@@ -40,15 +45,15 @@ void smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input )
     
 }
 //function to check the validation of the given input
-int isInBound(struct Input input)
+int isInBound(INPUT* input)
 {
-     if (input.row < 0 || input.row >= GRID_SIZE) {
-        return 0; //out of bound
+     if (input->row < 0 || input->row >= GRID_SIZE) {
+        return 0;
     }
 
     
-    if (input.column < 0 || input.column >= GRID_SIZE) {
-        return 0; //out of bound
+    if (input->column < 0 || input->column >= GRID_SIZE) {
+        return 0;
     }
 
     return 1;
@@ -71,4 +76,3 @@ void updateCoordBySquare(struct Input*input ,int iteration)
         input->row--;    //up even though unecessary
     }
 }
-
