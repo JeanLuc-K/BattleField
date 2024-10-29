@@ -32,6 +32,7 @@ void RadarSweep(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input){
             
         }
     }
+    //displaying the result of the move
     if (enemyFound)
     {
         printf("Enemy ships found");
