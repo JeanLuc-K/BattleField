@@ -7,7 +7,7 @@ void fireMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input)
     int row = input.row;
     int col = input.column;
   //  printf("%d", row); debug line
-  //checking validation
+    //checking validation
     if (row < 0 || row >= GRID_SIZE || col < 0 || col >= GRID_SIZE)
     {
         printf("Invalid coordinates");
@@ -16,16 +16,28 @@ void fireMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input)
     // Check hit or miss
     if (opposingPlayer->grid[row][col] == 'X')
     {
+        if(currentPlayer->hitsAndMissesGrid[row][col]=='*')
+        {
+            printf("congrats on hitting the same place twice!\n");
+            return;
+        }
         printf("Hit!\n");
         currentPlayer->hitsAndMissesGrid[row][col] = '*'; // Mark the location of the hit
         addHitOnShip(currentPlayer,opposingPlayer,&input);
     }
     else
     {
+        if(currentPlayer->hitsAndMissesGrid[row][col]=='o')
+        {
+            if(difficulty=EASY)
+            {
+                printf("why?\n");
+                return;
+            }
+        }
         printf("Miss.\n");
        currentPlayer->hitsAndMissesGrid[row][col] = 'o'; // Mark the miss
     }
-    // printGrid(opposingPlayer->hitsAndMissesGrid); // Print hits/misses grid
 }
 
 //function to register a hit on the ship for the player
@@ -34,7 +46,7 @@ void addHitOnShip(PLAYER* currentPlayer,PLAYER* opposingPlayer, INPUT* input)
 
     int hitCoord = input->row*10+input->column; //converting coordinates to integers
     SHIP* currentShip ;
-    // loop through each ship the player has
+    //loop over each ship 
     for(int  i =0;i< 4; i++)
     {
         currentShip= &opposingPlayer->ships[i];
