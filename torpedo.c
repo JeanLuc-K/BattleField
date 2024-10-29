@@ -1,10 +1,10 @@
 #include "headerFile.h"
 
 void torpedo(PLAYER* currentPlayer, PLAYER* opposingPlayer, INPUT* input) {
-    int torpedoUsed = 0; // when its 1 then we cant do the move
-
     // check if torpedo can be used: allow only if not used and condition met
-    if (torpedoUsed && currentPlayer->shipsLeft > 3) {
+
+    
+    if (currentPlayer->torpedo!=2) {
         printf("torpedo already used or conditions are not met.\n");
         return;
     }
@@ -14,49 +14,67 @@ void torpedo(PLAYER* currentPlayer, PLAYER* opposingPlayer, INPUT* input) {
         return;
     }
 
-    // targeting an entire row if column = -1
-   
-    if (input->column == -1) 
-    {
-        int row = input->row;
-        if (row < 0 || row >= GRID_SIZE) {
-            printf("Invalid row index.\n");
-            return;
-        }
-        for (int col = 0; col < GRID_SIZE; col++) {
-            if (opposingPlayer->grid[row][col] == '*') { 
-                opposingPlayer->grid[row][col] = 'X'; // mark hit
-                printf("Hit at row %d, col %d\n", row, col);
-            } else {
-                opposingPlayer->grid[row][col] = 'o'; // mark miss w bl hard betdall wave
-                printf("Miss at row %d, col %d\n", row, col);
-            }
+// Targeting an entire row if column = -1
+if (input->column == -1) 
+{
+    if (input->row < 0 || input->row >= GRID_SIZE) {
+        printf("Invalid row index.\n");
+        return;
+    }
+    for (int col = 0; col < GRID_SIZE; col++) {  // Loop through each column
+        if (opposingPlayer->grid[input->row][col] == 'X') { 
+            currentPlayer->hitsAndMissesGrid[input->row][col] = '*'; // Mark the location of the hit
+            
+            input->column = col;
+
+            addHitOnShip(currentPlayer, opposingPlayer, input); // Update the hit count of the ship
+
+            printf("Hit at row %d, col %d\n", input->row, col);
+        } else {
+            currentPlayer->hitsAndMissesGrid[input->row][col] = 'o'; // Mark miss
+            printf("Miss at row %d, col %d\n", input->row, col);
         }
     }
-    // targeting an entire column if row = -1
-    else if (input->row == -1) 
-    {
-        int col = input->column;
-        if (col < 0 || col >= GRID_SIZE) {
-            printf("Invalid column index.\n");
-            return;
+}
+// Targeting an entire column if row = -1
+else if (input->row == -1) 
+{
+    if (input->column < 0 || input->column >= GRID_SIZE) {
+        printf("Invalid column index.\n");
+        return;
+    }
+    for (int row = 0; row < GRID_SIZE; row++) { // Loop through each row
+        if (opposingPlayer->grid[row][input->column] == 'X') {
+            currentPlayer->hitsAndMissesGrid[row][input->column] = '*'; // Mark the location of the hit
+            
+            input->row=row;
+
+            addHitOnShip(currentPlayer, opposingPlayer, input); // Update the hit count of the ship
+
+            printf("Hit at row %d, col %d\n", row, input->column);
+        } else {
+            currentPlayer->hitsAndMissesGrid[row][input->column] = 'o'; // Mark miss
+            printf("Miss at row %d, col %d\n", row, input->column);
         }
-        for (int row = 0; row < GRID_SIZE; row++) {
-            if (opposingPlayer->grid[row][col] == '*') {
-                opposingPlayer->grid[row][col] = 'X';
-                printf("Hit at row %d, col %d\n", row, col);
-            } else {
-                opposingPlayer->grid[row][col] = 'o';
-                printf("Miss at row %d, col %d\n", row, col);
-            }
-        }
-        
+    }
+
+
     } else {
         printf("Invalid direction. Use 'R' for row or 'C' for column\n");
         return;
     }
 
-    // mark torpedo used
-    torpedoUsed = 1;
-    printf("Torpedo used successfully.\n");
+}
+
+void checkTorpedo(PLAYER* currentPlayer)
+{
+    if(currentPlayer ->torpedo==2)
+    {
+        currentPlayer->torpedo =0;
+    }
+   if(currentPlayer->torpedo ==1)
+    {
+        printf("Special move unlocked for 1 turn: torpedo!\n");
+        currentPlayer->torpedo=2;
+    }
 }
