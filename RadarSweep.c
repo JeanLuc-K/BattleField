@@ -12,35 +12,41 @@ void RadarSweep(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input){
     //check the validation of the input
     int row = input->row;
     int col = input->column;
-    if (row < 0 || row >= GRID_SIZE || col < 0 || col >= GRID_SIZE)
+    if (isInBound(input)==0)
     {
-        printf("Invalid coordinates");
+        printf("Invalid coordinates\n");
             return;
     }
     int enemyFound = 0; //creating a boolean if we found it updates to 1
     //checking the 2x2 grid starting from the row and col provided
-    for (int i = row; i < row +2 && i < GRID_SIZE; i++)
+    // for (int i = row; i < row +2 && i < GRID_SIZE; i++)
+    // {
+    //     for (int j = col; j < col + 2 && j < GRID_SIZE; j++){
+    for(int  i =0 ; i<NUMBEROFSHIPS;i++)
     {
-        for (int j = col; j < col + 2 && j < GRID_SIZE; j++){
-        if (opposingPlayer->grid[i][j] == 'X')
+
+        if(isInBound(input))
         {
-            if(opposingPlayer->smokeGird[i][j]!='X') //check if its not hidden by smoke
+            if (opposingPlayer->grid[input->row][input->column] == 'X')
             {
-                enemyFound = 1;
-                break; //we exist the loop when we find an enemy
+                if(opposingPlayer->smokeGird[input->row][input->column]!='X') //check if its not hidden by smoke
+                {
+                    enemyFound = 1;
+                    break; //we exist the loop when we find an enemy
+                }
+                
             }
-            
         }
+        updateCoordBySquare(input,i);
     }
     //displaying the result of the move
     if (enemyFound)
     {
-        printf("Enemy ships found");
+        printf("Enemy ships found\n");
     }
     else
     {
-        printf("No enemy ships found");
+        printf("No enemy ships found\n");
     }
         currentPlayer->radarSweep++; //adding to check after if it exceeds 3
-    }
 }
