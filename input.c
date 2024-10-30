@@ -129,28 +129,6 @@ int getColumn(char input)
 
 int getOrientation(char* input)
  {
-//     int whiteSpaceBefore = whiteSpaceIndex;
-//     while(input[whiteSpaceBefore] == ' ' && input[whiteSpaceBefore] != '\0')
-//     {
-//         whiteSpaceBefore++;
-//     }
-
-//     int endOfOrientationInput = whiteSpaceBefore+1;
-//     while(input[endOfOrientationInput]!= ' ' && input[endOfOrientationInput]!= '\n' && input[endOfOrientationInput] != '\0')
-//     {
-//         endOfOrientationInput++;
-//     }
-
-//     if(endOfOrientationInput-whiteSpaceBefore >10)
-//     {
-//         return -1;
-//     }
-
-
-//     char orientation[11];
-
-//     strncpy(orientation, input + whiteSpaceBefore, endOfOrientationInput - whiteSpaceBefore);
-//     orientation[endOfOrientationInput - whiteSpaceBefore] = '\0'; // Null-terminate the substring
 
     if (strcmp(input, "horizontal") == 0) {
         return HORIZONTAL;
@@ -171,6 +149,7 @@ void getInputForPlacingShips(INPUT* input)
 
     fgets(stringInput,sizeof(stringInput),stdin);
     clearInput(stringInput,sizeof(stringInput));
+    //each leading and trailing are the leading and trailing whitespaces respectively
 
     int leading1 = getLeadingCharachterIndex(stringInput,0);
     int trailing1 = getTrailingCharachterIndex(stringInput,leading1);
@@ -196,6 +175,7 @@ void getInputForPlacingShips(INPUT* input)
 
 }
 
+//input for placing ship is the opposit of that to make moves
 void getInput(INPUT* input)
 {
     char stringInput[20];
@@ -248,4 +228,37 @@ int getTrailingCharachterIndex(char*input, int start)
     }
 
     return start;
+}
+
+//function to check the validation of the given input
+int isInBound(INPUT* input)
+{
+     if (input->row < 0 || input->row >= GRID_SIZE) {
+        return 0;
+    }
+
+    
+    if (input->column < 0 || input->column >= GRID_SIZE) {
+        return 0;
+    }
+
+    return 1;
+}
+//function to update the coordinates to move around the square area
+void updateCoordBySquare(struct Input*input ,int iteration)
+{
+    if(iteration ==0)
+    {
+        input->column++; //move right
+    }else if(iteration ==1)
+    { 
+        input->row++; //down
+    }else if(iteration ==2)
+    {
+        input->column--; //left
+
+    }else if (iteration == 3) 
+    {
+        input->row--;    //up even though unecessary
+    }
 }
