@@ -5,7 +5,7 @@ void torpedo(PLAYER* currentPlayer, PLAYER* opposingPlayer, INPUT* input) {
 
     
     if (currentPlayer->torpedo!=2) {
-        printf("torpedo already used or conditions are not met.\n");
+        printf("conditions are not met.\n");
         return;
     }
     // handeling cases where row or column is -1

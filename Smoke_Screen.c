@@ -1,8 +1,9 @@
-#include "headerFile.h"
-
+smoke screen #include "headerFile.h"
+//this function hide a 2x2 area on the player's grid
 void smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input )
-{
+{   //calculating the number of lost ships
     int shipsSunk = 4- opposingPlayer->shipsLeft;
+    //check if the player has used this function >= to the number of sunk ships
     if(currentPlayer->smokeScreenCounter>= shipsSunk)
     {
         printf("You cannot hide more than you have sunk ships!Stand Strong\n!");
@@ -16,7 +17,8 @@ void smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input )
     else
     {
 
-        int hiddenSquares = 0;
+        int hiddenSquares = 0; // counter for squares that are hidder successfully
+         //looping from the given coordinates
         for(int i = 0 ; i < 4 ; i++)
         {
             if(isInBound(&input))
@@ -27,6 +29,7 @@ void smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input )
 
             updateCoordBySquare(&input, i);
         }
+        //check if no squares were hidden
         if(hiddenSquares==0)
         {
             printf("let it be known that you have hidden absolutely no square, great job!");
@@ -34,13 +37,14 @@ void smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input )
         
     }
 
-    system("cls");
-    
+    printf("\n");
+
+    //increament the counter to track the number of times this move has been used
     currentPlayer->smokeScreenCounter++;
 
     
 }
-
+//function to check the validation of the given input
 int isInBound(INPUT* input)
 {
      if (input->row < 0 || input->row >= GRID_SIZE) {
@@ -54,7 +58,7 @@ int isInBound(INPUT* input)
 
     return 1;
 }
-
+//function to update the coordinates to move around the square area
 void updateCoordBySquare(struct Input*input ,int iteration)
 {
     if(iteration ==0)
@@ -72,4 +76,3 @@ void updateCoordBySquare(struct Input*input ,int iteration)
         input->row--;    //up even though unecessary
     }
 }
-

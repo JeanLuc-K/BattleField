@@ -3,10 +3,11 @@
 void fireMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input)
 {
  
-    //check the validation of the input
+    //extracting the row and col from input
     int row = input.row;
     int col = input.column;
   //  printf("%d", row); debug line
+    //checking validation
     if (row < 0 || row >= GRID_SIZE || col < 0 || col >= GRID_SIZE)
     {
         printf("Invalid coordinates");
@@ -39,12 +40,13 @@ void fireMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input)
     }
 }
 
-
+//function to register a hit on the ship for the player
 void addHitOnShip(PLAYER* currentPlayer,PLAYER* opposingPlayer, INPUT* input)
 {
 
-    int hitCoord = input->row*10+input->column;
+    int hitCoord = input->row*10+input->column; //converting coordinates to integers
     SHIP* currentShip ;
+    //loop over each ship 
     for(int  i =0;i< 4; i++)
     {
         currentShip= &opposingPlayer->ships[i];
@@ -62,7 +64,7 @@ void addHitOnShip(PLAYER* currentPlayer,PLAYER* opposingPlayer, INPUT* input)
 
                 if(currentShip->hits == currentShip->size)
                 {
-                    printf("%s has fallen!\n",currentShip->name);
+                    printf("%s has fallen!\n",currentShip->name); //ship is destroyed
                     currentShip->hasFallen=1;
                     shipFallen(currentPlayer,opposingPlayer,input); //reprecussions of a fallenSHIP
 
