@@ -1,18 +1,20 @@
 #include "headerFile.h"
 
-void fireMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input)
+void fireMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input)
 {
  
     //extracting the row and col from input
-    int row = input.row;
-    int col = input.column;
+    int row = input->row;
+    int col = input->column;
   //  printf("%d", row); debug line
+    
     //checking validation
-    if (row < 0 || row >= GRID_SIZE || col < 0 || col >= GRID_SIZE)
+    if (isInBound(input)==0)
     {
-        printf("Invalid coordinates");
+        printf("Invalid coordinates\n");
             return;
     }
+
     // Check hit or miss
     if (opposingPlayer->grid[row][col] == 'X')
     {
@@ -23,7 +25,7 @@ void fireMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input)
         }
         printf("Hit!\n");
         currentPlayer->hitsAndMissesGrid[row][col] = '*'; // Mark the location of the hit
-        addHitOnShip(currentPlayer,opposingPlayer,&input);
+        addHitOnShip(currentPlayer,opposingPlayer,input);
     }
     else
     {
@@ -47,7 +49,7 @@ void addHitOnShip(PLAYER* currentPlayer,PLAYER* opposingPlayer, INPUT* input)
     int hitCoord = input->row*10+input->column; //converting coordinates to integers
     SHIP* currentShip ;
     //loop over each ship 
-    for(int  i =0;i< 4; i++)
+    for(int  i =0;i< NUMBEROFSHIPS; i++)
     {
         currentShip= &opposingPlayer->ships[i];
         if(currentShip->hasFallen==1) //skip if the ship has fallen
