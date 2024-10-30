@@ -32,11 +32,14 @@ int getRow(char*, int,int);
 int getTrailingCharachterIndex(char*, int );
 int getLeadingCharachterIndex(char* , int );
 void clearInput(char* , int);
+int isInBound(INPUT*);
+void updateCoordBySquare(struct Input* input ,int iteration);
+
 
 
 //for initialize_game
 #define GRID_SIZE 10
-
+#define NUMBEROFSHIPS 4
 #define EASY 0
 #define HARD 1
 #define SHIP struct Ship
@@ -59,8 +62,8 @@ struct Player
     char hitsAndMissesGrid[GRID_SIZE][GRID_SIZE];
     char smokeGird[GRID_SIZE][GRID_SIZE];
     char name[50];
-    SHIP ships[4];
-    int shipsLocations[4][4];
+    SHIP ships[NUMBEROFSHIPS];
+    int shipsLocations[NUMBEROFSHIPS][4];
     
     int shipsLeft;
     int smokeScreenCounter;
@@ -96,15 +99,13 @@ int checkBounds(PLAYER* ,INPUT*,int );
 
 //for firemove.c
 
-void fireMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input);
+void fireMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input);
 void addHitOnShip(PLAYER*, PLAYER* , INPUT*);
 void shipFallen(PLAYER* currentPlayer,PLAYER* opposingPlayer, INPUT* input);
 
 
 //for smoke_screen.C
-void smokeScreen(PLAYER*,PLAYER*,INPUT);
-int isInBound(INPUT*);
-void updateCoordBySquare(struct Input* input ,int iteration);
+void smokeScreen(PLAYER*,PLAYER*,INPUT*);
 
 // for radarSweep.c
 void RadarSweep(PLAYER*,PLAYER*,INPUT*);
