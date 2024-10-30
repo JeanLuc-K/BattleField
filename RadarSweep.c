@@ -35,11 +35,11 @@ void RadarSweep(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input){
     //displaying the result of the move
     if (enemyFound)
     {
-        printf("Enemy ships found\n");
+        printf("Enemy ships found");
     }
     else
     {
-        printf("No enemy ships found\n");
+        printf("No enemy ships found");
     }
         currentPlayer->radarSweep++; //adding to check after if it exceeds 3
     }
