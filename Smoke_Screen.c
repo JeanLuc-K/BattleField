@@ -32,11 +32,12 @@ void smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input )
         //check if no squares were hidden
         if(hiddenSquares==0)
         {
-            printf("let it be known that you have hidden absolutely no square, great job!");
+            printf("let it be known that you have hidden absolutely no square, great job!\n");
+            return;
         }
         
     }
-
+    system("cls");
     printf("\n");
 
     //increament the counter to track the number of times this move has been used
