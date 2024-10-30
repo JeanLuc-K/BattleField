@@ -81,7 +81,7 @@ int game(PLAYER *currentPlayer, PLAYER *opposingPlayer)
     
     if (strcasecmp(input.moveName, "fire") == 0)
     {
-        fireMove(currentPlayer, opposingPlayer, input);
+        fireMove(currentPlayer, opposingPlayer, &input);
         
     }
     else if (strcasecmp(input.moveName, "radar") == 0)
@@ -91,7 +91,7 @@ int game(PLAYER *currentPlayer, PLAYER *opposingPlayer)
     }
     else if (strcasecmp(input.moveName, "smoke") == 0)
     {
-        smokeScreen(currentPlayer, opposingPlayer, input);
+        smokeScreen(currentPlayer, opposingPlayer, &input);
         
     }
     else if (strcasecmp(input.moveName, "artillery") == 0)
