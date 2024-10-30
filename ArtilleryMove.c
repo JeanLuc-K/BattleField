@@ -2,7 +2,7 @@
 
 void artilleryMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input)
 {
-    if (opposingPlayer->shipsLeft > 4) { // i can only access this move if at least 1 ship is sunk
+    if (currentPlayer->artillery!=2) { // i can only access this move if at least 1 ship is sunk
         printf("Artillery conditions are not met.\n");
         return;
     }
@@ -14,22 +14,22 @@ void artilleryMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input)
     }
     
 
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < NUMBEROFSHIPS; i++)
     {
-        for (int j = 0; j < 2; j++)
-        {
-            // Check the 2x2 area starting from inputed coordinates
-            input->row+= i ;
-            input->column+=j;
+        
             // Make sure I dont go out of bounds
-            if (input->row < GRID_SIZE && input->column < GRID_SIZE)
+            if (isInBound(input)==1)
             {
                 // Check for a hit in the grid
                 if (opposingPlayer->grid[input->row][input->column] == 'X')
                 {
                     printf("Hit!\n");
-                    currentPlayer->hitsAndMissesGrid[input->row][input->column] = '*'; // Mark the location of the hit
-                    addHitOnShip(currentPlayer, opposingPlayer,input); //update the hit count of the ship
+                    if(currentPlayer->hitsAndMissesGrid[input->row][input->column]!='*')
+                    {
+                        currentPlayer->hitsAndMissesGrid[input->row][input->column] = '*'; // Mark the location of the hit
+                        addHitOnShip(currentPlayer, opposingPlayer,input); //update the hit count of the ship
+               
+                    }
                 }
                 else
                 {
@@ -38,13 +38,17 @@ void artilleryMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input)
                     
                 }
             }
-        }
+
+            updateCoordBySquare(input,i);
     }
+
+    
 //printGrid(opposingPlayer->hitsAndMissesGrid);
 }
 
 //checking if we can use this move
-void checkArtillery(PLAYER* currentPlayer)
+//first when artillery can be used , it is set to one, the first iteration its updated to 2 so that the second itert=ation its back to 0 so ca't be used again
+void checkArtillery(PLAYER* currentPlayer) 
 {
     if(currentPlayer->artillery==2 )
     {
