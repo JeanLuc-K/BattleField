@@ -1,6 +1,6 @@
 #include "headerFile.h"
 
-void artilleryMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input)
+void artilleryMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input)
 {
     if (opposingPlayer->shipsLeft > 4) { // i can only access this move if at least 1 ship is sunk
         printf("Artillery conditions are not met.\n");
@@ -41,24 +41,9 @@ void artilleryMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT input)
         }
     }
 //printGrid(opposingPlayer->hitsAndMissesGrid);
-
 }
+
 //checking if we can use this move
-void checkArtillery(PLAYER* currentPlayer)
-{
-    if(currentPlayer->artillery==2 )
-    {
-        currentPlayer->artillery=0;
-    }
-
-     if(currentPlayer->artillery==1)
-    {
-        printf("Special move unlocked for 1 turn: artillery!\n");
-        currentPlayer->artillery=2;
-
-    }
-}
-
 void checkArtillery(PLAYER* currentPlayer)
 {
     if(currentPlayer->artillery==2 )
