@@ -60,10 +60,8 @@ void getName(char* name, int size, int number)
 {
     
     printf("Please enter name of Player %d(%d max characters): ",number,size);
-    fgets(name, sizeof(name), stdin);
-
-
-    clearInput(name, sizeof(name));
+    fgets(name, size, stdin);
+    clearInput(name, size);
 
     for(int i= 0; i <size;i++) //drop the \n
     {
@@ -81,7 +79,7 @@ void initializePlayer(PLAYER* player,int number)
     initializeGrid(player->smokeGird);
 
     getName(player->name,sizeof(player->name),number);
-    player->shipsLeft =4;
+    player->shipsLeft =NUMBEROFSHIPS;
     player->smokeScreenCounter = 0;
     player->radarSweep =0;
     player-> artillery=0;
