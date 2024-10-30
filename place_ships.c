@@ -2,8 +2,8 @@
 
 void addShip(PLAYER* currentPlayer,INPUT* input,const char* name,int shipSize)
 {   
-    SHIP* ships = currentPlayer->ships;
-    int shipIndex = 4-shipSize;
+    SHIP* ships = currentPlayer->ships; //array of ships
+    int shipIndex = 4-shipSize; //first ship is the biggest
 
     int sizeofName =0;
     while(name[sizeofName]!= '\0')
@@ -12,9 +12,9 @@ void addShip(PLAYER* currentPlayer,INPUT* input,const char* name,int shipSize)
     }
 
     strncpy(ships[shipIndex].name, name, sizeofName);
-    ships[shipIndex].name[sizeofName] = '\0';
+    ships[shipIndex].name[sizeofName] = '\0'; //get the name coorectly
 
-    currentPlayer->ships[shipIndex].size = shipSize;
+    currentPlayer->ships[shipIndex].size = shipSize;//set the size of each ship
 
 
     int orientation = getOrientation(input->orientation);
@@ -23,7 +23,7 @@ void addShip(PLAYER* currentPlayer,INPUT* input,const char* name,int shipSize)
         for(int  i = 0 ; i<shipSize;i++)
         {
             currentPlayer->grid[input->row][i+input->column] = 'X';
-           currentPlayer->ships[shipIndex].coord[i] = (input->row * 10) + (input->column + i); 
+           currentPlayer->ships[shipIndex].coord[i] = (input->row * 10) + (input->column + i);//save ship coord as an integer where the  ones place is the column and the the tens place is the row smart i know 
             
         }
     }else if(orientation==VERTICAL)
@@ -95,7 +95,7 @@ void placeShips(PLAYER* player)
     printf("First start with the square(A10), then the orienttion(horizontal, vertical).\n");
 
     const char *shipsNames[] = {"Carrier", "Battleship", "Destroyer", "Submarine"}; // all ships to avoid clustering if condition
-    for (int i = 0; i < 4; i++) // 4 total ships to place
+    for (int i = 0; i < NUMBEROFSHIPS; i++) // 4 total ships to place
     {
 
         int currentShipSize = 4 - i; // reverse order size
@@ -138,7 +138,7 @@ void placeShips(PLAYER* player)
         }
         
         addShip(player,&input,shipsNames[i],currentShipSize);
-        printGrid(player->hitsAndMissesGrid);
+        printGrid(player->grid);
         
     }
 
