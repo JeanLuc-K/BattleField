@@ -23,16 +23,17 @@ if (input->column == -1)
     }
     for (int col = 0; col < GRID_SIZE; col++) {  // Loop through each column
         if (opposingPlayer->grid[input->row][col] == 'X') { 
-            currentPlayer->hitsAndMissesGrid[input->row][col] = '*'; // Mark the location of the hit
             
-            input->column = col;
-
-            addHitOnShip(currentPlayer, opposingPlayer, input); // Update the hit count of the ship
-
-            printf("Hit at row %d, col %d\n", input->row, col);
+            if(currentPlayer->hitsAndMissesGrid[input->row][input->column]!='*') // so to avoid multiple hts and marks
+            {
+                    currentPlayer->hitsAndMissesGrid[input->row][input->column] = '*'; // Mark the location of the hit
+                    addHitOnShip(currentPlayer, opposingPlayer,input); //update the hit count of the ship
+               
+            }
+            // printf("Hit at row %d, col %d\n", input->row, col);
         } else {
             currentPlayer->hitsAndMissesGrid[input->row][col] = 'o'; // Mark miss
-            printf("Miss at row %d, col %d\n", input->row, col);
+            // printf("Miss at row %d, col %d\n", input->row, col);
         }
     }
 }
@@ -45,16 +46,19 @@ else if (input->row == -1)
     }
     for (int row = 0; row < GRID_SIZE; row++) { // Loop through each row
         if (opposingPlayer->grid[row][input->column] == 'X') {
-            currentPlayer->hitsAndMissesGrid[row][input->column] = '*'; // Mark the location of the hit
-            
             input->row=row;
 
-            addHitOnShip(currentPlayer, opposingPlayer, input); // Update the hit count of the ship
+            if(currentPlayer->hitsAndMissesGrid[input->row][input->column]!='*') // so to avoid multiple hts and marks
+            {
+                    currentPlayer->hitsAndMissesGrid[input->row][input->column] = '*'; // Mark the location of the hit
+                    addHitOnShip(currentPlayer, opposingPlayer,input); //update the hit count of the ship
+               
+            }
 
-            printf("Hit at row %d, col %d\n", row, input->column);
+            // printf("Hit at row %d, col %d\n", row, input->column);
         } else {
             currentPlayer->hitsAndMissesGrid[row][input->column] = 'o'; // Mark miss
-            printf("Miss at row %d, col %d\n", row, input->column);
+            // printf("Miss at row %d, col %d\n", row, input->column);
         }
     }
 
