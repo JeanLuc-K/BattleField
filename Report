@@ -1,0 +1,23 @@
+Report for bot implementation:
+
+For fire move:
+To implement the bot the best strategy I found was:
+
+Start by randomly picking a spot to hit. This has to be random as we still don’t know anything about the places on the ship. If I hit a spot then:
+-	I focus on surrounding cells since the Battlefield ships are found on consecutive grids so the next ship should be around. When the bot hits a ship, there's a high probability that adjacent cells also belong to the same ship. By targeting these cells, the bot maximizes its chances of sinking the ship quickly, rather than randomly firing elsewhere on the grid. 
+-	I first try to hit left/right, if I don’t hit then try the opposite of what I chose.
+-	Then try above/below, if I don’t hit try the opposite of what I chose.
+-	For example, if the bot hits a ship at (3,3), the cells (2,3), (4,3), (3,2), and (3,4) get a higher probability since ships are linear.
+-	
+ If I don’t hit the spot, then:
+-	Choose the spot randomly until we find the spot with a hit.
+
+This allows the bot to choose optimal locations to fire during the hunting phase. We created a helper function to help test for valid guesses. 
+
+Some improvements that we made to this:
+One way we can improve this algorithm is to pay attention to the orientation of the ship. If the algorithm has hit a part of the ship horizontally, it should prioritize horizontal adjacent squares. Similarly, if the ship is oriented vertically, it should prioritize vertical adjacent squares.  We did this by using the following strategy:
+-	After the first hit, the bot checks if there was a previous hit.
+-	If the rows are the same, the ship is horizontal, and the bot prioritizes searching horizontally (left and right).
+-	If the columns are the same, the ship is vertical, and the bot prioritizes searching vertically(up and down)
+
+The approach we used uses previous hits to infer the orientation of the ship and prioritize targeting adjacent cells based on the ship's layout. This makes the algorithm more efficient and increases the likelihood of sinking the ship faster after a successful hit.

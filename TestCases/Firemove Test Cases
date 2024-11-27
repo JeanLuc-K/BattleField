@@ -1,0 +1,55 @@
+fireMove() method:
+
+Test Case 1:
+Input:
+•	currentPlayer: Hits and misses grid is empty (' ')
+•	opposingPlayer: Ship present at [2][4] = 'X'
+•	Input coordinates: row = 2, column = 4
+Expected Output:
+Hit!
+The current player's hits and misses grid at [3][4] should update to '*'.
+Description:
+Tests that the function identifies a hit and updates the grid appropriately.
+
+Test Case 2
+Input:
+•	currentPlayer: Hits and misses grid is empty
+•	opposingPlayer: Grid contains no ships or no ship present at the inputted coordinates.
+•	Input coordinates: row = 2, column = 5
+Expected Output:
+Miss.
+The current player's hits and misses grid at [2][5] should update to 'o'.
+Description:
+Tests that the function correctly handles misses.
+
+Test Case 3
+Input:
+•	currentPlayer: Hits and misses grid has a hit at [4][4] = '*'
+•	opposingPlayer: Grid has a ship part at [4][4] = 'X'
+•	Input coordinates: row = 4, column = 4
+Expected Output:
+Congrats on hitting the same place twice!
+Description:
+Ensures no changes are made when a previously targeted spot is selected again.
+
+Test Case 4
+Input:
+•	currentPlayer: Hits and misses grid is empty (' ')
+•	opposingPlayer: Ship present at [3][4] = 'X'
+•	Input coordinates: row = 11, column = 4
+Expected Output:
+Invalid coordinates.
+Description:
+Tests that the function correctly handles out-of-bound coordinates.
+
+Test Case 5:
+Input:
+•	currentPlayer: Initialized with default values.
+•	opposingPlayer: A ship of size 2 at coordinates (3, 4) and (3, 5).
+•	Input: First hit at (3, 4), second hit at (3, 5).
+Expected Output:
+•	After first hit: Hit!
+•	After second hit: [Ship Name] has fallen!
+Description:
+Tests that the function properly handles a ship falling when all parts are hit.
+
