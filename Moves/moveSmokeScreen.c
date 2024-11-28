@@ -1,4 +1,4 @@
-#include "headerFile.h"
+#include "../headerFile.h"
 //this function hide a 2x2 area on the player's grid
 void smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input )
 {   //calculating the number of lost ships
