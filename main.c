@@ -5,11 +5,11 @@
 #include "initialize_game.c"
 #include "place_ships.c"
 
-#include "firemove.c"
-#include "smoke_screen.c"
-#include "RadarSweep.c"
-#include "torpedo.c"
-#include "ArtilleryMove.c"
+#include "moveFire.c"
+#include "moveSmokeScreen.c"
+#include "moveRadarSweep.c"
+#include "moveTorpedo.c"
+#include "moveArtillery.c"
 
 int difficulty =0;
 int main()
