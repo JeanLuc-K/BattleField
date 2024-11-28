@@ -1,4 +1,4 @@
-#include "headerFile.h"
+#include "../headerFile.h"
 
 void artilleryMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input)
 {
