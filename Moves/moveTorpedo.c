@@ -1,4 +1,4 @@
-#include "headerFile.h"
+#include "../headerFile.h"
 
 void torpedo(PLAYER* currentPlayer, PLAYER* opposingPlayer, INPUT* input) {
     // check if torpedo can be used: allow only if not used and condition met
