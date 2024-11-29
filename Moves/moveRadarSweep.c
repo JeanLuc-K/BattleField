@@ -1,13 +1,13 @@
 #include "../headerFile.h"
 
 //radar sweep function checks in a 2x2 area if it exists enemy ships and display result
-
-void RadarSweep(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input){
+//return 0 if move invalid, 1 if ships found, 2 if no ship found
+int RadarSweep(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input){
     //every player is allowed 3 radar sweeps per entire game
 
     if (currentPlayer->radarSweep >= 3){
         printf("No radar sweeps remaining.\n");
-            return;
+            return ILLEGALMOVE;
     }
     //check the validation of the input
     int row = input->row;
@@ -15,7 +15,7 @@ void RadarSweep(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input){
     if (isInBound(input)==0)
     {
         printf("Invalid coordinates\n");
-            return;
+            return ILLEGALMOVE;
     }
     int enemyFound = 0; //creating a boolean if we found it updates to 1
     //checking the 2x2 grid starting from the row and col provided
@@ -43,10 +43,18 @@ void RadarSweep(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input){
     if (enemyFound)
     {
         printf("Enemy ships found\n");
+        currentPlayer->radarSweep++; //adding to check after if it exceeds 3
+
+        return SHIPSFOUND;
+
+
     }
     else
     {
         printf("No enemy ships found\n");
-    }
         currentPlayer->radarSweep++; //adding to check after if it exceeds 3
+
+        return SHIPSNOTFOUND;
+    }
+    
 }
