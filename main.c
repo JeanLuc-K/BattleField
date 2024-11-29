@@ -11,10 +11,11 @@
 #include "Moves/moveTorpedo.c"
 #include "Moves/moveArtillery.c"
 
+#include "TestCases/test.c"
+
 int difficulty =0;
 int main()
 {
-
     PLAYER player1;
     PLAYER player2;
 
@@ -39,11 +40,11 @@ int main()
         int turnSuccess;
         if (i % 2 == 0)
         {
-            turnSuccess = game(&player1, &player2);
+            turnSuccess = game(&player1, &player2,i);
         }
         else
         {
-            turnSuccess = game(&player2, &player1);
+            turnSuccess = game(&player2, &player1,i);
         }
 
         // Only increment i if the turn was successful (when i dont enter help)
@@ -64,7 +65,7 @@ int main()
     return 0;
 }
 
-int game(PLAYER *currentPlayer, PLAYER *opposingPlayer)
+int game(PLAYER *currentPlayer, PLAYER *opposingPlayer,int turnNumber)
 {
 
     printf("%s, what is your move?\n", currentPlayer->name);
@@ -122,6 +123,8 @@ int game(PLAYER *currentPlayer, PLAYER *opposingPlayer)
         printf("Invalid input. Turn skipped.\n");
         return 1; 
     }
+
+    calculateProbability(currentPlayer,opposingPlayer,&input);
 
     printGrid(currentPlayer->hitsAndMissesGrid);
     return 1; //successful turn
