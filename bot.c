@@ -154,3 +154,26 @@ int isValidAndUnguessed(PLAYER* currentPlayer, int row, int col) {
     }
     return 0; // Invalid or already guessed
 }
+
+// Requires: Valid PLAYER objects and INPUT within grid bounds.  
+// Returns: Scans 2x2 area for enemy ships, ignoring smoke and displays result and increments radarSweep (max 3 uses).  
+void radarSweepBot(PLAYER* currentPlayer, PLAYER* opposingPlayer, INPUT* input) {
+    int row, col;
+
+    // Prioritize sweeping near recent missed cells
+    if (targetNearRecentMisses(currentPlayer, &row, &col)) {
+        input->row = row;
+        input->column = col;
+        radarSweep(currentPlayer, opposingPlayer, input);
+        return;
+    }
+
+    randomTargetWithBias(currentPlayer, opposingPlayer, &row, &col);
+
+    input->row = row;
+    input->column = col;
+
+    // Perform the radar sweep on a 2x2 grid centered around the chosen cell
+    radarSweep(currentPlayer, opposingPlayer, input);
+}
+
