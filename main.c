@@ -11,11 +11,11 @@
 #include "Moves/moveTorpedo.c"
 #include "Moves/moveArtillery.c"
 
-#include "probabilityGrid.c"
-#include "myBot.c"
+#include "Bot/probabilityGrid.c"
+#include "Bot/botThinking.c"
+#include "Bot/handleRadar.c"
 
 
-#include "TestCases/test.c"
 
 int difficulty =0;
 int main()
