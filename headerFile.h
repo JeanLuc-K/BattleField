@@ -61,6 +61,7 @@ struct Player
     char grid[GRID_SIZE][GRID_SIZE]; 
     char hitsAndMissesGrid[GRID_SIZE][GRID_SIZE];
     char smokeGird[GRID_SIZE][GRID_SIZE];
+    int probGrid[GRID_SIZE][GRID_SIZE];
     char name[50];
     SHIP ships[NUMBEROFSHIPS];
     int shipsLocations[NUMBEROFSHIPS][4];
@@ -71,11 +72,15 @@ struct Player
 
     int torpedo;
     int artillery;
+
+    int isBot;
 };
 
 
 int game(PLAYER* player1, PLAYER* player2,int turnNumber);
 void initializePlayer(PLAYER* player,int number);
+
+void initializeProbGrid(int probGrid[GRID_SIZE][GRID_SIZE]);
 void initializeGrid(char grid[GRID_SIZE][GRID_SIZE]);
 void assignStartingPlayer(PLAYER*,PLAYER*);
 int getDifficultyLevel();
@@ -110,7 +115,10 @@ void shipFallen(PLAYER* currentPlayer,PLAYER* opposingPlayer, INPUT* input);
 void smokeScreen(PLAYER*,PLAYER*,INPUT*);
 
 // for radarSweep.c
-void RadarSweep(PLAYER*,PLAYER*,INPUT*);
+#define ILLEGALMOVE 0
+#define SHIPSFOUND 1
+#define SHIPSNOTFOUND 2
+int RadarSweep(PLAYER*,PLAYER*,INPUT*);
 
 //for torpedo.c
 void torpedo(PLAYER*,PLAYER*,INPUT*);
@@ -123,7 +131,32 @@ void artilleryMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input);
 
 //FOR BOT 
 int isInBound2(int row,int column);
-void calculateProbability(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input);
+void calculateProbability(PLAYER* currentPlayer, PLAYER* opposingPlayer);
+
+
+//FOR MYBOT
+int ThinkRadar(PLAYER *currentPlayer, PLAYER *opposingPlayer);
+void botThinking(PLAYER *currentPlayer, PLAYER *opposingPlayer);
+
+
+
+//for getSquareCoord
+#define MAX_COORDS 25 // Maximum possible number of coordinates (for 5x5 grid)
+
+typedef struct {
+    int row;
+    int col;
+} Coord;
+
+typedef struct {
+    Coord maxCoords[MAX_COORDS];
+    int size;
+} squareCoords; 
+
+int calculateSum(int grid[GRID_SIZE][GRID_SIZE], int i, int j) ;
+int findMaxSumCoords(int grid[GRID_SIZE][GRID_SIZE], Coord coords[MAX_COORDS]);
+squareCoords getSquareCoord(int probGrid[GRID_SIZE][GRID_SIZE]) ;
+
 
 
 
