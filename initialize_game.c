@@ -13,12 +13,25 @@ void assignStartingPlayer(PLAYER * player1, PLAYER * player2)
         strcpy(temp,player1->name);
         strcpy(player1->name,player2->name);
         strcpy(player2->name,temp);
+
+        //switch if bot
+        player1->isBot = player2->isBot;
+        player2->isBot = 0;
+        
         
         
         
     }else
     {
         printf("The first player is %s\n", player1->name);
+    }
+}
+
+void initializeProbGrid(int probGrid[GRID_SIZE][GRID_SIZE]) {
+    for (int i = 0; i < GRID_SIZE; i++) {
+        for (int j = 0; j < GRID_SIZE; j++) {
+            probGrid[i][j] = 0;  // Set all elements to 0
+        }
     }
 }
 
@@ -78,11 +91,17 @@ void initializePlayer(PLAYER* player,int number)
     initializeGrid(player->hitsAndMissesGrid);
     initializeGrid(player->smokeGird);
 
+    
+
     getName(player->name,sizeof(player->name),number);
     player->shipsLeft =NUMBEROFSHIPS;
     player->smokeScreenCounter = 0;
     player->radarSweep =0;
     player-> artillery=0;
     player->torpedo=0;
+    player-> isBot = 0;
+
+
+   
     
 }
