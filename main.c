@@ -11,11 +11,17 @@
 #include "Moves/moveTorpedo.c"
 #include "Moves/moveArtillery.c"
 
+#include "probabilityGrid.c"
+#include "myBot.c"
+
+
 #include "TestCases/test.c"
 
 int difficulty =0;
 int main()
 {
+    
+
     PLAYER player1;
     PLAYER player2;
 
@@ -24,15 +30,26 @@ int main()
     initializePlayer(&player1, 1);
     initializePlayer(&player2, 2);
 
+    player2.isBot=1;
+
     printf("\n");
 
     assignStartingPlayer(&player1, &player2);
 
+    printf("first player is bot: %d and second player : %d",  player1.isBot,player2.isBot);
     placeShips(&player1);
     system("cls");
     placeShips(&player2);
     system("cls");
 
+
+    initializeProbGrid(player1.probGrid);
+    calculateProbability(&player1,&player2);
+
+    initializeProbGrid(player2.probGrid);
+    calculateProbability(&player2,&player1);
+
+    
 
    for (int i = 0; player1.shipsLeft > 0 && player2.shipsLeft > 0;)
     {
@@ -67,16 +84,31 @@ int main()
 
 int game(PLAYER *currentPlayer, PLAYER *opposingPlayer,int turnNumber)
 {
+   
+    
 
     printf("%s, what is your move?\n", currentPlayer->name);
     printf("for a list of moves, enter \"help\"\n");
+
+
 
     checkArtillery(currentPlayer);
     checkTorpedo(currentPlayer);
 
     printGrid(currentPlayer->hitsAndMissesGrid);
+
+    if(currentPlayer->isBot)
+    {
+        botThinking(currentPlayer,opposingPlayer);
+        printGrid(currentPlayer->hitsAndMissesGrid);
+        printf("THE TURN HAS ENDED\n\n");
+        //go to bot thinking
+        return 1 ;
+    }
     INPUT input;
     getInput(&input);
+
+
     
     
     
@@ -101,7 +133,6 @@ int game(PLAYER *currentPlayer, PLAYER *opposingPlayer,int turnNumber)
         artilleryMove(currentPlayer, opposingPlayer, &input);
         
 
-        
     }
     else if (strcasecmp(input.moveName, "torpedo") == 0)
     {
@@ -121,12 +152,12 @@ int game(PLAYER *currentPlayer, PLAYER *opposingPlayer,int turnNumber)
     else
     {
         printf("Invalid input. Turn skipped.\n");
+        printf("THE TURN HAS ENDED\n\n");
         return 1; 
     }
 
-    calculateProbability(currentPlayer,opposingPlayer,&input);
-
     printGrid(currentPlayer->hitsAndMissesGrid);
+    printf("THE TURN HAS ENDED\n\n");
     return 1; //successful turn
 
 }
