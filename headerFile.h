@@ -135,7 +135,7 @@ void calculateProbability(PLAYER* currentPlayer, PLAYER* opposingPlayer);
 
 
 //FOR MYBOT
-int ThinkRadar(PLAYER *currentPlayer, PLAYER *opposingPlayer);
+int handleRadar(PLAYER *currentPlayer, PLAYER *opposingPlayer);
 void botThinking(PLAYER *currentPlayer, PLAYER *opposingPlayer);
 
 
