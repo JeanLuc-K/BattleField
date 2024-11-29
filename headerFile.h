@@ -74,7 +74,7 @@ struct Player
 };
 
 
-int game(PLAYER* player1, PLAYER* player2);
+int game(PLAYER* player1, PLAYER* player2,int turnNumber);
 void initializePlayer(PLAYER* player,int number);
 void initializeGrid(char grid[GRID_SIZE][GRID_SIZE]);
 void assignStartingPlayer(PLAYER*,PLAYER*);
@@ -92,6 +92,8 @@ void initializeGridHelper(char[GRID_SIZE][GRID_SIZE],char[GRID_SIZE][GRID_SIZE],
 #define VERTICAL 1
 void placeShips(PLAYER* );
 void printGrid(char grid[GRID_SIZE][GRID_SIZE]);
+void printGridInt(int grid[GRID_SIZE][GRID_SIZE]);
+
 void addShip(PLAYER* ,INPUT*,const char* ,int );
 int checkBounds(PLAYER* ,INPUT*,int );
 
@@ -119,6 +121,9 @@ void artilleryMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input);
 
 
 
+//FOR BOT 
+int isInBound2(int row,int column);
+void calculateProbability(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input);
 
 
 

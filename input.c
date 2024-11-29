@@ -97,6 +97,38 @@ void printGrid(char grid[GRID_SIZE][GRID_SIZE])
     }
 }
 
+void printGridInt(int grid[GRID_SIZE][GRID_SIZE])
+{
+    printf("    A B C D E F G H I J\n");
+
+    for (int i = 0; i < GRID_SIZE; i++)
+    {
+        if (i != 9){
+            printf("%d   ", i + 1);
+        }
+        else{
+             printf("%d  ", i + 1);
+        }
+        for (int j = 0; j < GRID_SIZE; j++)
+        {
+            if(difficulty==HARD)
+            {
+                if(grid[i][j]=='o')
+                {
+                    printf("~ ");
+                }else 
+                {
+                    printf("%d ", grid[i][j]);
+                }
+            }else{
+                 printf("%d ", grid[i][j]);
+            }
+           
+        }
+        printf("\n");
+    }
+}
+
 int getColumn(char input)
 {
    
@@ -244,6 +276,8 @@ int isInBound(INPUT* input)
 
     return 1;
 }
+
+
 //function to update the coordinates to move around the square area
 void updateCoordBySquare(struct Input*input ,int iteration)
 {
