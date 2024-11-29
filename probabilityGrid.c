@@ -61,7 +61,9 @@ int foundHitVertical(int row, int col, int shipSize, PLAYER* currentPlayer) {
 void calculateProbability(PLAYER* currentPlayer, PLAYER* opposingPlayer) {
     printf("Calculating probability...\n");
 
-    initializeProbGrid(currentPlayer->probGrid);
+    int currentProbGrid[GRID_SIZE][GRID_SIZE] ={0};
+
+    // initializeProbGrid(currentPlayer->probGrid);
     for (int shipIndex = 0; shipIndex < NUMBEROFSHIPS; ++shipIndex) {
         SHIP currentShip = opposingPlayer->ships[shipIndex];
 
@@ -73,6 +75,11 @@ void calculateProbability(PLAYER* currentPlayer, PLAYER* opposingPlayer) {
             for (int row = 0; row < GRID_SIZE; ++row) {
                 for (int col = 0; col < GRID_SIZE; ++col) {
                     
+                    if(currentPlayer->probGrid[row][col]<0) //to make sure not to overwrite that i am sure a ship might be there can be there
+                    {
+                        currentProbGrid[row][col]==-1;
+                        continue;
+                    }
                     int foundHit = 0;
 
                     // Check for horizontal placement
@@ -80,7 +87,7 @@ void calculateProbability(PLAYER* currentPlayer, PLAYER* opposingPlayer) {
                         // Update probability grid if no hit was found
                         if (isInBound2(row, col + currentShipSize - 1)) {  // Ensure horizontal ship can fit
                             for (int colShift = 0; colShift < currentShipSize; ++colShift) {
-                                ++currentPlayer->probGrid[row][col + colShift];
+                                ++currentProbGrid[row][col + colShift];
                             }
                         }
                     }
@@ -93,7 +100,7 @@ void calculateProbability(PLAYER* currentPlayer, PLAYER* opposingPlayer) {
                         // Update probability grid if no hit was found
                         if (isInBound2(row + currentShipSize - 1, col)) {  // Ensure vertical ship can fit
                             for (int rowShift = 0; rowShift < currentShipSize; ++rowShift) {
-                                ++currentPlayer->probGrid[row + rowShift][col];
+                                ++currentProbGrid[row + rowShift][col];
                             }
                         }
                     }
@@ -101,6 +108,17 @@ void calculateProbability(PLAYER* currentPlayer, PLAYER* opposingPlayer) {
             }
         }
     }
+
+    for (int i = 0; i < GRID_SIZE; i++) {
+        for (int j = 0; j < GRID_SIZE; j++) {
+            if(currentPlayer->probGrid[i][j]!=-1)
+            {
+            currentPlayer->probGrid[i][j] = currentProbGrid[i][j];
+            }
+        }
+    }
+
+
 
   
 }
