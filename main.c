@@ -2,8 +2,8 @@
 #include "headerFile.h"
 
 #include "input.c"
-#include "initialize_game.c"
-#include "place_ships.c"
+#include "GameSetup/initializeGame.c"
+#include "GameSetup/placeShips.c"
 
 #include "Moves/moveFire.c"
 #include "Moves/moveSmokeScreen.c"
