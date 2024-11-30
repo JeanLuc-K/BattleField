@@ -245,6 +245,7 @@ int findTorpedoTarget(PLAYER* currentPlayer, int* row, int* col, int* getOrienta
     }
     return 0;  // Return 0 if no target found
 }
+
 void torpedoBot(PLAYER* currentPlayer, PLAYER* opposingPlayer) {
     if (currentPlayer->torpedo >= 2) {  // Limit torpedo uses
         printf("No torpedo moves remaining.\n");
@@ -256,10 +257,27 @@ void torpedoBot(PLAYER* currentPlayer, PLAYER* opposingPlayer) {
 
     // Try to find a recent hit to guide torpedo targeting
     if (!findTorpedoTarget(currentPlayer, &row, &col, &orientation)) {
-       chooseHighestProbability(&row,&col);
-    } 
-    INPUT* input={row,col};
+        chooseHighestProbability(&row, &col);  // Ensure this method works as intended
+    }
+
+    // Create the INPUT struct
+      INPUT input={row,col};
 
     // Execute the torpedo move, attacking the entire row or column based on orientation
-  torpedo(currentPlayer,opposingPlayer,input);
+    if (orientation == VERTICAL) {
+        // Attack entire column
+        for (int i = 0; i < GRID_SIZE; i++) {
+            input.row = i;
+            torpedo(currentPlayer, opposingPlayer, &input); 
+        }
+    } else if (orientation == HORIZONTAL) {
+        // Attack entire row
+        for (int j = 0; j < GRID_SIZE; j++) {
+            input.col = j;
+            torpedo(currentPlayer, opposingPlayer, &input);  
+        }
+    } else {
+        // If orientation isn't determined, just attack the current cell
+        torpedo(currentPlayer, opposingPlayer, &input);
+    }
 }
