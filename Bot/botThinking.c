@@ -1,5 +1,5 @@
 #include "../headerFile.h"
-*/
+/*
 requires: a reference to currentPlayer when current player is bot
           a reference to opposingPlayer 
           
