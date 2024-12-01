@@ -144,11 +144,25 @@ Coord* findHighestProbCoords(PLAYER* currentPlayer, int* count) {
     return highestProbCoords;  // Return the dynamically allocated array of coordinates
 }
 
-void hitOutcome(PLAYER *currentPlayer,INPUT* input) {
+//returns 0 if no new ship sunk or the size of the actual ship sunk
+int checkShipStatusChange(PLAYER* opposingPlayer, int* opposingShipsStatus) {
+    // Compare each ship status
+    for (int i = 0; i < NUMBEROFSHIPS; i++) {
+        // If the status does not match, return the first index of the mismatch
+        if (opposingShipsStatus[i] != opposingPlayer->ships[i].hasFallen) {
+            return 4-i;  // Return the size of the ship where the change occurred
+        }
+    }
+
+    // If no changes are found, return 0
+    return 0;
+}
+
+void hitOutcome(PLAYER *currentPlayer,PLAYER* opposingPlayer, INPUT* input,int* opposingShipsStatus,Coord* lastHit ) {
     // Check if the given coordinate is within bounds
 
     //if we hit a random spot
-    if(currentPlayer->probGrid[input->row][input->column]<0)
+    if(currentPlayer->probGrid[input->row][input->column]>=0)
     {
         for(int i =0 ;i<4;i++)
         {
@@ -160,9 +174,58 @@ void hitOutcome(PLAYER *currentPlayer,INPUT* input) {
     //if we hit a marked spot
     else{
         //if we hit a ship at that marked spot
-        if(currentPlayer->hitsAndMissesGrid[input->row][input->column]='*')
+        if(currentPlayer->hitsAndMissesGrid[input->row][input->column]=='*')
         {
-            //we update the shipHitCounter
+            currentPlayer->probGrid[input->row][input->column]=9999;// make it 0 so that the next time the prob grid changes it
+
+            
+            int lastHitRow = lastHit->row;
+            int lastHitCol = lastHit->col;
+
+             printf("Last hit coordinates: Row = %d, Column = %d\n", lastHitRow, lastHitCol);
+            if(input->row == lastHitRow)
+            {
+                currentPlayer->probGrid[lastHitRow--][lastHitCol]++;
+                currentPlayer->probGrid[lastHitRow++][lastHitCol]++;
+
+            }else
+            {
+                currentPlayer->probGrid[lastHitRow][lastHitCol++]++;
+                currentPlayer->probGrid[lastHitRow][lastHitCol--]++;
+
+            }
+           //i  now check around it
+    // i have to check the orientation of the next shot as well;
+            // i have to check if its next to a hit and i have to be careful not to check hit ships from long before
+
+            //we update the ship hit  counter
+            currentPlayer->hitsBeforeShipSunk++;
+
+            // we check if any ship sunk
+
+            int result = checkShipStatusChange(opposingPlayer,opposingShipsStatus);
+            if(result ==0) //no ship sunk
+            {
+                return ;//i cannot know anything so next
+            }else{
+
+                //i have sunk the ship and didn;t hit any other ship at the same time 
+                if (currentPlayer->hitsBeforeShipSunk== result)
+                {
+                    //make all the -1 into 0 adjacent to the ship or maybe +1 so maybe if one had 2 but won;t ever happen ma baarf 3m 5arref
+                }
+                //i have sunk a ship but i still did hit another ship on the way 
+                // ana fiye wa2ef hon lal hard
+                else 
+                {
+                    // bruh bemche backwards la hat ma le2e l hit l barrat l ship bhot l hwalaya -1 ma aada l 0 w bkamml aade
+                }
+            }
+
+
+        }// if we misses the hitandmiss will become 'o' and the probgrid will change the -1 to 0
+        else{
+            currentPlayer->probGrid[input->row][input->column]==0;
         }
     }
     
@@ -209,20 +272,47 @@ void updateCoordByCross(INPUT* input ,int iteration)
     }
 }
 
+void saveOpposingShipsStatus(PLAYER* opposingPlayer,int* opposingShipsStatus)
+{
+    
+
+    for(int  i = 0 ; i < NUMBEROFSHIPS ;i++)
+    {
+        opposingShipsStatus[i]=opposingPlayer->ships[i].hasFallen;
+    }
+    
+
+}
+
 void handleFire(PLAYER* currentPlayer, PLAYER* opposingPlayer) 
 {
+    INPUT input;
+
+    // currentPlayer->probGrid[3][5]=-1;
+    // opposingPlayer->grid[3][5]='X';
+    // input.row =3;
+    // input.column = 6;
+    // fireMove(currentPlayer,opposingPlayer,&input);
     Coord coord=getHighestProbSquare(currentPlayer,opposingPlayer);
     
     printf("WE pick : %d,%c",coord.row+1,coord.col+97);
-    INPUT input;
+    
     input.row=coord.row;
     input.column = coord.col;
 
+    
+    int opposingShipsStatus[NUMBEROFSHIPS];
+    saveOpposingShipsStatus(opposingPlayer,opposingShipsStatus);
+
+    Coord lastHit;
+    lastHit.row = currentPlayer->lastHit.row;
+    lastHit.col = currentPlayer->lastHit.col;
+    printf("Last hit coordinates: Row = %d, Column = %d\n", lastHit.row, lastHit.col);
     fireMove(currentPlayer,opposingPlayer,&input);
 
     if(currentPlayer->hitsAndMissesGrid[input.row][input.column]=='*')
     {
-        hitOutcome(currentPlayer,&input);
+        hitOutcome(currentPlayer,opposingPlayer,&input,opposingShipsStatus,&lastHit);
     }else {
         printf("No hit at (%d, %d), no change to probGrid.\n", input.row, input.column);
     }
