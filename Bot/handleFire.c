@@ -1,7 +1,16 @@
 #include "../headerFile.h"
 
 
-// Define the PLAYER structure with a probability grid
+
+/*
+requires: A reference to `currentPlayer`, which includes the player's probability grid (`probGrid`)
+          A reference to `negativeCount`, which will store the count of negative values found in the grid.
+effects:  
+          If no negative cells are found, it prints a message and returns `NULL`.
+          If negative cells are found, the function allocates memory for an array of `Coord` structures, stores the coordinates of negative cells 
+          in the array, and sorts them in descending order of their values in `probGrid`. 
+          The sorted array of coordinates is then printed and returned. If memory allocation fails, it prints an error message and returns `NULL`.
+*/
 Coord* countAndSortNegativeCells(PLAYER* currentPlayer, int* negativeCount) {
     // Step 1: Count negative cells
     *negativeCount = 0;
@@ -72,7 +81,13 @@ Coord* countAndSortNegativeCells(PLAYER* currentPlayer, int* negativeCount) {
 }
 
 //returns the highest prob square to shoot if no squares are marked as <0
-
+/*
+requires: A reference to `currentPlayer`, which includes the player's probability grid (`probGrid`), 
+          representing the likelihood of a ship being placed at each grid location.
+effects:   prints the coordinates of these highest-probability squares and then selects one randomly by generating 
+          a random index. The selected coordinate is returned. If multiple squares have the highest probability, one of them 
+          is chosen randomly.
+*/
 Coord getHighestPositiveProbSquare(PLAYER* currentPlayer)
 {
      //if does not have <0
@@ -90,7 +105,15 @@ Coord getHighestPositiveProbSquare(PLAYER* currentPlayer)
 }
 
 
-//returns the highest prob square to shoot it
+/*
+requires: 
+    - A reference to `currentPlayer`, which includes the player's probability grid (`probGrid`), 
+    - A reference to `opposingPlayer`, which contains information about the opponent's ships.
+    
+effects: returns the highest prob square to shoot it depending on:
+    - If negative probability values are found , it returns the coordinate of the first negative cell (the one with the most negative probability).
+    - If no negative cells are found, it calls  return a coordinate with the highest positive probability.
+*/
 Coord getHighestProbSquare(PLAYER* currentPlayer, PLAYER* opposingPlayer)
 {
     //check if it has -1
@@ -108,8 +131,13 @@ Coord getHighestProbSquare(PLAYER* currentPlayer, PLAYER* opposingPlayer)
     
 }
 
-
 //returns all the coord that have the same max prob
+/*
+requires: A reference to `currentPlayer`, which includes the player's probability grid (`probGrid`). and ount parameter is used to keep track of how many coordinates on the grid have the highest probability value.
+    
+returns: A pointer to an array of `Coord` structures containing the coordinates of all cells with the highest probability.
+         If memory allocation fails, the program exits.
+*/
 Coord* findHighestProbCoords(PLAYER* currentPlayer, int* count) {
     int maxProb = -1;  // Initialize the maximum probability to a very low value
     *count = 0;  // Initialize the count of coordinates with the highest probability
@@ -144,7 +172,15 @@ Coord* findHighestProbCoords(PLAYER* currentPlayer, int* count) {
     return highestProbCoords;  // Return the dynamically allocated array of coordinates
 }
 
-//returns 0 if no new ship sunk or the size of the actual ship sunk
+/*
+requires:
+    - A reference to `opposingPlayer` .
+    - A reference to `opposingShipsStatus`, which is an array tracking the fallen status of each ship.
+returns: 
+    - The size of the ship that was sunk or 0 if no ship was sunk.
+*/
+
+int checkShipStatus
 int checkShipStatusChange(PLAYER* opposingPlayer, int* opposingShipsStatus) {
     // Compare each ship status
     for (int i = 0; i < NUMBEROFSHIPS; i++) {
@@ -157,7 +193,18 @@ int checkShipStatusChange(PLAYER* opposingPlayer, int* opposingShipsStatus) {
     // If no changes are found, return 0
     return 0;
 }
+/*
+requires:
+    - ` A reference to `opposingPlayer` .
+    -  A reference to `opposingShipsStatus`, which is an array tracking the fallen status of each ship.
+    -  The input containing the coordinates of the shot.
+    - `opposingShipsStatus`: The status array for the opponent's ships.
+    - `lastHit`: The last successful hit coordinates.
 
+effects:
+   - Updates the game state based on the hit or miss outcome, including adjusting the probability grid.
+   -If a ship is sunk but another ship is still hit, the game continues without adjusting the probability grid further for the sunk ship.
+*/
 void hitOutcome(PLAYER *currentPlayer,PLAYER* opposingPlayer, INPUT* input,int* opposingShipsStatus,Coord* lastHit ) {
     // Check if the given coordinate is within bounds
 
@@ -275,7 +322,15 @@ void hitOutcome(PLAYER *currentPlayer,PLAYER* opposingPlayer, INPUT* input,int* 
     
     
 }
+*
+requires:
+    - currentPlayer`reference
+    - input refence :The coordinates of the shot.
 
+effects:
+    -if the cell is a hit ('*'), it updates the `probGrid` for the surrounding cells, marking them with `-1` if they are not already marked.
+    - Updates the probability grid based on surrounding cells and removes  unlikely shots around previously marked hit cells..
+*/
 void processSurroundingCell(PLAYER *currentPlayer, INPUT* input) {
     // Check if the coordinate is within bounds
     if(!isInBound(input))
@@ -294,7 +349,15 @@ void processSurroundingCell(PLAYER *currentPlayer, INPUT* input) {
         printf("Marked cell (%d, %d) as -1.\n", input->row, input->column);
     } 
 }
+/*
+requires:
+    - `input`: The coordinates of the shot.
+    - `iteration`: The iteration step that determines the direction of the update.
 
+effects:
+    - Adjusts the `input` coordinates based on the current iteration (0-3) which represents the directions (right, down, left, up).
+    
+*/
 void updateCoordByCross(INPUT* input ,int iteration)
 {
     if(iteration ==0)
@@ -315,7 +378,14 @@ void updateCoordByCross(INPUT* input ,int iteration)
         input->row--;    //up 
     }
 }
+/*
+requires:
+    - `opposingPlayer`: The opponent's player object, containing the current ship statuses.
+    - `opposingShipsStatus`: The array to store the status of the opponent's ships.
 
+returns: 
+    - Updates the `opposingShipsStatus` array with the current status of the opponent's ships.
+*/
 void saveOpposingShipsStatus(PLAYER* opposingPlayer,int* opposingShipsStatus)
 {
     
@@ -327,7 +397,12 @@ void saveOpposingShipsStatus(PLAYER* opposingPlayer,int* opposingShipsStatus)
     
 
 }
-
+/*
+requires:
+    - currentPlayer and opposing player reference
+returns: 
+    - This function handles the entire process of firing a shot, including choosing the target, processing the hit outcome, and updating the probability grid.
+*/
 void handleFire(PLAYER* currentPlayer, PLAYER* opposingPlayer) 
 {
     INPUT input;
