@@ -79,6 +79,7 @@ int foundHitVertical(int row, int col, int shipSize, PLAYER* currentPlayer) {
 }
 /*
 requires: a reference to currentPlayer  which includes the probability grid.
+          probabilty grid of current player represents the probility of having an opponent's ship in each square
           a reference to opposingPlayer which includes the list of ships .
           
 effects:   Iterates through each potential grid position for horizontal and vertical placements of ships.
