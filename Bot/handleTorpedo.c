@@ -9,7 +9,15 @@ struct maxCoord {
     int minusCounters[MAX_COORD_SIZE];  // Counter for negative values (such as -1)
 };
 
-// Function to print the contents of the maxCoord structure
+/*
+requires: A reference to the coord structure of type maxCoord, which contains the following fields:
+        indicates if the coordinates are for rows (1) or columns (0).
+        An array of coordinate indices.
+        An array of sum values corresponding to each coordinate.
+        minusCounter which is An array of counters for negative values (-1).
+Effects: Prints all fields mentioned above
+    
+*/
 void printCoord(struct maxCoord *coord) {
     if (coord == NULL) {
         printf("Null structure passed.\n");
@@ -43,8 +51,14 @@ void printCoord(struct maxCoord *coord) {
     }
     printf("\n");
 }
-
-// Function to sum the rows and track negative numbers
+/*
+requires: A reference to the currentPlayer structure of type PLAYER, which contains the probGrid array representing the player's grid of probabilities.
+          A reference to the rows structure of type maxCoord
+effects: Iterates through each row in the player's grid (probGrid) and for each column in the row:
+            - If the value is negative (-1), increments the minus counter for that row.
+            - Otherwise, adds the value to the sum for that row.
+           - Updates the rows structure with the computed values.
+*/
 void sumRows(PLAYER* currentPlayer, struct maxCoord *rows) {
     for (int i = 0; i < GRID_SIZE; i++) {
         rows->coords[i] = i;
@@ -61,7 +75,14 @@ void sumRows(PLAYER* currentPlayer, struct maxCoord *rows) {
     }
 }
 
-// Function to sum the columns and track negative numbers
+/*
+requires: A reference to the currentPlayer structure of type PLAYER, which contains the probGrid array representing the player's grid of probabilities.
+          A reference to the cols structure of type maxCoord, 
+effects: Iterates through each column in the player's grid (probGrid) and and for each row in the column:
+            - If the value is negative (-1), increments the minus counter for that column.
+            - Otherwise, adds the value to the sum for that column.
+          - Updates the cols structure with the computed values.
+*/
 void sumCols(PLAYER* currentPlayer, struct maxCoord *cols) {
     for (int i = 0; i < GRID_SIZE; i++) {
         cols->coords[i] = i;
@@ -78,7 +99,14 @@ void sumCols(PLAYER* currentPlayer, struct maxCoord *cols) {
     }
 }
 
-// Function to compare two `maxCoord` entries by minusCounters and then by sum
+/*
+requires: Two pointers to `maxCoord` structures (a and b) to compare.
+          
+effects: Compares the `maxCoord` structures and returns
+            - A positive value if `a` should come after `b` in the sorted order.
+            - A negative value if `a` should come before `b` in the sorted order.
+            - Zero if both structures are considered equal.
+*/
 int compareCoord(const void *a, const void *b) {
     struct maxCoord *coordA = (struct maxCoord *)a;
     struct maxCoord *coordB = (struct maxCoord *)b;
@@ -90,7 +118,10 @@ int compareCoord(const void *a, const void *b) {
     // If the negative counters are the same, compare by sum (descending order)
     return coordB->sums[0] - coordA->sums[0]; 
 }
-// Function to sort the rows/columns manually based on minusCounters and then by sum
+/*
+requires: A reference to a `maxCoord` structure (`coord`)
+effects: Sorts the entries in the `maxCoord` structure by using a simple comparison and swapping mechanism.
+*/
 void sortMaxCoord(struct maxCoord *coord) {
     for (int i = 0; i < GRID_SIZE - 1; i++) {
         for (int j = i + 1; j < GRID_SIZE; j++) {
@@ -130,15 +161,28 @@ void sortMaxCoord(struct maxCoord *coord) {
     }
 }
 
-// Function to handle the Torpedo phase
+/*
+requires: A reference to the current player and opposing player, a reference to the sorted row coordinates (`rows`), and a reference to the `input` structure.
+         
+effects: Sets the row value of the `input` to the first row in the sorted `rows` array.
+         Sets the column value of `input` to -1 (indicating no column is selected).
+         Prints the row where the torpedo will be played.
+         Calls the `torpedo` function to execute the torpedo action using the `input` parameters.
+*/
 void playTorpedoRow(PLAYER* currentPlayer, PLAYER* opposingPlayer, struct maxCoord* rows, INPUT* input) {
     input->row = rows->coords[0];  // Select the row based on the sorted row coordinates
     input->column = -1;  // No column is selected
     printf("The bot plays torpedo at row %d\n", input->row);
     torpedo(currentPlayer, opposingPlayer, input);  // Call the torpedo function
 }
-
-// Function to play torpedo based on column selection
+/*
+requires: A reference to the current player , opposing player , a reference to the sorted column coordinates (`cols`), and a reference to the `input` structure.
+          .
+effects: Sets the column value of the `input` to the first column in the sorted `cols` array.
+         Sets the row value of `input` to -1 (indicating no row is selected).
+         Prints the column where the torpedo will be played, converting the column index to a letter (a-j).
+         Calls the `torpedo` function to execute the torpedo action using the `input` parameters.
+*/
 void playTorpedoColumn(PLAYER* currentPlayer, PLAYER* opposingPlayer, struct maxCoord* cols, INPUT* input) {
     input->row = -1;  // No row is selected
     input->column = cols->coords[0];  // Select the column based on the sorted column coordinates
@@ -146,7 +190,15 @@ void playTorpedoColumn(PLAYER* currentPlayer, PLAYER* opposingPlayer, struct max
     torpedo(currentPlayer, opposingPlayer, input);  // Call the torpedo function
 }
 
-
+/*
+requires: A reference to the current player, opposing player , a reference to the sorted row coordinates (`rows`), a reference to the sorted column coordinates (`cols`), and a reference to the `input` structure.
+effects: Compares the negative counters (`minusCounters`) and sums (`sums`) of the rows and columns:
+          - If the row has more negative counters than the column, calls `playTorpedoRow`.
+          - If the column has more negative counters than the row, calls `playTorpedoColumn`.
+          - If both row and column have the same number of negative counters, compares the sums:
+              - If the row sum is higher, calls `playTorpedoRow`.
+              - If the column sum is higher or equal, calls `playTorpedoColumn`.
+*/
 void decideTorpedoAction(PLAYER* currentPlayer, PLAYER* opposingPlayer, struct maxCoord* rows, struct maxCoord* cols, INPUT* input) {
     // If the row has more negative counters than the column
     if (rows->minusCounters[GRID_SIZE-1] > cols->minusCounters[GRID_SIZE-1]) {
@@ -167,7 +219,14 @@ void decideTorpedoAction(PLAYER* currentPlayer, PLAYER* opposingPlayer, struct m
 }
 
 
-// Function to play torpedo based on row selection
+/*
+requires: A reference to the current player  and the opposing player.
+effects: 
+    - Calls `sumRows` and `sumCols` to calculate sums and track negative counters for rows and columns.
+    - Sorts both `rows` and `cols` based on negative counters and then by sums
+    - Prints the sorted row and column coordinates
+   
+*/
 
 void handleTorpedo(PLAYER* currentPlayer, PLAYER* opposingPlayer) {
     struct maxCoord rows;
