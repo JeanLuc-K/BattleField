@@ -12,7 +12,7 @@ effects: Marks the grid with 'X' for the ship's location.
 void addShip(PLAYER* currentPlayer, const char* name,int shipSize, int row, int col, int orientation)
 {   
     SHIP* ships = currentPlayer->ships;
-    int shipIndex = 4-shipSize;
+    int shipIndex = 4-shipSize + 1;
 
     int sizeofName =0;
     while(name[sizeofName]!= '\0')
@@ -112,10 +112,10 @@ void placeShipsEasy(PLAYER* player) //edit it for bot
 
     const char *shipsNames[] = {"Carrier", "Battleship", "Destroyer", "Submarine"}; // all ships to avoid clustering if condition
     srand(time(NULL)); //randomly
-    for (int i = 0; i < 4; i++) // 4 total ships to place
+    for (int i = 0; i < 5; i++) // 4 total ships to place
     {
 
-        int currentShipSize = 4 - i; // reverse order size
+        int currentShipSize = 5 - i; // reverse order size
 
         int placed = 0;
         int row, col, orientation;
@@ -154,10 +154,10 @@ void placeShipsMedium(PLAYER* player)
     const char *shipsNames[] = {"Carrier", "Battleship", "Destroyer", "Submarine"}; // all ships to avoid clustering if condition
     srand(time(NULL));
 
-    for (int  i = 0; i < 4; ++i)
+    for (int  i = 0; i < 5; ++i)
     {
         //bot will still choose the place randomly
-        int currentShipeSize = 4 - i;
+        int currentShipeSize = 5 - i;
         int placed = 0;
         int row, col , orientation;
 
@@ -234,8 +234,8 @@ void placeShipsHard(PLAYER* player){
     const char *shipsNames[] = {"Carrier", "Battleship", "Destroyer", "Submarine"}; // all ships to avoid clustering if condition
     srand(time(NULL));
 
-    for(int i = 0 ; i < 4 ; ++i){
-        int currentShipSize = 4 - i;
+    for(int i = 0 ; i < 5 ; ++i){
+        int currentShipSize = 5 - i;
         int placed = 0;
         int row, col , orientation;
         while (!placed)
