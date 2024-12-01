@@ -84,18 +84,17 @@ int getDifficultyLevel()
 requires: array of character to indicates the name, size of it and number to indicates if the player is 1 or 2
 effects: take the name of the player from the input
 */
-void getName(char* name, int size, int number)
+void getName(char* name, int size)
 {
-    
-    printf("Please enter name of Player %d(%d max characters): ",number,size);
+    printf("Please enter name of Player 1 (%d max characters): ", size);
     fgets(name, size, stdin);
     clearInput(name, size);
 
-    for(int i= 0; i <size;i++) //drop the \n
+    for (int i = 0; i < size; i++) // Remove newline character if present
     {
-        if(name[i]=='\n')
+        if (name[i] == '\n')
         {
-            name[i]='\0';
+            name[i] = '\0';
         }
     }
 }
@@ -103,27 +102,31 @@ void getName(char* name, int size, int number)
 requires: player of type PLAYER, number to know if he is player 1 or 2
 effect: initialize grids of the player
 */
-void initializePlayer(PLAYER* player,int number)
+void initializePlayer(PLAYER* player, int isBot)
 {
     initializeGrid(player->grid);
     initializeGrid(player->hitsAndMissesGrid);
     initializeGrid(player->smokeGird);
 
-    
+    if (!isBot)
+    {
+        getName(player->name, sizeof(player->name));
+    }
+    else
+    {
+        // Default bot name and settings
+        strncpy(player->name, "Bot", sizeof(player->name) - 1);
+        player->name[sizeof(player->name) - 1] = '\0';  // Ensure null-termination
+    }
 
-    getName(player->name,sizeof(player->name),number);
-    player->shipsLeft =NUMBEROFSHIPS;
+    player->shipsLeft = NUMBEROFSHIPS;
     player->smokeScreenCounter = 0;
-    player->radarSweep =0;
-    player-> artillery=0;
-    player->torpedo=0;
-    player-> isBot = 0;
-    player->hitsBeforeShipSunk=0;
+    player->radarSweep = 0;
+    player->artillery = 0;
+    player->torpedo = 0;
+    player->isBot = isBot;
+    player->hitsBeforeShipSunk = 0;
 
-    player->lastHit.row=-1;
-    player->lastHit.col=-1;
-
-
-   
-    
+    player->lastHit.row = -1;
+    player->lastHit.col = -1;
 }
