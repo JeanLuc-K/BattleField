@@ -1,68 +1,16 @@
 #include "../headerFile.h"
-/*requires:  - currentPlayer: a pointer to the PLAYER structure representing the current player.
-    - input: a pointer to the INPUT structure containing the starting coordinates and orientation for placing the ship.
-    -ship name
-    - shipSize: an integer representing the size (length) of the ship to be placed.
 
-
-effects:- Adds the specified ship to the current player's grid by placing 'X' characters on the grid based on the inputted coordinates, 
-      size, and orientation.
-    - Updates the ship's information in the player's ship array, including its name, size, and coordinates.
-    - Initializes the ship's hit counter (hits) to 0 and sets hasFallen to 0 (indicating the ship is still afloat).
-
-*/
-void addShip(PLAYER* currentPlayer,INPUT* input,const char* name,int shipSize)
-{   
-    printf("Ship size is: %d", shipSize);
-    SHIP* ships = currentPlayer->ships; //array of ships
-    int shipIndex = 4-shipSize+1; //first ship is the biggest
-
-    int sizeofName =0;
-    while(name[sizeofName]!= '\0')
-    {
-        sizeofName++;
-    }
-
-    strncpy(ships[shipIndex].name, name, sizeofName);
-    ships[shipIndex].name[sizeofName] = '\0'; //get the name coorectly
-
-    currentPlayer->ships[shipIndex].size = shipSize;//set the size of each ship
-
-
-    int orientation = getOrientation(input->orientation);
-    if(orientation==HORIZONTAL)
-    {
-        for(int  i = 0 ; i<shipSize;i++)
-        {
-            currentPlayer->grid[input->row][i+input->column] = 'X';
-           currentPlayer->ships[shipIndex].coord[i] = (input->row * 10) + (input->column + i);//save ship coord as an integer where the  ones place is the column and the the tens place is the row smart i know 
-            
-        }
-    }else if(orientation==VERTICAL)
-    {
-        
-        for(int  i = 0 ; i<shipSize;i++)
-        {
-            currentPlayer->grid[i+input->row][input->column] = 'X';
-            currentPlayer->ships[shipIndex].coord[i] = (input->row + i) * 10 + input->column; 
-        }
-    }
-    ships[shipIndex].hits=0;
-    ships[shipIndex].hasFallen =0;
-
-}
 /*
   requires:
     - currentPlayer: a pointer to the PLAYER structure representing the current player.
     - input: a pointer to the INPUT structure containing the starting coordinates and orientation for placing the ship.
     - shipSize: an integer representing the size (length) of the ship to be placed.
 
-
-  returns:
+  effects:
     - 1 if the placement is valid (within bounds and no overlap).
     - -1 if the placement is invalid due to being out of bounds or overlapping with another ship.
 */
-int checkBounds(PLAYER* currentPlayer,INPUT* input,int shipSize)
+int checkBounds2(PLAYER* currentPlayer,INPUT* input,int shipSize)
 {
     int orientation = getOrientation(input->orientation);
    if(orientation==HORIZONTAL)
@@ -114,61 +62,63 @@ int checkBounds(PLAYER* currentPlayer,INPUT* input,int shipSize)
     - a pointer to the PLAYER current player.
     - Collects user input for the starting coordinates and orientation (horizontal or vertical) of each ship.
 
-  effects: displays the added ships on the grid dependinding on their coordinates .
+  effects: displays the added ships on the grid dependinding on their coordinates for human input .
 */
-void placeShips(PLAYER* player)
+void placeShipsHuman(PLAYER* player)
 {
+    // Define the ship names and their respective sizes
+    const char *shipsNames[] = {"Carrier", "Battleship", "Destroyer", "Submarine"};
+    const int shipsSizes[] = {5, 4, 3, 2};  // Sizes for each ship
 
-    printf("%s, please enter your ships coordinate.\n", player->name);
-    printf("First start with the square(A10), then the orienttion(horizontal, vertical).\n");
+    printf("%s, please enter your ships coordinates.\n", player->name);
+    printf("First, start with the square (e.g., A10), then the orientation (horizontal, vertical).\n");
 
-    const char *shipsNames[] = {"Carrier", "Battleship", "Destroyer", "Submarine"}; // all ships to avoid clustering if condition
     for (int i = 0; i < NUMBEROFSHIPS; i++) // 4 total ships to place
     {
-
-        int currentShipSize = 5 - i; // reverse order size
+        int currentShipSize = shipsSizes[i]; // Use the predefined sizes
 
         printf("Where would you like to place your %s (%d cells)?\n", shipsNames[i], currentShipSize);
 
         INPUT input;
-        getInputForPlacingShips(&input);        
+        getInputForPlacingShips(&input); // Get the ship's coordinates and orientation
 
-        // transform into coord
-        if (input.column == -1)             // validate the column coordinate
+        // Validate the column coordinate
+        if (input.column == -1)
         {
-            i--; // to repeat the loop ;
-            printf("please enter a valid column\n");
-
+            i--; // Repeat the loop for invalid column
+            printf("Please enter a valid column\n");
             continue;
         }
 
-        if (input.row < 0 || input.row > 9) // validate the row coordinate
+        // Validate the row coordinate
+        if (input.row < 0 || input.row > 9)
         {
-            printf("please enter a valid row\n");
-            i--; // to repeat the loop ;
+            printf("Please enter a valid row\n");
+            i--; // Repeat the loop for invalid row
             continue;
         }
 
-
-        int orientation = getOrientation(input.orientation); // 0  for horizontal 1 for vertical
-
-        if (orientation == -1) // validate orientation
+        // Validate the orientation
+        int orientation = getOrientation(input.orientation); // 0 for horizontal, 1 for vertical
+        if (orientation == -1)
         {
-            printf("please enter a valid column from A to J\n");
-            i--;
+            printf("Please enter a valid orientation (horizontal or vertical)\n");
+            i--; // Repeat the loop for invalid orientation
             continue;
         }
 
-        if (checkBounds(player,&input, currentShipSize) == -1)
+        // Check if the ship can be placed within bounds and doesn't overlap with other ships
+        if (checkBounds2(player, &input, currentShipSize) == -1)
         {
-            i--;
+            i--; // Repeat the loop for invalid placement
             continue;
         }
-        
-        addShip(player,&input,shipsNames[i],currentShipSize);
-        
+
+        // Add the ship to the player's grid
+        addShip(player, shipsNames[i], currentShipSize,input.row,input.column, orientation);
+
+        // Print the current grid after placing the ship
         printGrid(player->grid);
-        
     }
 
     printf("\n");
