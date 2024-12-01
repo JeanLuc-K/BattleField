@@ -1,5 +1,11 @@
 #include "../headerFile.h"
+/*
+requires: A reference to the current player (`currentPlayer`) and the opposing player (`opposingPlayer`).
 
+effects: 
+ handles artillery based on bot implementaion and
+ Calls the `artilleryMove` function to perform the artillery action u
+*/
 void handleArtillery(PLAYER *currentPlayer, PLAYER *opposingPlayer)
 {
     //no condition since its met throught the botThinking
