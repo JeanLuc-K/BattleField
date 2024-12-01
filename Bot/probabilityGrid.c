@@ -60,6 +60,8 @@ int foundHitVertical(int row, int col, int shipSize, PLAYER* currentPlayer) {
 
 void calculateProbability(PLAYER* currentPlayer, PLAYER* opposingPlayer) {
     printf("Calculating probability...\n");
+    printf("BEFOOOOOOOOOOR");
+    printGridInt(currentPlayer->probGrid);
 
     int currentProbGrid[GRID_SIZE][GRID_SIZE] ={0};
 
@@ -74,6 +76,7 @@ void calculateProbability(PLAYER* currentPlayer, PLAYER* opposingPlayer) {
             // Loop through every possible cell in the grid
             for (int row = 0; row < GRID_SIZE; ++row) {
                 for (int col = 0; col < GRID_SIZE; ++col) {
+                    
                     
                     if(currentPlayer->probGrid[row][col]<0) //to make sure not to overwrite that i am sure a ship might be there can be there
                     {
