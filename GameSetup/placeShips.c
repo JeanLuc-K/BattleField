@@ -2,8 +2,9 @@
 
 void addShip(PLAYER* currentPlayer,INPUT* input,const char* name,int shipSize)
 {   
+    printf("Ship size is: %d", shipSize);
     SHIP* ships = currentPlayer->ships; //array of ships
-    int shipIndex = 4-shipSize; //first ship is the biggest
+    int shipIndex = 4-shipSize+1; //first ship is the biggest
 
     int sizeofName =0;
     while(name[sizeofName]!= '\0')
@@ -98,7 +99,7 @@ void placeShips(PLAYER* player)
     for (int i = 0; i < NUMBEROFSHIPS; i++) // 4 total ships to place
     {
 
-        int currentShipSize = 4 - i; // reverse order size
+        int currentShipSize = 5 - i; // reverse order size
 
         printf("Where would you like to place your %s (%d cells)?\n", shipsNames[i], currentShipSize);
 
@@ -138,10 +139,10 @@ void placeShips(PLAYER* player)
         }
         
         addShip(player,&input,shipsNames[i],currentShipSize);
+        
         printGrid(player->grid);
         
     }
 
     printf("\n");
 }
-
