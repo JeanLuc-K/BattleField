@@ -14,7 +14,9 @@
 #include "Bot/probabilityGrid.c"
 #include "Bot/botThinking.c"
 #include "Bot/handleRadar.c"
-
+#include "Bot/handleTorpedo.c"
+#include "Bot/handleArtillery.c"
+#include "Bot/handleFire.c"
 
 
 int difficulty =0;
@@ -86,7 +88,7 @@ int game(PLAYER *currentPlayer, PLAYER *opposingPlayer,int turnNumber)
 {
    
     
-
+    currentPlayer->artillery=1;
     printf("%s, what is your move?\n", currentPlayer->name);
     printf("for a list of moves, enter \"help\"\n");
 
@@ -100,6 +102,7 @@ int game(PLAYER *currentPlayer, PLAYER *opposingPlayer,int turnNumber)
     if(currentPlayer->isBot)
     {
         botThinking(currentPlayer,opposingPlayer);
+        calculateProbability(currentPlayer,opposingPlayer);   
         printGrid(currentPlayer->hitsAndMissesGrid);
         printf("THE TURN HAS ENDED\n\n");
         //go to bot thinking
