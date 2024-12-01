@@ -38,6 +38,7 @@ void updateCoordBySquare(struct Input* input ,int iteration);
 
 
 //for initialize_game
+#define MAX_COORDS 100 // Maximum possible number of coordinates (for 10x10 grid)
 #define GRID_SIZE 10
 #define NUMBEROFSHIPS 4
 #define EASY 0
@@ -45,6 +46,16 @@ void updateCoordBySquare(struct Input* input ,int iteration);
 #define SHIP struct Ship
 #define PLAYER struct Player
 extern int difficulty ;
+
+typedef struct {
+    int row;
+    int col;
+} Coord;
+
+typedef struct {
+    Coord maxCoords[MAX_COORDS];
+    int size;
+} squareCoords; 
 
 struct Ship
 {
@@ -74,6 +85,7 @@ struct Player
     int artillery;
 
     int isBot;
+    Coord lastHit;
     int hitsBeforeShipSunk; //counts the number of consecutive hits before we sink an opponent ship
 };
 
@@ -142,18 +154,10 @@ void botThinking(PLAYER *currentPlayer, PLAYER *opposingPlayer);
 
 
 //FOR  probabilityGrid.c
-#define MAX_COORDS 100 // Maximum possible number of coordinates (for 10x10 grid)
 
 
-typedef struct {
-    int row;
-    int col;
-} Coord;
 
-typedef struct {
-    Coord maxCoords[MAX_COORDS];
-    int size;
-} squareCoords; 
+
 
 int isInBound2(int row,int column);
 void calculateProbability(PLAYER* currentPlayer, PLAYER* opposingPlayer);
@@ -168,7 +172,7 @@ int handleRadar(PLAYER *currentPlayer, PLAYER *opposingPlayer);
 Coord getHighestProbSquare(PLAYER* currentPlayer, PLAYER* opposingPlayer);
 Coord* findHighestProbCoords(PLAYER* currentPlayer, int* count);
 void processSurroundingCell(PLAYER *currentPlayer, INPUT* input) ;
-void hitOutcome(PLAYER *currentPlayer, INPUT* input);
+void hitOutcome(PLAYER *currentPlayer,PLAYER* opposingPlayer, INPUT* input,int* opposingShipsStatus,Coord* lastHit);
 void updateCoordByCross(INPUT* input ,int iteration);
 void handleFire(PLAYER* currentPlayer, PLAYER* opposingPlayer);
 
