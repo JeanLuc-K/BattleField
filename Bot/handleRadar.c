@@ -1,5 +1,20 @@
 #include "../headerFile.h"
 
+void printSquareCoords(squareCoords *sc) {
+    if (sc == NULL) {
+        printf("Null squareCoords structure passed.\n");
+        return;
+    }
+
+    printf("Number of coordinates: %d\n", sc->size);
+    printf("Coordinates (row, column):\n");
+
+    // Loop through and print each valid coordinate
+    for (int i = 0; i < sc->size; i++) {
+        printf("Coord %d: Row = %d, Column = %d\n", i + 1, sc->maxCoords[i].row, sc->maxCoords[i].col);
+    }
+}
+
 int handleRadar(PLAYER *currentPlayer, PLAYER *opposingPlayer)
 {
 
@@ -12,14 +27,15 @@ int handleRadar(PLAYER *currentPlayer, PLAYER *opposingPlayer)
     
 
     squareCoords squareCoord = getSquareCoord(currentPlayer->probGrid);
-
+    
+    printSquareCoords(&squareCoord);
 
 
     INPUT input;
     input.row=squareCoord.maxCoords->row;
     input.column = squareCoord.maxCoords->col;
     
-    printf("The bot plays Radar %c%d \n", 97+input.column ,input.row);
+    printf("The bot plays Radar %c%d \n", 97+input.column ,input.row+1);
 
     int moveResult = RadarSweep(currentPlayer,opposingPlayer,&input); //use radar
     
