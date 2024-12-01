@@ -1,5 +1,5 @@
 #include "headerFile.h"
-*/
+/*
 requires: a reference to currentPlayer hip name.
          Size of the ship.
          row, col ccordinates which are the starting position for the ship.
@@ -47,7 +47,7 @@ void addShip(PLAYER* currentPlayer, const char* name,int shipSize, int row, int 
     ships[shipIndex].hasFallen =0;
 
 }
-    */
+    /*
 requires: a reference to currentPlayer hip name.
          Size of the ship.
          row, col ccordinates which are the starting position for the ship.
