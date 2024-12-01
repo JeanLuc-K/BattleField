@@ -1,5 +1,12 @@
 #include "headerFile.h"
+/*
+requires:
+     Pointer to a `squareCoords` structure containing `size` (number of coordinates) and `maxCoords` (array of coordinates).
 
+effects:
+    - If `sc` is `NULL`, prints an error message: "Null squareCoords structure passed."
+    - Otherwise, prints the number of coordinates , and each coordinate's row and column values from `sc->maxCoords`.
+*/
 void printSquareCoords(squareCoords *sc) {
     if (sc == NULL) {
         printf("Null squareCoords structure passed.\n");
@@ -14,7 +21,14 @@ void printSquareCoords(squareCoords *sc) {
         printf("Coord %d: Row = %d, Column = %d\n", i + 1, sc->maxCoords[i].row, sc->maxCoords[i].col);
     }
 }
+/*
+requires:
+    - A reference to the `currentPlayer` and `opposingPlayer` structures.
+effects:
+     handles radar sweep for bot implementation using progrid and square coordinates and  check for ships in the selected square using radar sweep
+     Returns 1 to indicate the radar sweep was successfully processed.
 
+*/
 int handleRadar(PLAYER *currentPlayer, PLAYER *opposingPlayer)
 {
 
