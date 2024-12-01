@@ -1,5 +1,16 @@
 #include "../headerFile.h"
+/*requires:  - currentPlayer: a pointer to the PLAYER structure representing the current player.
+    - input: a pointer to the INPUT structure containing the starting coordinates and orientation for placing the ship.
+    -ship name
+    - shipSize: an integer representing the size (length) of the ship to be placed.
 
+
+effects:- Adds the specified ship to the current player's grid by placing 'X' characters on the grid based on the inputted coordinates, 
+      size, and orientation.
+    - Updates the ship's information in the player's ship array, including its name, size, and coordinates.
+    - Initializes the ship's hit counter (hits) to 0 and sets hasFallen to 0 (indicating the ship is still afloat).
+
+*/
 void addShip(PLAYER* currentPlayer,INPUT* input,const char* name,int shipSize)
 {   
     printf("Ship size is: %d", shipSize);
@@ -40,7 +51,17 @@ void addShip(PLAYER* currentPlayer,INPUT* input,const char* name,int shipSize)
     ships[shipIndex].hasFallen =0;
 
 }
+/*
+  requires:
+    - currentPlayer: a pointer to the PLAYER structure representing the current player.
+    - input: a pointer to the INPUT structure containing the starting coordinates and orientation for placing the ship.
+    - shipSize: an integer representing the size (length) of the ship to be placed.
 
+
+  returns:
+    - 1 if the placement is valid (within bounds and no overlap).
+    - -1 if the placement is invalid due to being out of bounds or overlapping with another ship.
+*/
 int checkBounds(PLAYER* currentPlayer,INPUT* input,int shipSize)
 {
     int orientation = getOrientation(input->orientation);
@@ -88,7 +109,13 @@ int checkBounds(PLAYER* currentPlayer,INPUT* input,int shipSize)
 
 
 }
+/*
+  requires:
+    - a pointer to the PLAYER current player.
+    - Collects user input for the starting coordinates and orientation (horizontal or vertical) of each ship.
 
+  effects: displays the added ships on the grid dependinding on their coordinates .
+*/
 void placeShips(PLAYER* player)
 {
 
