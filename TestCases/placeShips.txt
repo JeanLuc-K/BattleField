@@ -1,0 +1,105 @@
+
+addship()
+
+Test Case 1:
+Input:
+•	currentPlayer:   Grid initialized with ~.
+•	input = {row: 2, column: 3, orientation: HORIZONTAL}.
+•	name = "Destroyer".
+•	shipSize = 3
+Expected output:
+Grid updated:
+~ ~ ~ ~ ~
+~ ~ ~ ~ ~
+~ ~ ~ X X X ~ ~ ~ ~
+~ ~ ~ ~ ~
+coord = {23, 24, 25} (Integer coordinate)
+
+Description: Confirms horizontal ship placement and updates grid and ship attributes correctly.
+
+Test Case 2:
+Input:
+•	currentPlayer:Grid initialized with ~.
+•	input = {row: 1, column: 4, orientation: VERTICAL}.
+•	name = "Submarine".
+•	shipSize = 2.
+Expected Output:
+Grid updated:
+~ ~ ~ ~ ~
+~ ~ ~ ~ X
+~ ~ ~ ~ X
+~ ~ ~ ~ ~
+coord = {14, 24}.( Integer coordinate)
+
+Description: Verifies vertical ship placement and updates grid and ship attributes correctly.
+
+checkBounds():
+
+Test Case 1:
+Input:
+•	currentPlayer: Grid initialized with ~.
+•	input = {row: 8, column: 6, orientation: HORIZONTAL}.
+•	shipSize = 4.
+Expected Output:
+•	-1.
+Description: Confirms the function correctly identifies a ship placement going out of bounds horizontally.
+
+Test Case 2:
+Input:
+•	currentPlayer grid already has a vertical ship at {row: 5, column: 1} with size = 3.
+•	input = {row: 6, column: 1, orientation: VERTICAL}.
+•	shipSize = 2.
+Expected Output:
+•	-1.
+Description: Ensures the function detects overlap for vertical ships on the same column.
+
+
+Test Case 3:
+Input:
+•	currentPlayer grid already has a horizontal ship at {row: 3, column: 2} with size = 3.
+•	input = {row: 3, column: 3, orientation: HORIZONTAL}.
+•	shipSize = 2.
+Expected Output:
+•	-1.
+Description: Confirms the function detects overlapping ships on the grid.
+
+
+
+Test Case 4:
+Input:
+•	currentPlayer has an empty grid initialized with ~.
+•	input = {row: 0, column: 0, orientation: VERTICAL}.
+•	shipSize = 5.
+Expected Output:
+•	1.
+Description: Verifies the function allows placement when within bounds and no overlap exists.
+
+placeShips() 
+
+Test Case 1:
+Input: 
+•	Row 2, Column 3, Horizontal, Carrier (Size 4)
+Expected Output: 
+•	Ship placed from (2,3) to (2,6).
+Description: Confirms horizontal ship placement.
+
+Test Case 2:
+Input: 
+•	Row 1, Column 5, Vertical, Battleship (Size 3)
+Expected Output:
+•	Ship placed from (1,5) to (3,5).
+Description: Confirms vertical ship placement.
+
+Test Case 3: 
+Input: 
+•	Row 9, Column 9, Horizontal, Destroyer (Size 3)
+Expected Output: 
+•	Error: "Ship is out of bounds."
+Description: Verifies bounds check for horizontal placement.
+
+Test Case 4:
+Input: 
+•	Row 1, Column 5, Horizontal, Submarine (Size 3)
+Expected Output:
+•	Error: "Ships overlap."
+Description: Verifies overlap check for horizontal placement.
