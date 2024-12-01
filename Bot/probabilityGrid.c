@@ -5,6 +5,12 @@
     To calculate the probabilty GRID
 *************************************/
 
+/*
+requires: two integer parameters row and column, representing the coordinates to be checked.
+        
+effects:  Returns 1 if the coordinates (`row`, `column`) are within the bounds of the grid.
+          Returns 0 if the coordinates are out of bounds.
+*/
 int isInBound2(int row, int column) {
     if (row < 0 || row >= GRID_SIZE) {
         return 0;
@@ -17,7 +23,14 @@ int isInBound2(int row, int column) {
     return 1;
 }
 
-// Check horizontally for a possible hit
+/*
+requires: reference to the current player of type PLAYER which includes the `hitsAndMissesGrid` representing the game grid.
+          a reference to the input of type INPUT containing the target coordinates
+          the size of the ship to check for, which includes how many consecutive cells to check horizontally or vertically.
+effects: Returns  1 if a hit is detected horizontally  or if the check goes out of bounds or a miss is detected in EASY mode.
+         Returns  0 if no hit or miss is detected after checking the full horizontal length of the ship.
+
+*/
 int foundHitHorizontal(int row, int col, int shipSize, PLAYER* currentPlayer) {
     for (int colShift = 0; colShift < shipSize; ++colShift) {
         if (!isInBound2(row, col + colShift)) {
@@ -37,7 +50,14 @@ int foundHitHorizontal(int row, int col, int shipSize, PLAYER* currentPlayer) {
     return 0;  // No hit detected
 }
 
-// Check vertically for a possible hit
+/*
+requires: reference to the current player of type PLAYER which includes the `hitsAndMissesGrid` representing the game grid.
+          a reference to the input of type INPUT containing the target coordinates 
+          the size of the ship to check for, which includes how many consecutive cells to check horizontally or vertically.
+effects: Returns  1 if a hit is detected vertically or if the check goes out of bounds or a miss is detected in EASY mode.
+         Returns  0 if no hit or miss is detected after checking the full vertical length of the ship.
+
+*/
 int foundHitVertical(int row, int col, int shipSize, PLAYER* currentPlayer) {
     for (int rowShift = 0; rowShift < shipSize; ++rowShift) {
         if (!isInBound2(row + rowShift, col)) {
@@ -57,7 +77,13 @@ int foundHitVertical(int row, int col, int shipSize, PLAYER* currentPlayer) {
     }
     return 0;  // No hit detected
 }
-
+/*
+requires: a reference to currentPlayer  which includes the probability grid.
+          a reference to opposingPlayer which includes the list of ships .
+          
+effects:   Iterates through each potential grid position for horizontal and vertical placements of ships.
+           If a position does not contain a hit or miss for that ship's placement, the function updates the `probGrid` of the current player to increase the probability of a ship being placed at that location.       
+*/
 void calculateProbability(PLAYER* currentPlayer, PLAYER* opposingPlayer) {
     printf("Calculating probability...\n");
     printf("BEFOOOOOOOOOOR");
@@ -128,9 +154,14 @@ void calculateProbability(PLAYER* currentPlayer, PLAYER* opposingPlayer) {
 
 
 
-/************************************
-    to calculate the sum of a 2x2 grid starting at (i, j)
-*************************************/
+/*
+requires: grid representing the  the sum is to be calculated.
+          int i which is the starting row index of the 2x2 grid.
+          int  j which is the starting column index of the 2x2 grid.
+
+effects:  returns an the sum of the values of the 2x2 grid starting at the position `(i, j)`.
+*/
+
 int calculateSum(int grid[GRID_SIZE][GRID_SIZE], int i, int j) {
     int sum = 0;
 
@@ -145,8 +176,12 @@ int calculateSum(int grid[GRID_SIZE][GRID_SIZE], int i, int j) {
     }
     return sum;
 }
+/*
+requires: grid on which the sum of 2x2 sub-grids will be calculated.
+          an array of `Coord` structures that will store the coordinates of the 2x2 sub-grids with the maximum sum
+effects: The function rthe number of coordinates in the `coords` array that have the maximum sum. This value is stored in `count`.
+*/
 
-// Function to find and return the list of coordinates of the 2x2 subgrids with the max sum
 int findMaxSumCoords(int grid[GRID_SIZE][GRID_SIZE], Coord coords[MAX_COORDS]) {
     int maxSum = -1;  // To store the maximum sum found
     int count = 0;    // To track the number of coordinates with the max sum
@@ -176,7 +211,11 @@ int findMaxSumCoords(int grid[GRID_SIZE][GRID_SIZE], Coord coords[MAX_COORDS]) {
     return count;  // Return the number of coordinates with the maximum sum
 }
 
-// Function to get the coordinates with the maximum sum from the probGrid
+
+/*
+requires: probability grid where each element holds a value that will be used to calculate the sum for 2x2 sub-grids.
+effects: The function returns a `squareCoords` structure, which includes the size of the maximum sum coordinates and the coordinates themselves in the maxCoords array.
+*/
 squareCoords getSquareCoord(int probGrid[GRID_SIZE][GRID_SIZE]) {
     
     squareCoords squareCoord;  // Create a squareCoords structure
