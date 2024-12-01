@@ -1,5 +1,8 @@
 #include "../headerFile.h"
-
+/*void assignStartingPlayer(PLAYER * player1, PLAYER * player2)
+requires: reference to player1 and player2 of type PLAYER containing the name of each player
+effects: returns the name of the player who will start
+*/
 void assignStartingPlayer(PLAYER * player1, PLAYER * player2)
 {
 
@@ -26,7 +29,10 @@ void assignStartingPlayer(PLAYER * player1, PLAYER * player2)
         printf("The first player is %s\n", player1->name);
     }
 }
-
+/*void initializeProbGrid(int probGrid[GRID_SIZE][GRID_SIZE])
+requires: probgrid of type int
+effects: set all elements in the grid to 0
+*/
 void initializeProbGrid(int probGrid[GRID_SIZE][GRID_SIZE]) {
     for (int i = 0; i < GRID_SIZE; i++) {
         for (int j = 0; j < GRID_SIZE; j++) {
@@ -34,7 +40,10 @@ void initializeProbGrid(int probGrid[GRID_SIZE][GRID_SIZE]) {
         }
     }
 }
-
+/*void initializeGrid(char grid[GRID_SIZE][GRID_SIZE])
+requires: grid of type char
+effects: set each element in the grid to '~'
+*/
 void initializeGrid(char grid[GRID_SIZE][GRID_SIZE])
 {
     for (int i = 0; i < GRID_SIZE; i++)
@@ -45,7 +54,10 @@ void initializeGrid(char grid[GRID_SIZE][GRID_SIZE])
         }
     }
 }
-
+/*int getDifficultyLevel()
+requires: nothing
+effects: return 0 if its easy, 1 if it is hard
+*/
 int getDifficultyLevel()
 {
    INPUT input;
@@ -68,7 +80,10 @@ int getDifficultyLevel()
 
     printf("\n");
 }
-
+/*void getName(char* name, int size, int number)
+requires: array of character to indicates the name, size of it and number to indicates if the player is 1 or 2
+effects: take the name of the player from the input
+*/
 void getName(char* name, int size, int number)
 {
     
@@ -84,7 +99,10 @@ void getName(char* name, int size, int number)
         }
     }
 }
-
+/*void initializePlayer(PLAYER* player,int number)
+requires: player of type PLAYER, number to know if he is player 1 or 2
+effect: initialize grids of the player
+*/
 void initializePlayer(PLAYER* player,int number)
 {
     initializeGrid(player->grid);
