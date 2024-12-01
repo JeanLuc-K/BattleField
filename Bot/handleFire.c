@@ -182,16 +182,30 @@ void hitOutcome(PLAYER *currentPlayer,PLAYER* opposingPlayer, INPUT* input,int* 
             int lastHitRow = lastHit->row;
             int lastHitCol = lastHit->col;
 
-             printf("Last hit coordinates: Row = %d, Column = %d\n", lastHitRow, lastHitCol);
-            if(input->row == lastHitRow)
+            if(input->row == lastHitRow)//don't forget bound checking
             {
                 currentPlayer->probGrid[lastHitRow--][lastHitCol]++;
                 currentPlayer->probGrid[lastHitRow++][lastHitCol]++;
+                if(input->column-lastHitCol>0)
+                {
+                    currentPlayer->probGrid[input->row][input->column+1]=-1;
+                }else{
+                    currentPlayer->probGrid[input->row][input->column-1]=-1;
+                }
 
             }else
-            {
+            {//bade enebeth 23ml -1 eza azghar men 0
                 currentPlayer->probGrid[lastHitRow][lastHitCol++]++;
                 currentPlayer->probGrid[lastHitRow][lastHitCol--]++;
+                
+                if(input->row-lastHitRow>0)
+                {
+                    currentPlayer->probGrid[input->row+1][input->column]=-1;
+                }else
+                
+                {
+                    currentPlayer->probGrid[input->row-1][input->column]=-1;
+                }
 
             }
            //i  now check around it
@@ -209,10 +223,40 @@ void hitOutcome(PLAYER *currentPlayer,PLAYER* opposingPlayer, INPUT* input,int* 
                 return ;//i cannot know anything so next
             }else{
 
-                //i have sunk the ship and didn;t hit any other ship at the same time 
+                //ana hon i have sunk the ship and didn;t hit any other ship at the same time 
                 if (currentPlayer->hitsBeforeShipSunk== result)
                 {
                     //make all the -1 into 0 adjacent to the ship or maybe +1 so maybe if one had 2 but won;t ever happen ma baarf 3m 5arref
+                     
+                    int lastHitRow = lastHit->row;
+                    int lastHitCol = lastHit->col;
+
+                    if(input->row == lastHitRow)//don't forget bound checking
+                    {
+                        currentPlayer->probGrid[lastHitRow--][lastHitCol]++;
+                        currentPlayer->probGrid[lastHitRow++][lastHitCol]++;
+                        if(input->column-lastHitCol>0)
+                        {
+                            currentPlayer->probGrid[input->row][input->column+1]=-1;
+                        }else{
+                            currentPlayer->probGrid[input->row][input->column-1]=-1;
+                        }
+
+                    }else
+                    {//bade enebeth 23ml -1 eza azghar men 0
+                        currentPlayer->probGrid[lastHitRow][lastHitCol++]++;
+                        currentPlayer->probGrid[lastHitRow][lastHitCol--]++;
+                        
+                        if(input->row-lastHitRow>0)
+                        {
+                            currentPlayer->probGrid[input->row+1][input->column]=-1;
+                        }else
+                        
+                        {
+                            currentPlayer->probGrid[input->row-1][input->column]=-1;
+                        }
+
+                    }
                 }
                 //i have sunk a ship but i still did hit another ship on the way 
                 // ana fiye wa2ef hon lal hard
@@ -225,7 +269,7 @@ void hitOutcome(PLAYER *currentPlayer,PLAYER* opposingPlayer, INPUT* input,int* 
 
         }// if we misses the hitandmiss will become 'o' and the probgrid will change the -1 to 0
         else{
-            currentPlayer->probGrid[input->row][input->column]==0;
+            currentPlayer->probGrid[input->row][input->column]=0;
         }
     }
     
@@ -307,7 +351,8 @@ void handleFire(PLAYER* currentPlayer, PLAYER* opposingPlayer)
     Coord lastHit;
     lastHit.row = currentPlayer->lastHit.row;
     lastHit.col = currentPlayer->lastHit.col;
-    printf("Last hit coordinates: Row = %d, Column = %d\n", lastHit.row, lastHit.col);
+
+
     fireMove(currentPlayer,opposingPlayer,&input);
 
     if(currentPlayer->hitsAndMissesGrid[input.row][input.column]=='*')
