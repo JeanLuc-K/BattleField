@@ -100,6 +100,7 @@ void initializePlayer(PLAYER* player,int number)
     player-> artillery=0;
     player->torpedo=0;
     player-> isBot = 0;
+    player->hitsBeforeShipSunk=0;
 
 
    

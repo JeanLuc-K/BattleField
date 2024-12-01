@@ -74,6 +74,7 @@ struct Player
     int artillery;
 
     int isBot;
+    int hitsBeforeShipSunk; //counts the number of consecutive hits before we sink an opponent ship
 };
 
 
@@ -128,20 +129,21 @@ void checkArtillery(PLAYER* currentPlayer);
 void artilleryMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input);
 
 
+//FOR BOT
 
-//FOR BOT 
-int isInBound2(int row,int column);
-void calculateProbability(PLAYER* currentPlayer, PLAYER* opposingPlayer);
+//for handleTorpedo
+void handleTorpedo(PLAYER* currentPlayer, PLAYER* opposingPlayer);
 
+//for handleArtillery
+void handleArtillery(PLAYER *currentPlayer, PLAYER *opposingPlayer);
 
-//FOR MYBOT
-int handleRadar(PLAYER *currentPlayer, PLAYER *opposingPlayer);
+//for botThinking.c
 void botThinking(PLAYER *currentPlayer, PLAYER *opposingPlayer);
 
 
+//FOR  probabilityGrid.c
+#define MAX_COORDS 100 // Maximum possible number of coordinates (for 10x10 grid)
 
-//for getSquareCoord
-#define MAX_COORDS 25 // Maximum possible number of coordinates (for 5x5 grid)
 
 typedef struct {
     int row;
@@ -153,11 +155,22 @@ typedef struct {
     int size;
 } squareCoords; 
 
+int isInBound2(int row,int column);
+void calculateProbability(PLAYER* currentPlayer, PLAYER* opposingPlayer);
 int calculateSum(int grid[GRID_SIZE][GRID_SIZE], int i, int j) ;
 int findMaxSumCoords(int grid[GRID_SIZE][GRID_SIZE], Coord coords[MAX_COORDS]);
 squareCoords getSquareCoord(int probGrid[GRID_SIZE][GRID_SIZE]) ;
 
+//FOR HandleRadar
+int handleRadar(PLAYER *currentPlayer, PLAYER *opposingPlayer);
 
+//for handleFire
+Coord getHighestProbSquare(PLAYER* currentPlayer, PLAYER* opposingPlayer);
+Coord* findHighestProbCoords(PLAYER* currentPlayer, int* count);
+void processSurroundingCell(PLAYER *currentPlayer, INPUT* input) ;
+void hitOutcome(PLAYER *currentPlayer, INPUT* input);
+void updateCoordByCross(INPUT* input ,int iteration);
+void handleFire(PLAYER* currentPlayer, PLAYER* opposingPlayer);
 
 
 #endif
