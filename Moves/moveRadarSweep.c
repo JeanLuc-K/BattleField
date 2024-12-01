@@ -2,6 +2,13 @@
 
 //radar sweep function checks in a 2x2 area if it exists enemy ships and display result
 //return 0 if move invalid, 1 if ships found, 2 if no ship found
+
+/*int RadarSweep(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input)
+requires:-reference for currentPlayer of type PLAYER containing the number of radarsweep used and opposingPlayer of type PLAYER containing the grid and smoke grid, reference to the input of type INPUT containing the coordinates of the 2x2 area to be scanned 
+         -used radar sweep less than or 3 times
+effects: returns 1 if there is a ship for the enemy not covered by smoke or 2 if not.
+*/
+
 int RadarSweep(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input){
     //every player is allowed 3 radar sweeps per entire game
 
