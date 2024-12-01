@@ -102,6 +102,9 @@ void initializePlayer(PLAYER* player,int number)
     player-> isBot = 0;
     player->hitsBeforeShipSunk=0;
 
+    player->lastHit.row=-1;
+    player->lastHit.col=-1;
+
 
    
     
