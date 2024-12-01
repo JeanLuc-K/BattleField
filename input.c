@@ -1,5 +1,8 @@
 #include "headerFile.h"
-
+/*int getRow(char* input,int startCoord, int whiteSpaceIndex)
+requires: input representing coordinates of type string, starting index of the coordinate of type int, index of the 1st space in the string
+effects: returns the row number based on the extracted digits 
+*/
 int getRow(char* input,int startCoord, int whiteSpaceIndex)
 {
     if(whiteSpaceIndex-startCoord ==0 || whiteSpaceIndex-startCoord >2) //check if no character entered or more than 2 characters
@@ -25,7 +28,10 @@ int getRow(char* input,int startCoord, int whiteSpaceIndex)
 
     
 }
-
+/*int getDigit(char c)
+requires: a character representing the column
+effects: returns an integer corresponding to the column
+*/
 int getDigit(char c)
 {
     int digit = c-'0';
@@ -38,7 +44,10 @@ int getDigit(char c)
     }
     return -1;
 }
-
+/*void clearInput(char* input, int size)
+requires: input of type char*, int size of the input
+effects: clear the input buffer
+*/
 void clearInput(char* input, int size) //removes any overflow in the input
 {
 
@@ -64,7 +73,10 @@ void clearInput(char* input, int size) //removes any overflow in the input
         while(charachter = getchar()!='\n' && charachter!=EOF);
     }
 }
-
+/*void printGrid(char grid[GRID_SIZE][GRID_SIZE])
+requires: 2d array for the grid
+effect: print the grid
+*/
 void printGrid(char grid[GRID_SIZE][GRID_SIZE])
 {
     printf("    A B C D E F G H I J\n");
@@ -96,7 +108,10 @@ void printGrid(char grid[GRID_SIZE][GRID_SIZE])
         printf("\n");
     }
 }
-
+/*void printGrid(char grid[GRID_SIZE][GRID_SIZE])
+requires: 2d array for the grid
+effect: print the grid
+*/
 void printGridInt(int grid[GRID_SIZE][GRID_SIZE])
 {
     printf("    A B C D E F G H I J\n");
@@ -128,7 +143,10 @@ void printGridInt(int grid[GRID_SIZE][GRID_SIZE])
         printf("\n");
     }
 }
-
+/*int getColumn(char input)
+requires: character representing the column (A-J)
+effects: returns the integer corresponding to the column
+*/
 int getColumn(char input)
 {
    
@@ -158,7 +176,10 @@ int getColumn(char input)
     }
 
 }
-
+/*int getOrientation(char* input)
+requires: a string representing the orientation of the ship
+effects: returns if its horizontal or vertical
+*/
 int getOrientation(char* input)
  {
 
@@ -174,7 +195,10 @@ int getOrientation(char* input)
 
    
 }
-
+/*void getInputForPlacingShips(INPUT* input)
+requires: input of type INPUT containing the row col and orientation
+effects: stores the extracted values in the input object
+*/
 void getInputForPlacingShips(INPUT* input)
 {
     char stringInput[20];
@@ -208,6 +232,11 @@ void getInputForPlacingShips(INPUT* input)
 }
 
 //input for placing ship is the opposit of that to make moves
+/*void getInput(INPUT* input)
+requires: input of type INPUT storing the name of move and coordinates
+effect: extract the move name,row and col
+
+*/
 void getInput(INPUT* input)
 {
     char stringInput[20];
@@ -241,7 +270,10 @@ void getInput(INPUT* input)
     input->row = getRow(stringInput, leading3, trailing3);
 
 }
-
+/*int getLeadingCharachterIndex(char*input , int start)
+requires: input of type char*, int representing the index which to start with
+effects: skips the white spaces
+*/
 int getLeadingCharachterIndex(char*input , int start)
 {
     while(input[start]== ' ')
@@ -251,7 +283,10 @@ int getLeadingCharachterIndex(char*input , int start)
 
     return start;
 }
-
+/*int getTrailingCharachterIndex(char*input, int start)
+requires: input of type char* and a int representing the index which to start with
+effects: return the index where the first non word character is encountered
+*/
 int getTrailingCharachterIndex(char*input, int start)
 {
     while(input[start]!= ' ' && input[start]!= '\n'&& input[start]!= EOF )
@@ -263,6 +298,12 @@ int getTrailingCharachterIndex(char*input, int start)
 }
 
 //function to check the validation of the given input
+//function to check the validation of the given input
+/*int isInBound(INPUT* input)
+requires: input of type INPUT containing the row and col coordinates
+effects: return 0 if row and col are out of bound, 1 if they are in bound
+
+*/
 int isInBound(INPUT* input)
 {
      if (input->row < 0 || input->row >= GRID_SIZE) {
@@ -279,6 +320,10 @@ int isInBound(INPUT* input)
 
 
 //function to update the coordinates to move around the square area
+/*void updateCoordBySquare(struct Input*input ,int iteration)
+requires: reference to an INPUT struct, and iterator
+effects: update the coordinates to move around the square area
+*/
 void updateCoordBySquare(struct Input*input ,int iteration)
 {
     if(iteration ==0)
