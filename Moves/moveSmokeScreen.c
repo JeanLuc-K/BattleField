@@ -1,5 +1,10 @@
 #include "../headerFile.h"
 //this function hide a 2x2 area on the player's grid
+/*void smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input )
+requires: reference to the current player containing the smokeGrid and opposing player of type PLAYER containing the number of ships left, reference to the input containing the coordinates for the top-left corner of the 2x2 to be obscured
+          smoke screen should be used less than the number of ships the player has sunk
+effects: obscure the area of the indicated coordinates
+*/
 void smokeScreen(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input )
 {   //calculating the number of lost ships
     int shipsSunk = NUMBEROFSHIPS- opposingPlayer->shipsLeft;
