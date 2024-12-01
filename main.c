@@ -1,4 +1,3 @@
-
 #include "headerFile.h"
 
 #include "input.c"
@@ -38,11 +37,44 @@ int main()
 
     assignStartingPlayer(&player1, &player2);
 
-    printf("first player is bot: %d and second player : %d",  player1.isBot,player2.isBot);
-    placeShips(&player1);
-    system("cls");
-    placeShips(&player2);
-    system("cls");
+// Place ships for both players
+    if (player2.isBot)
+    {
+        if (difficulty == EASY)
+        {
+            placeShipsEasy(&player2); // Bot automatically places ships
+            placeShipsHuman(&player1);
+        }
+        else if (difficulty == HARD)
+        {
+            placeShipsHard(&player2); // Bot automatically places ships
+            placeShipsHuman(&player1);
+        }
+        else
+        {
+            placeShipsMedium(&player2); // Bot automatically places ships
+            placeShipsHuman(&player1);
+        }
+    }
+    else
+    {
+        if (difficulty == EASY)
+        {
+            placeShipsEasy(&player1); // Bot automatically places ships
+            placeShipsHuman(&player2);
+        }
+        else if (difficulty == HARD)
+        {
+            placeShipsHard(&player1); // Bot automatically places ships
+            placeShipsHuman(&player2);
+        }
+        else
+        {
+            placeShipsMedium(&player1); // Bot automatically places ships
+            placeShipsHuman(&player2);
+        }
+    }
+
 
 
     initializeProbGrid(player1.probGrid);
@@ -51,7 +83,11 @@ int main()
     initializeProbGrid(player2.probGrid);
     calculateProbability(&player2,&player1);
 
-    
+    printf("ooo5");
+    for(int  i = 0 ; i < 4 ;i++)
+    {
+        printf("the player1 ships sizes is %d , %d", i, player1.ships[i].size);
+    }
 
    for (int i = 0; player1.shipsLeft > 0 && player2.shipsLeft > 0;)
     {
@@ -98,7 +134,10 @@ int game(PLAYER *currentPlayer, PLAYER *opposingPlayer,int turnNumber)
     checkTorpedo(currentPlayer);
 
     printGrid(currentPlayer->hitsAndMissesGrid);
-
+    if(currentPlayer->isBot==0)
+    {
+        return 1;
+    }
     if(currentPlayer->isBot)
     {
         botThinking(currentPlayer,opposingPlayer);
