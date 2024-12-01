@@ -1,5 +1,10 @@
 #include "../headerFile.h"
-
+/*void torpedo(PLAYER* currentPlayer, PLAYER* opposingPlayer, INPUT* input)
+requires: reference to the current player and the opposing player of type PLAYER, which each contains their grid and other information (hitsandMissesGrid, smoke grid...)
+         the player must have unlocked the torpedo move
+         input indicating the target (col of row)
+effects: returns if the move on the specified row or col is a miss or a hit and updates the grids * if it is a hit and o if miss
+*/
 void torpedo(PLAYER* currentPlayer, PLAYER* opposingPlayer, INPUT* input) {
     // check if torpedo can be used: allow only if not used and condition met
 
@@ -69,7 +74,10 @@ else if (input->row == -1)
     }
 
 }
-
+/*void checkTorpedo(PLAYER* currentPlayer)
+requires: reference to the current player of type PLAYER to check its torpedo
+effects: returns if we unlock torpedo move or reset it
+*/
 void checkTorpedo(PLAYER* currentPlayer)
 {
     if(currentPlayer ->torpedo==2)
