@@ -60,7 +60,7 @@ typedef struct {
 struct Ship
 {
     char name[15];
-    int coord[4];
+    int coord[6];
     int hits;
     int size;
     int hasFallen;
@@ -71,8 +71,10 @@ struct Player
 {
     char grid[GRID_SIZE][GRID_SIZE]; 
     char hitsAndMissesGrid[GRID_SIZE][GRID_SIZE];
+    int shipSunkGrid[GRID_SIZE][GRID_SIZE];
     char smokeGird[GRID_SIZE][GRID_SIZE];
     int probGrid[GRID_SIZE][GRID_SIZE];
+    
     char name[50];
     SHIP ships[NUMBEROFSHIPS];
     int shipsLocations[NUMBEROFSHIPS][4];
@@ -171,8 +173,8 @@ int handleRadar(PLAYER *currentPlayer, PLAYER *opposingPlayer);
 //for handleFire
 Coord getHighestProbSquare(PLAYER* currentPlayer, PLAYER* opposingPlayer);
 Coord* findHighestProbCoords(PLAYER* currentPlayer, int* count);
-void processSurroundingCell(PLAYER *currentPlayer, INPUT* input) ;
-void hitOutcome(PLAYER *currentPlayer,PLAYER* opposingPlayer, INPUT* input,int* opposingShipsStatus,Coord* lastHit);
+void processSurroundingCell(PLAYER currentPlayer, INPUT input) ;
+void hitOutcome(PLAYER currentPlayer,PLAYER opposingPlayer, INPUT* input,int* opposingShipsStatus,Coord* lastHit);
 void updateCoordByCross(INPUT* input ,int iteration);
 void handleFire(PLAYER* currentPlayer, PLAYER* opposingPlayer);
 
