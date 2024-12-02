@@ -1,4 +1,4 @@
-#include "headerFile.h"
+#include "../headerFile.h"
 /*
 requires: a reference to currentPlayer hip name.
          Size of the ship.
@@ -110,11 +110,11 @@ void placeShipsEasy(PLAYER* player) {
             }
         }
         
-        printf("Placed %s (%d cells) at (%d, %d) with %s orientation.\n", shipsNames[i], currentShipSize, row + 1, col + 1, orientation == 0 ? "horizontal" : "vertical");
+        // printf("Placed %s (%d cells) at (%d, %d) with %s orientation.\n", shipsNames[i], currentShipSize, row + 1, col + 1, orientation == 0 ? "horizontal" : "vertical");
     }
 
     printGrid(player->grid); // Print the grid after placing all ships
-    printf("\n");
+    // printf("\n");
 }
 /*
 requires: A reference to the player object (player) to place ships on their grid.
@@ -153,9 +153,9 @@ void placeShipsMedium(PLAYER* player)
             }
         }
         // Print the placement details
-        printf("Placed %s (%d cells) at (%d, %d) with %s orientation.\n", 
-               shipsNames[i], currentShipSize, row + 1, col + 1, 
-               orientation == 0 ? "horizontal" : "vertical");
+        // printf("Placed %s (%d cells) at (%d, %d) with %s orientation.\n", 
+        //        shipsNames[i], currentShipSize, row + 1, col + 1, 
+        //        orientation == 0 ? "horizontal" : "vertical");
     }
 
     // Print the final grid after all ships are placed
@@ -243,9 +243,9 @@ void placeShipsHard(PLAYER* player) {
                 placed = 1;  // Successfully placed the ship
             }
         }
-        printf("Placed %s (%d cells) at (%d, %d) with %s orientation.\n", 
-               shipsNames[i], currentShipSize, row + 1, col + 1, 
-               orientation == 0 ? "horizontal" : "vertical");
+        // printf("Placed %s (%d cells) at (%d, %d) with %s orientation.\n", 
+        //        shipsNames[i], currentShipSize, row + 1, col + 1, 
+        //        orientation == 0 ? "horizontal" : "vertical");
     }
 
     // Print the final grid after all ships are placed
