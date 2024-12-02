@@ -1,6 +1,6 @@
 #include "../headerFile.h"
-
-
+ 
+  
 // Define the PLAYER structure with a probability grid
 Coord* countAndSortNegativeCells(PLAYER* currentPlayer, int* negativeCount) {
     // Step 1: Count negative cells
@@ -60,13 +60,13 @@ Coord* countAndSortNegativeCells(PLAYER* currentPlayer, int* negativeCount) {
     }
 
     // Step 5: Print the sorted negative cells
-    printf("Negative cells sorted by probGrid values (descending):\n");
-    for (int i = 0; i < *negativeCount; i++) {
-        printf("Row: %d, Column: %d, Value: %d\n", 
-            negativeCells[i].row, 
-            negativeCells[i].col, 
-            currentPlayer->probGrid[negativeCells[i].row][negativeCells[i].col]);
-    }
+    // printf("Negative cells sorted by probGrid values (descending):\n");
+    // for (int i = 0; i < *negativeCount; i++) {
+    //     printf("Row: %d, Column: %d, Value: %d\n", 
+    //         negativeCells[i].row, 
+    //         negativeCells[i].col, 
+    //         currentPlayer->probGrid[negativeCells[i].row][negativeCells[i].col]);
+    // }
 
     return negativeCells;  // Return the array of sorted negative cells
 }
@@ -79,15 +79,13 @@ Coord getHighestPositiveProbSquare(PLAYER* currentPlayer)
         int count =0;
         Coord* highestProbCoords = findHighestProbCoords(currentPlayer,&count);
 
-        printf("Coordinates with the highest probability (%d occurrences):\n", count);
-        for (int i = 0; i < count; i++) {
-            printf("Row: %d, Column: %d\n", highestProbCoords[i].row, highestProbCoords[i].col);
-        }
 
         srand(time(NULL));
         int randomNumber=rand()%count; //create random number
         return highestProbCoords[randomNumber];
 }
+
+
 
 //returns the highest prob square to shoot it
 Coord getHighestProbSquare(PLAYER* currentPlayer, PLAYER* opposingPlayer)
@@ -97,7 +95,27 @@ Coord getHighestProbSquare(PLAYER* currentPlayer, PLAYER* opposingPlayer)
     Coord* negativeCells = countAndSortNegativeCells(currentPlayer,&negativeCount);
     if(negativeCount>0)
     {
-        return negativeCells[0];
+        // Get the last cell's row, col from the sorted array
+        int currentRow = negativeCells[negativeCount - 1].row;
+        int currentCol = negativeCells[negativeCount - 1].col;
+        
+        // Get the probability value from probGrid for this cell
+        int minValue = currentPlayer->probGrid[currentRow][currentCol];
+        
+        int groupStart = negativeCount - 1;
+
+        // Find the start of the group with the minimum value
+        while (groupStart > 0 && currentPlayer->probGrid[negativeCells[groupStart - 1].row][negativeCells[groupStart - 1].col] == minValue) {
+            groupStart--;
+        }
+
+        // Calculate how many cells are in this group with the same value
+        int groupSize = negativeCount - groupStart;
+
+        // Randomly pick one cell from this group
+        int randomIndex = rand() % groupSize + groupStart;
+        
+        return negativeCells[randomIndex];
 
     }else
     {
@@ -145,8 +163,8 @@ Coord* findHighestProbCoords(PLAYER* currentPlayer, int* count) {
 //update the cood and the squares up down left right prob
 void updateProbabilityCross(PLAYER* currentPlayer,int row,int col)
 {
-    printf("\nthe gird of the fallen ship is : \n");
-    printGridInt(currentPlayer->shipSunkGrid);
+    // printf("\nthe gird of the fallen ship is : \n");
+    // printGridInt(currentPlayer->shipSunkGrid);
     INPUT currentInput;
     currentInput.row = row;
     currentInput.column = col;
@@ -157,15 +175,15 @@ void updateProbabilityCross(PLAYER* currentPlayer,int row,int col)
         
         if(isInBound(&currentInput))
         {
-            printf("condition 0");
+           
                 if(currentPlayer->hitsAndMissesGrid[currentInput.row][currentInput.column]=='*') //don;t forget to check 
                 {
-            printf("condition 1");
+           
 
                     //if its hit and not part of the sunk ship, target it
                     if(currentPlayer->shipSunkGrid[currentInput.row][currentInput.column]==0)
                     {
-            printf("condition 2");
+            
 
                         currentPlayer->probGrid[currentInput.row][currentInput.column]=-2;
                     }else{
@@ -173,13 +191,11 @@ void updateProbabilityCross(PLAYER* currentPlayer,int row,int col)
                     }
                 }else if(currentPlayer->hitsAndMissesGrid[currentInput.row][currentInput.column]=='~')
                 {
-            printf("condition 3");
-
-                    printf("i am checking a ~ block ");
+            
                     currentPlayer->probGrid[currentInput.row][currentInput.column]=-1;
                 }else if(currentPlayer->hitsAndMissesGrid[currentInput.row][currentInput.column]=='o')
                 {
-            printf("condition 4");
+           
 
                     currentPlayer->probGrid[currentInput.row][currentInput.column]=0;
                 }
@@ -188,8 +204,7 @@ void updateProbabilityCross(PLAYER* currentPlayer,int row,int col)
         
         updateCoordByCross(&currentInput,i);
     }
-    printf("the probgrid after updating is :");
-    printGridInt(currentPlayer->probGrid);
+  
     
 }
 
@@ -220,139 +235,6 @@ void updateProbOfHit(PLAYER* currentPlayer,int row,int col)
 }
 //after we sink a ship, this functions updates the probGrid around the shipSunk;
 
-void updateProbabilityGridAroundShip(PLAYER* currentPlayer, INPUT* input, int lastHitRow, int lastHitCol, int SHIPSUNKSIZE) {
-    //in here the currentPlayer->hitsBeforeSunk is still unchanged
-    // Update the probability grid around the original input (the new hit position)
-    
-    printf("i am now in the function that checks after w e sink a ship\n");
-    int row = input->row;
-    int col = input->column;
-
-
-    /* this is the irgoinal code for updateProbabilityCross
-    // Check and update the surrounding cells (up, down, left, right) of the input position
-    if (isInBound2(row, col)) {
-        // Update the current hit position
-        if (currentPlayer->probGrid[row][col] < 0) {
-            currentPlayer->probGrid[row][col]++;
-        } else if (currentPlayer->probGrid[row][col] >= 0) {
-            currentPlayer->probGrid[row][col] = 9999;
-        }
-
-        // Check up (row-1, col)
-        if (isInBound2(row - 1, col)) {
-            if (currentPlayer->probGrid[row - 1][col] < 0) {
-                currentPlayer->probGrid[row - 1][col]++;
-            } else if (currentPlayer->probGrid[row - 1][col] >= 0) {
-                currentPlayer->probGrid[row - 1][col] = 9999;
-            }
-        }
-
-        // Check down (row+1, col)
-        if (isInBound2(row + 1, col)) {
-            if (currentPlayer->probGrid[row + 1][col] < 0) {
-                currentPlayer->probGrid[row + 1][col]++;
-            } else if (currentPlayer->probGrid[row + 1][col] >= 0) {
-                currentPlayer->probGrid[row + 1][col] = 9999;
-            }
-        }
-
-        // Check left (row, col-1)
-        if (isInBound2(row, col - 1)) {
-            if (currentPlayer->probGrid[row][col - 1] < 0) {
-                currentPlayer->probGrid[row][col - 1]++;
-            } else if (currentPlayer->probGrid[row][col - 1] >= 0) {
-                currentPlayer->probGrid[row][col - 1] = 9999;
-            }
-        }
-
-        // Check right (row, col+1)
-        if (isInBound2(row, col + 1)) {
-            if (currentPlayer->probGrid[row][col + 1] < 0) {
-                currentPlayer->probGrid[row][col + 1]++;
-            } else if (currentPlayer->probGrid[row][col + 1] >= 0) {
-                currentPlayer->probGrid[row][col + 1] = 9999;
-            }
-        }
-    }
-    */
-    
-    updateProbabilityCross(currentPlayer,input->row,input->column);
-
-    // Direction of movement (vertical or horizontal)
-    int direction = 0;  // 1 for vertical, 0 for horizontal
-    int step = 0;       // Used to keep track of the distance covered by the ship size
-
-    // Determine if the hit is vertical or horizontal by comparing row or column
-    if (input->row == lastHitRow) {
-        direction = 0; // Horizontal movement
-    } else if (input->column == lastHitCol) {
-        direction = 1; // Vertical movement
-    }
-
-    // Move in the direction of the last hit depending on the ship size (SHIPSUNKSIZE)
-    for (;step < currentPlayer->hitsBeforeShipSunk;step++) 
-    {
-        if (direction == 0) {
-            // Horizontal movement (left-right)
-            if (input->column > lastHitCol) {
-                // Moving right (increasing column)
-                lastHitCol++;
-            } else if (input->column < lastHitCol) {
-                // Moving left (decreasing column)
-                lastHitCol--;
-            }
-
-        } else if (direction == 1) {
-            // Vertical movement (up-down)
-            if (input->row > lastHitRow) {
-                // Moving down (increasing row)
-                lastHitRow++;
-            } else if (input->row < lastHitRow) {
-                // Moving up (decreasing row)
-                lastHitRow--;
-            }
-        }
-        currentPlayer->shipSunkGrid[lastHitRow][lastHitCol]=1;
-
-        if(step>SHIPSUNKSIZE)
-        {
-            printf("i am in the part where i am checking unhit spots");
-            INPUT currentInput;
-            currentInput.row=lastHitRow;
-            currentInput.column = lastHitCol;
-
-            for(int  i = 0 ; i<4 ;i++)
-            {
-            
-            updateCoordByCross(&currentInput,i);
-            updateProbOfHit(currentPlayer,row,col);
-
-            }
-            //check if that coord is hit
-            
-            continue;
-        }
-        
-
-            // // Update probability grid based on new position
-        if (isInBound2(lastHitRow, lastHitCol)) {
-            if (currentPlayer->probGrid[lastHitRow][lastHitCol] < 0) {
-                currentPlayer->probGrid[lastHitRow][lastHitCol]++;
-            } else if (currentPlayer->probGrid[lastHitRow][lastHitCol] >= 0) {
-                currentPlayer->probGrid[lastHitRow][lastHitCol] = 9999;
-            }
-        }
-            
-    }
-    printGridInt(currentPlayer->shipSunkGrid);
-        // Increment step to move in the direction
-        
-}
-
-    
-    
-
 //returns 0 if no new ship sunk or the size of the actual ship sunk
 int checkShipStatusChange(PLAYER* opposingPlayer, int* opposingShipsStatus) {
     // Compare each ship status
@@ -367,23 +249,6 @@ int checkShipStatusChange(PLAYER* opposingPlayer, int* opposingShipsStatus) {
     return 0;
 }
 
-
-void printShipInfo(PLAYER* opposingPlayer) {
-    for (int i = 0; i < 4; i++) {  // Loop over the 4 ships
-        SHIP* ship = &opposingPlayer->ships[i];
-
-        printf("Ship %d:\n", i + 1);
-
-        printf("Coordinates: ");
-        for (int j = 0; j < 6; j++) {
-            if (ship->coord[j] != 0) {  // Only print non-zero coordinates
-                printf("%d ", ship->coord[j]);
-            }
-        }
-
-        printf("\nHas Fallen: %s\n\n", ship->hasFallen ? "Yes" : "No");
-    }
-}
 
 void hitOutcome(PLAYER *currentPlayer,PLAYER* opposingPlayer, INPUT* input,int* opposingShipsStatus,Coord* lastHit ) {
 
@@ -400,15 +265,15 @@ void hitOutcome(PLAYER *currentPlayer,PLAYER* opposingPlayer, INPUT* input,int* 
 
     //if we hit a marked spot
     //if we hit a ship at that marked spot that means its connected to another hit ship
-    if(currentPlayer->hitsAndMissesGrid[input->row][input->column]=='*')
-    {
+   
         currentPlayer->probGrid[input->row][input->column]=9999;// make it 0 so that the next time the prob grid changes it to 0 because its a hit
 
         
         int lastHitRow = lastHit->row;
         int lastHitCol = lastHit->col;
 
-        
+
+        // printf("PLAYER LAST HIT IS : %d,  %d",lastHitRow,lastHitCol);
 
         //if the new hit is on the same row as the last hit
         if(input->row == lastHitRow)//don't forget bound checking
@@ -450,10 +315,10 @@ void hitOutcome(PLAYER *currentPlayer,PLAYER* opposingPlayer, INPUT* input,int* 
         else //if they are not on the same row automaticly means they are on the same colmun
         {   //bade enebeth 23ml -1 eza azghar men 0
             if (isInBound2(lastHitRow, lastHitCol + 1)) {
-                currentPlayer->probGrid[lastHitRow][lastHitCol + 1]++;
+                currentPlayer->probGrid[lastHitRow][lastHitCol + 1]=0;
             }
             if (isInBound2(lastHitRow, lastHitCol - 1)) {
-                currentPlayer->probGrid[lastHitRow][lastHitCol - 1]++;
+                currentPlayer->probGrid[lastHitRow][lastHitCol - 1]=0;
             }
             
             // Handle vertical neighbor (down or up) based on input row
@@ -503,15 +368,26 @@ void hitOutcome(PLAYER *currentPlayer,PLAYER* opposingPlayer, INPUT* input,int* 
                 }
             }
 
-            printf("the probability grid after checking the hits but not sunk\n");
-            printGridInt(currentPlayer->probGrid);
+                int tempGRID[GRID_SIZE][GRID_SIZE];
+
+                // Copy values from probGrid to tempGRID
+                for (int row = 0; row < GRID_SIZE; row++)
+                {
+                    for (int col = 0; col < GRID_SIZE; col++)
+                    {
+                        tempGRID[row][col] = currentPlayer->probGrid[row][col];
+                    }
+                }
+
+            // printf("the probability grid after checking the hits but not sunk\n");
+            // printGridInt(currentPlayer->probGrid);
             for (int row = 0; row < GRID_SIZE; row++) 
             {
                 for (int col = 0; col < GRID_SIZE; col++) 
                 {
                 
                 //updae the -1 only the coord surrownding them
-                    if (currentPlayer->probGrid[row][col]==-1) 
+                    if (tempGRID[row][col]==-1) 
                     {
                         INPUT tempInput;
                         tempInput.row= input->row;
@@ -522,13 +398,17 @@ void hitOutcome(PLAYER *currentPlayer,PLAYER* opposingPlayer, INPUT* input,int* 
                             updateCoordByCross(&tempInput,i);
                             updateProbOfHit(currentPlayer,tempInput.row,tempInput.column);
                         }
+
+                        
+                        currentPlayer->probGrid[row][col]=0;
                     }
+                    
                 }
                 
             }
 
-            printf("the probability grid afterupdating  the hits but not sunk around them\n");
-            printGridInt(currentPlayer->probGrid);
+            // printf("the probability grid afterupdating  the hits but not sunk around them\n");
+            // printGridInt(currentPlayer->probGrid);
 
          
         
@@ -560,26 +440,15 @@ void hitOutcome(PLAYER *currentPlayer,PLAYER* opposingPlayer, INPUT* input,int* 
 
 
         }
-        else if(currentPlayer->hitsBeforeShipSunk > result)
-        {   
-            
-            //i have hit more ships than i sunk, on of the hits was for another ship.
-
-        }
 
 
         if(result>0) //a ship has sunk;
         {
             currentPlayer->hitsBeforeShipSunk-= result;
-
-
-            
+ 
         }
         
-    }// if we misses the hitandmiss will become 'o' and the probgrid will change the -1 to 0
-    else{
-        currentPlayer->probGrid[input->row][input->column]=0;
-    }
+    
 
     printShipInfo(opposingPlayer);
 }
@@ -601,7 +470,6 @@ void processSurroundingCell(PLAYER *currentPlayer, INPUT* input) {
         else {
             currentPlayer->probGrid[input->row][input->column] = -1;  // Set to -1 if valid
         }
-        printf("Marked cell (%d, %d) as -1.\n", input->row, input->column);
     } 
 }
 
@@ -663,15 +531,15 @@ void handleFire(PLAYER* currentPlayer, PLAYER* opposingPlayer)
     if(currentPlayer->hitsAndMissesGrid[input.row][input.column]=='*')
     {
         currentPlayer->hitsBeforeShipSunk++;
-        printf("the number of hits before sink ; %d\n", currentPlayer->hitsBeforeShipSunk);
 
         hitOutcome(currentPlayer,opposingPlayer,&input,opposingShipsStatus,&lastHit);
 
     }else {
         currentPlayer->probGrid[input.row][input.column]=0;
-        printf("No hit at (%d, %d), no change to probGrid.\n", input.row, input.column);
     }
 
+
+    //the code belows check if there is any hit not accounted for in the probgrid , if so account for it ( his is for extreme cases where i hit 2-3-4 ships in a row)
 
         int negativeCounter = 0; 
 
@@ -693,24 +561,27 @@ void handleFire(PLAYER* currentPlayer, PLAYER* opposingPlayer)
                 for (int col = 0; col < GRID_SIZE; col++) 
                 {
                     // Check if the current position is a hit ('*') and the ship is not sunk (shipSunkGrid[row][col] == 0)
-                    if (currentPlayer->hitsAndMissesGrid[row][col] == '*' && currentPlayer->shipSunkGrid[row][col] == 0) {
-                    hitsButNotSunkCounter++;
+                    if (currentPlayer->hitsAndMissesGrid[row][col] == '*' && currentPlayer->shipSunkGrid[row][col] == 0) 
+                    {
+                        hitsButNotSunkCounter++;
                     }
+                
+                
                 }
+            }
         }
     
 
         
-
+    //if there is any hit not accounted for in ships sunk
         if(negativeCounter ==0 && hitsButNotSunkCounter >0)
         {
 
 
-            printf("\n\ni am entering this condition that there are no negative porb but the hitsbut not sunk counter is > 0 from the end of the firemove\n");
-            printGridInt(currentPlayer->probGrid);
-
-            printGridInt(currentPlayer->shipSunkGrid);
-            for (int row = 0; row < GRID_SIZE; row++) 
+            
+            // printf("\n\ni am entering this condition that there are no negative porb but the hitsbut not sunk counter is > 0 from the end of the firemove\n");
+    
+      for (int row = 0; row < GRID_SIZE; row++) 
             {
                 for (int col = 0; col < GRID_SIZE; col++) 
                 {
@@ -722,21 +593,20 @@ void handleFire(PLAYER* currentPlayer, PLAYER* opposingPlayer)
                     }
                 }
             }
-            printf("the probability grid after checking the hits but not sunk\n");
-            printGridInt(currentPlayer->probGrid);
 
-            int tempGRID[GRID_SIZE][GRID_SIZE];
+                 int tempGRID[GRID_SIZE][GRID_SIZE];
 
-    // Copy values from probGrid to tempGRID
-    for (int row = 0; row < GRID_SIZE; row++)
-    {
-        for (int col = 0; col < GRID_SIZE; col++)
-        {
-            tempGRID[row][col] = currentPlayer->probGrid[row][col];
-        }
-    }
+                // Copy values from probGrid to tempGRID
+                for (int row = 0; row < GRID_SIZE; row++)
+                {
+                    for (int col = 0; col < GRID_SIZE; col++)
+                    {
+                        tempGRID[row][col] = currentPlayer->probGrid[row][col];
+                    }
+                }
 
-            
+            // printf("the probability grid after checking the hits but not sunk\n");
+            // printGridInt(currentPlayer->probGrid);
             for (int row = 0; row < GRID_SIZE; row++) 
             {
                 for (int col = 0; col < GRID_SIZE; col++) 
@@ -745,27 +615,29 @@ void handleFire(PLAYER* currentPlayer, PLAYER* opposingPlayer)
                 //updae the -1 only the coord surrownding them
                     if (tempGRID[row][col]==-1) 
                     {
-                        
-                        updateProbabilityCross(currentPlayer,row,col) ;
-                            printf("THE COORD I AM CHECKING ARE %d,%d",row, col);
-                        
-
+                        INPUT tempInput;
+                        tempInput.row= row;
+                        tempInput.column =col;
+                        for(int  i = 0 ;i<4;i++)
+                        {
+                            
+                            updateCoordByCross(&tempInput,i);
+                            updateProbOfHit(currentPlayer,tempInput.row,tempInput.column);
+                        }
                         currentPlayer->probGrid[row][col]=0;
                     }
+                    
                 }
                 
             }
 
-            printf("the probability grid afterupdating  the hits but not sunk around them\n");
-            printGridInt(currentPlayer->probGrid);
+            // printf("the probability grid afterupdating  the hits but not sunk around them\n");
+            // printGridInt(currentPlayer->probGrid);
 
-         
-        
-    
-            }
         }
-    
-    
+        
+
+        
 
 }
 
