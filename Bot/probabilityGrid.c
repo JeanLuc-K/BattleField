@@ -86,8 +86,8 @@ effects:   Iterates through each potential grid position for horizontal and vert
            If a position does not contain a hit or miss for that ship's placement, the function updates the `probGrid` of the current player to increase the probability of a ship being placed at that location.       
 */
 void calculateProbability(PLAYER* currentPlayer, PLAYER* opposingPlayer) {
-    printf("Calculating probability...\n");
-    printf("BEFOOOOOOOOOOR");
+    // printf("Calculating probability...\n");
+    // printf("BEFOOOOOOOOOOR");
     printGridInt(currentPlayer->probGrid);
 
     int currentProbGrid[GRID_SIZE][GRID_SIZE] ={0};
