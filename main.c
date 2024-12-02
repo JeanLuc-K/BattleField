@@ -119,7 +119,10 @@ int main()
     }
     return 0;
 }
-
+/*int game(PLAYER *currentPlayer, PLAYER *opposingPlayer,int turnNumber)
+requires: reference to the current player and opposing player of type PLAYER, and int turn number of the game
+effects: returns 1 when a successful turn, 0 when "help"
+*/
 int game(PLAYER *currentPlayer, PLAYER *opposingPlayer,int turnNumber)
 {
    
