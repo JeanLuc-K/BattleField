@@ -93,7 +93,7 @@ struct Player
 
 
 int game(PLAYER* player1, PLAYER* player2,int turnNumber);
-void initializePlayer(PLAYER* player,int isBot);
+void initializePlayer(PLAYER* player);
 void initializeProbGrid(int probGrid[GRID_SIZE][GRID_SIZE]);
 void initializeGrid(char grid[GRID_SIZE][GRID_SIZE]);
 void assignStartingPlayer(PLAYER*,PLAYER*);
@@ -172,11 +172,28 @@ squareCoords getSquareCoord(int probGrid[GRID_SIZE][GRID_SIZE]) ;
 int handleRadar(PLAYER *currentPlayer, PLAYER *opposingPlayer);
 
 //for handleFire
+// Coord getHighestProbSquare(PLAYER* currentPlayer, PLAYER* opposingPlayer);
+// Coord* findHighestProbCoords(PLAYER* currentPlayer, int* count);
+// void processSurroundingCell(PLAYER currentPlayer, INPUT input) ;
+// void hitOutcome(PLAYER currentPlayer,PLAYER opposingPlayer, INPUT* input,int* opposingShipsStatus,Coord* lastHit);
+// void updateCoordByCross(INPUT* input ,int iteration);
+// void handleFire(PLAYER* currentPlayer, PLAYER* opposingPlayer);
+
+Coord* countAndSortNegativeCells(PLAYER* currentPlayer, int* negativeCount);
+Coord getHighestPositiveProbSquare(PLAYER* currentPlayer);
 Coord getHighestProbSquare(PLAYER* currentPlayer, PLAYER* opposingPlayer);
 Coord* findHighestProbCoords(PLAYER* currentPlayer, int* count);
-void processSurroundingCell(PLAYER currentPlayer, INPUT input) ;
-void hitOutcome(PLAYER currentPlayer,PLAYER opposingPlayer, INPUT* input,int* opposingShipsStatus,Coord* lastHit);
-void updateCoordByCross(INPUT* input ,int iteration);
+void updateProbabilityCross(PLAYER* currentPlayer, int row, int col);
+void updateProbOfHit(PLAYER* currentPlayer, int row, int col);
+void updateProbabilityGridAroundShip(PLAYER* currentPlayer, INPUT* input, int lastHitRow, int lastHitCol, int SHIPSUNKSIZE);
+
+int checkShipStatusChange(PLAYER* opposingPlayer, int* opposingShipsStatus);
+void printShipInfo(PLAYER* opposingPlayer);
+void hitOutcome(PLAYER *currentPlayer, PLAYER* opposingPlayer, INPUT* input, int* opposingShipsStatus, Coord* lastHit);
+
+void processSurroundingCell(PLAYER *currentPlayer, INPUT* input);
+void updateCoordByCross(INPUT* input, int iteration);
+void saveOpposingShipsStatus(PLAYER* opposingPlayer, int* opposingShipsStatus);
 void handleFire(PLAYER* currentPlayer, PLAYER* opposingPlayer);
 
 
