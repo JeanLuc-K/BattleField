@@ -28,6 +28,8 @@ void fireMove(PLAYER* currentPlayer, PLAYER* opposingPlayer,INPUT* input)
         }
         printf("Hit!\n");
         currentPlayer->hitsAndMissesGrid[row][col] = '*'; // Mark the location of the hit
+        currentPlayer->lastHit.row = row;
+        currentPlayer->lastHit.col = col;
         addHitOnShip(currentPlayer,opposingPlayer,input);
     }
     else
@@ -73,6 +75,16 @@ void addHitOnShip(PLAYER* currentPlayer,PLAYER* opposingPlayer, INPUT* input)
 
                 if(currentShip->hits == currentShip->size)
                 {
+                    for (int i = 0; i < currentShip->size; i++) {
+                    int coord = currentShip->coord[i];  // Get the coordinate in row * 10 + col format
+                    
+                    int row = coord / 10;  // Extract the row (integer division)
+                    int col = coord % 10;  // Extract the column (modulo 10)
+
+                    // Update the shipsSunkGrid to mark this cell as part of the sunk ship
+                    currentPlayer->shipSunkGrid[row][col] = 1;  // Mark as sunk
+                    
+                    }
                     printf("%s has fallen!\n",currentShip->name); //ship is destroyed
                     currentShip->hasFallen=1;
                     shipFallen(currentPlayer,opposingPlayer,input); //reprecussions of a fallenSHIP
