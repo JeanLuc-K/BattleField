@@ -1,4 +1,4 @@
-#include "headerFile.h"
+#include "../headerFile.h"
 /*
 requires:
      Pointer to a `squareCoords` structure containing `size` (number of coordinates) and `maxCoords` (array of coordinates).
