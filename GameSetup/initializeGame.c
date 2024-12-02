@@ -3,7 +3,7 @@
 requires: reference to player1 and player2 of type PLAYER containing the name of each player
 effects: returns the name of the player who will start
 */
-void assignStartingPlayer(PLAYER * player1, PLAYER * player2)
+oid assignStartingPlayer(PLAYER * player1, PLAYER * player2)
 {
 
     char temp[50];
@@ -29,6 +29,7 @@ void assignStartingPlayer(PLAYER * player1, PLAYER * player2)
         printf("The first player is %s\n", player1->name);
     }
 }
+
 /*void initializeProbGrid(int probGrid[GRID_SIZE][GRID_SIZE])
 requires: probgrid of type int
 effects: set all elements in the grid to 0
@@ -40,6 +41,7 @@ void initializeProbGrid(int probGrid[GRID_SIZE][GRID_SIZE]) {
         }
     }
 }
+
 /*void initializeGrid(char grid[GRID_SIZE][GRID_SIZE])
 requires: grid of type char
 effects: set each element in the grid to '~'
@@ -54,11 +56,13 @@ void initializeGrid(char grid[GRID_SIZE][GRID_SIZE])
         }
     }
 }
+
+
 /*int getDifficultyLevel()
 requires: nothing
 effects: return 0 if its easy, 1 if it is hard
 */
-int getDifficultyLevel()
+nt getDifficultyLevel()
 {
    INPUT input;
    
@@ -80,7 +84,9 @@ int getDifficultyLevel()
 
     printf("\n");
 }
-/*void getName(char* name, int size, int number)
+
+
+/*
 requires: array of character to indicates the name, size of it and number to indicates if the player is 1 or 2
 effects: take the name of the player from the input
 */
@@ -98,7 +104,7 @@ void getName(char* name, int size)
         }
     }
 }
-/*void initializePlayer(PLAYER* player,int number)
+/*
 requires: player of type PLAYER, number to know if he is player 1 or 2
 effect: initialize grids of the player
 */
@@ -116,7 +122,7 @@ void initializePlayer(PLAYER* player, int isBot)
     {
         // Default bot name and settings
         strncpy(player->name, "Bot", sizeof(player->name) - 1);
-        player->name[sizeof(player->name) - 1] = '\0';  // Ensure null-termination
+        player->name[sizeof(player->name) - 1] = '\0'; 
     }
 
     player->shipsLeft = NUMBEROFSHIPS;
