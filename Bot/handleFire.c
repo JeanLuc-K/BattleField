@@ -450,7 +450,7 @@ void hitOutcome(PLAYER *currentPlayer,PLAYER* opposingPlayer, INPUT* input,int* 
         
     
 
-    printShipInfo(opposingPlayer);
+   
 }
     
     
