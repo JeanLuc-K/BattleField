@@ -16,8 +16,37 @@
 #include "Bot/handleTorpedo.c"
 #include "Bot/handleArtillery.c"
 #include "Bot/handleFire.c"
+#include "Bot/placeShipsBot.c"
 
 
+#define PLAYER2_IS_BOT 1
+
+
+void ChoosePlaceShips(PLAYER* player)
+{
+    if(player->isBot)
+    {
+        
+        if (difficulty == EASY)
+        {
+            placeShipsEasy(player); // Bot automatically places ships
+            
+        }
+        else if (difficulty == HARD)
+        {
+            placeShipsHard(player); // Bot automatically places ships
+            
+        }
+        else
+        {
+            placeShipsMedium(player); // Bot automatically places ships
+            
+        }
+    }else{
+        placeShipsHuman(player);
+    }
+    
+}
 int difficulty =0;
 int main()
 {
@@ -26,56 +55,28 @@ int main()
     PLAYER player1;
     PLAYER player2;
 
+    
+
     difficulty = getDifficultyLevel();
 
-    initializePlayer(&player1, 1);
-    initializePlayer(&player2, 2);
+    initializePlayer(&player1);
+    initializePlayer(&player2);
 
-    player2.isBot=1;
+    player2.isBot= PLAYER2_IS_BOT;
+    printf("%s is bot : %d , and %s is bot: %d", player1.name,player2.name);
+
+    
 
     printf("\n");
 
     assignStartingPlayer(&player1, &player2);
 
-// Place ships for both players
-    if (player2.isBot)
-    {
-        if (difficulty == EASY)
-        {
-            placeShipsEasy(&player2); // Bot automatically places ships
-            placeShipsHuman(&player1);
-        }
-        else if (difficulty == HARD)
-        {
-            placeShipsHard(&player2); // Bot automatically places ships
-            placeShipsHuman(&player1);
-        }
-        else
-        {
-            placeShipsMedium(&player2); // Bot automatically places ships
-            placeShipsHuman(&player1);
-        }
-    }
-    else
-    {
-        if (difficulty == EASY)
-        {
-            placeShipsEasy(&player1); // Bot automatically places ships
-            placeShipsHuman(&player2);
-        }
-        else if (difficulty == HARD)
-        {
-            placeShipsHard(&player1); // Bot automatically places ships
-            placeShipsHuman(&player2);
-        }
-        else
-        {
-            placeShipsMedium(&player1); // Bot automatically places ships
-            placeShipsHuman(&player2);
-        }
-    }
+    //Place ships for both players
+        ChoosePlaceShips(&player1);
+        ChoosePlaceShips(&player2);
 
-
+    // placeShipsHuman(&player1);
+    // placeShipsHuman(&player2);
 
     initializeProbGrid(player1.probGrid);
     calculateProbability(&player1,&player2);
@@ -83,11 +84,16 @@ int main()
     initializeProbGrid(player2.probGrid);
     calculateProbability(&player2,&player1);
 
-    printf("ooo5");
-    for(int  i = 0 ; i < 4 ;i++)
+    //random bug i swear i have no idea how
+    if(player1.isBot)
     {
-        printf("the player1 ships sizes is %d , %d", i, player1.ships[i].size);
+        initializeGrid(player1.grid);
+    }if(player2.isBot)
+    {
+        initializeGrid(player2.grid);
     }
+
+    int NumberOfTurns =0;
 
    for (int i = 0; player1.shipsLeft > 0 && player2.shipsLeft > 0;)
     {
@@ -105,6 +111,7 @@ int main()
         // Only increment i if the turn was successful (when i dont enter help)
         if (turnSuccess) {
             i++;
+            NumberOfTurns++;
         }
         
     printf("\n\n");
@@ -117,8 +124,11 @@ int main()
     }else{
         printf("Congrats %s, you have defeated %s!",player1.name,player2.name);
     }
+
+    printf("the game took %d turns!\n", NumberOfTurns/2 + NumberOfTurns%2);
     return 0;
 }
+
 /*int game(PLAYER *currentPlayer, PLAYER *opposingPlayer,int turnNumber)
 requires: reference to the current player and opposing player of type PLAYER, and int turn number of the game
 effects: returns 1 when a successful turn, 0 when "help"
@@ -127,7 +137,7 @@ int game(PLAYER *currentPlayer, PLAYER *opposingPlayer,int turnNumber)
 {
    
     
-    currentPlayer->artillery=1;
+
     printf("%s, what is your move?\n", currentPlayer->name);
     printf("for a list of moves, enter \"help\"\n");
 
@@ -137,12 +147,13 @@ int game(PLAYER *currentPlayer, PLAYER *opposingPlayer,int turnNumber)
     checkTorpedo(currentPlayer);
 
     printGrid(currentPlayer->hitsAndMissesGrid);
-    if(currentPlayer->isBot==0)
-    {
-        return 1;
-    }
+    
     if(currentPlayer->isBot)
     {
+
+        printf("the probability GRID at the start of the turn is:\n ");
+        printGridInt(currentPlayer->probGrid);
+
         botThinking(currentPlayer,opposingPlayer);
         calculateProbability(currentPlayer,opposingPlayer);   
         printGrid(currentPlayer->hitsAndMissesGrid);
@@ -154,7 +165,12 @@ int game(PLAYER *currentPlayer, PLAYER *opposingPlayer,int turnNumber)
     getInput(&input);
 
 
-    
+    if(currentPlayer->isBot==0)
+    {
+        printf("the player turn is skipped \n");
+        return 1;
+
+    }
     
     
     if (strcasecmp(input.moveName, "fire") == 0)
