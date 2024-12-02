@@ -3,7 +3,7 @@
 requires: reference to player1 and player2 of type PLAYER containing the name of each player
 effects: returns the name of the player who will start
 */
-oid assignStartingPlayer(PLAYER * player1, PLAYER * player2)
+void assignStartingPlayer(PLAYER * player1, PLAYER * player2)
 {
 
     char temp[50];
@@ -62,7 +62,7 @@ void initializeGrid(char grid[GRID_SIZE][GRID_SIZE])
 requires: nothing
 effects: return 0 if its easy, 1 if it is hard
 */
-nt getDifficultyLevel()
+int getDifficultyLevel()
 {
    INPUT input;
    
@@ -76,7 +76,10 @@ nt getDifficultyLevel()
             return 0;
         }else if(strcasecmp(input.moveName, "hard")==0) {
             return 1;
-        }else{
+        }else if(strcasecmp(input.moveName, "medium")==0) {
+            return 2;
+        }
+        else{
         printf("difficulty level unknow, try again.\n");
         }
 
@@ -108,29 +111,26 @@ void getName(char* name, int size)
 requires: player of type PLAYER, number to know if he is player 1 or 2
 effect: initialize grids of the player
 */
-void initializePlayer(PLAYER* player, int isBot)
+void initializePlayer(PLAYER* player)
 {
     initializeGrid(player->grid);
     initializeGrid(player->hitsAndMissesGrid);
     initializeGrid(player->smokeGird);
 
-    if (!isBot)
-    {
-        getName(player->name, sizeof(player->name));
-    }
-    else
-    {
-        // Default bot name and settings
-        strncpy(player->name, "Bot", sizeof(player->name) - 1);
-        player->name[sizeof(player->name) - 1] = '\0'; 
-    }
+    initializeProbGrid(player->shipSunkGrid);
+    initializeProbGrid(player->probGrid);
+
+    
+    getName(player->name, sizeof(player->name));
+    
+    
 
     player->shipsLeft = NUMBEROFSHIPS;
     player->smokeScreenCounter = 0;
     player->radarSweep = 0;
     player->artillery = 0;
     player->torpedo = 0;
-    player->isBot = isBot;
+    player->isBot =0;
     player->hitsBeforeShipSunk = 0;
 
     player->lastHit.row = -1;
